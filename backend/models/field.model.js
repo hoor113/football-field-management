@@ -31,6 +31,7 @@ const FieldSchema = new Schema({
 });
 
 // Calculate average ratings - Not sure how it works
+/*
 FieldSchema.methods.getAverageRating = async function() {
     return await Rating.aggregate([
       { $match: { field_id: this._id }},
@@ -59,5 +60,6 @@ FieldSchema.virtual('averageRating', {
       }
     ]
   });
+*/
 
 export const Field = new mongoose.model("Field", FieldSchema)
