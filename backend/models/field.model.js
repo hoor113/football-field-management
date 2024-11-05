@@ -31,14 +31,17 @@ const FieldSchema = new Schema({
 });
 
 // Calculate average ratings - Not sure how it works
-FieldSchema.methods.getAverageRating = async function () {
-  return await Rating.aggregate([
-    { $match: { field_id: this._id } },
-    {
-      $group: {
-        _id: null,
-        averageStars: { $avg: '$stars' },
-        totalRatings: { $sum: 1 }
+
+/*
+FieldSchema.methods.getAverageRating = async function() {
+    return await Rating.aggregate([
+      { $match: { field_id: this._id }},
+      { 
+        $group: {
+          _id: null,
+          averageStars: { $avg: '$stars' },
+          totalRatings: { $sum: 1 }
+        }
       }
     }
   ]);
@@ -56,8 +59,8 @@ FieldSchema.virtual('averageRating', {
         averageStars: { $avg: '$stars' },
         totalRatings: { $sum: 1 }
       }
-    }
-  ]
-});
+    ]
+  });
+*/
 
 export const Field =  mongoose.model("Field", FieldSchema)

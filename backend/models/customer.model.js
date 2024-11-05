@@ -41,3 +41,4 @@ CustomerSchema.methods.comparePassword = async function(password) {
 
 
 export const Customer = mongoose.model("Customer", CustomerSchema)
+
