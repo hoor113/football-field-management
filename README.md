@@ -4,3 +4,5 @@ Tải các dependencies nếu thiếu (npm install <tên dependencies (cách nha
  - dotenv
  - express
  - nodemon
+ - jsonwebtoken
+ - bcryptjs
