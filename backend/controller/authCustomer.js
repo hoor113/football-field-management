@@ -1,5 +1,4 @@
 import { Customer } from '../models/customer.model.js';
-import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 
 // Đăng ký người dùng mới
@@ -27,7 +26,7 @@ export const register = async (req, res) => {
         // Lưu người dùng vào cơ sở dữ liệu
         await newCustomer.save();
 
-        res.status(201).json({ message: 'User registered successfully', user: newCustomer });
+        res.status(201).json({ message: 'Customer registered successfully', user: newCustomer });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

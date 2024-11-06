@@ -30,11 +30,7 @@ CustomerSchema.pre('save', async function(next) {
 
 
 // Hàm kiểm tra mật khẩu khi đăng nhập
-/**
- * So sánh mật khẩu khi đăng nhập
- * @param {string} password
- * @returns {Promise<boolean>} 
- */
+
 CustomerSchema.methods.comparePassword = async function(password) {
   return bcrypt.compare(password, this.password);
 };

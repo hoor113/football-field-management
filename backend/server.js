@@ -1,14 +1,20 @@
 import express from "express"
 import dotenv from "dotenv"
 import { ConnectDB } from "./config/db.js"
-import router from "./routes/authRoutes.js"
+import router1 from "./routes/authRoutesCustomer.js"
+import router2 from "./routes/authRoutesFieldOwner.js"
+import cors from 'cors'
 
+dotenv.config()
 
 const app = express()
+app.use(cors({
+    origin: 'http://localhost:3000' // Địa chỉ frontend ReactJS của bạn
+  }));  
 app.use(express.json())
 const PORT = process.env.PORT || 5000
 
-dotenv.config()
+
 
 console.log(process.env.MONGO_URI)
 
@@ -17,7 +23,8 @@ console.log(process.env.MONGO_URI)
 //     console.log("Responding ", res)
 // })
 
-app.use('/api', router);
+app.use('/api1', router1);
+app.use('/api2', router2);
 
 // app.get('/', (req, res) => {
 //     res.send()
