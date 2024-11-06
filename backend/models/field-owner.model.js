@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import bcrypt from 'bcryptjs'
 const Schema = mongoose.Schema;
 
 const FieldOwnerSchema = new Schema({
@@ -13,4 +14,24 @@ const FieldOwnerSchema = new Schema({
   fields: [{ type: Schema.Types.ObjectId, ref: 'Field' }]
 });
 
-export const FieldOwner = mongoose.model("Field Owner", FieldOwnerSchema)
+//Mã hóa mật khẩu trước khi lưu
+FieldOwnerSchema.pre('save', async function(next) {
+  if (!this.isModified('password')) return next();
+  try {
+    const salt = await bcrypt.genSalt(10);
+    this.password = await bcrypt.hash(this.password, salt);
+    next();
+  } catch (error) {
+    next(error);
+  }
+});
+
+
+// Hàm kiểm tra mật khẩu khi đăng nhập
+
+FieldOwnerSchema.methods.comparePassword = async function(password) {
+  return bcrypt.compare(password, this.password);
+};
+
+
+export const FieldOwner = mongoose.model("FieldOwner", FieldOwnerSchema)
