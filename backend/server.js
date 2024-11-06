@@ -7,12 +7,7 @@ const PORT = process.env.PORT || 5000
 
 dotenv.config()
 
-console.log(process.env.MONGO_URI)
-
-app.use((req, res) => {
-    console.log("Requesting ", req)
-    console.log("Responding ", res)
-})
+app.use(express.json())
 
 app.get('/', (req, res) => {
     res.send()
