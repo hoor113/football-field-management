@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 // Đăng ký chủ sân mới
 export const register = async (req, res) => {
     const { username, password, fullname, sex, birthday, phone_no, email } = req.body;
+    if (!(username || password || fullname || sex || birthday || phone_no || email)) {
+        return res.status(400).json({ success: false, message: "Please provide all fields" });
+    }
 
     try {
         // Kiểm tra nếu username hoặc email đã tồn tại
