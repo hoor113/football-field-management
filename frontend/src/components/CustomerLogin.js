@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState } from "react";
 import "./CustomerLogin.css"
 
-const Login = () => {
+const CustomerLogin = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: ''
@@ -25,7 +25,7 @@ const Login = () => {
 
   return (
     <div className="login-container">
-      <h2>Login</h2>
+      <h2>CustomerLogin</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <input
@@ -48,4 +48,4 @@ const Login = () => {
     </div>
   );
 };
-export default Login;
+export default CustomerLogin;
