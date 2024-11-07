@@ -1,8 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar.js';
-import Login from './components/CustomerLogin.js';
-import Register from './components/CustomerRegister.js';
+import CustomerLogin from './components/CustomerLogin.js';
+import CustomerRegister from './components/CustomerRegister.js';
+import FieldOwnerRegister from './components/fieldOwnerRegister.js';
+import FieldOwnerLogin from './components/fieldOwnerLogin.js';
 
 const App = () => (
   <Router>
@@ -10,8 +12,10 @@ const App = () => (
       <Navbar />
       <Routes>
         <Route path="/" element={<h1>Welcome to Football Field Management</h1>} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route path="/customer/login" element={<CustomerLogin />} />  
+        <Route path="/fieldOwner/login" element={<FieldOwnerLogin />} />  
+        <Route path="/customer/register" element={<CustomerRegister />} /> 
+        <Route path="/fieldOwner/register" element={<FieldOwnerRegister />} />
       </Routes>
     </div>
   </Router>

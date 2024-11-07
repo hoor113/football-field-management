@@ -19,7 +19,7 @@ const CustomerRegister = () => {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/customer/register`, formData);
       alert(response.data.message);  // Hiển thị thông báo thành công
       // Redirect to login page
-      window.location.href = '/login';
+      window.location.href = '/customer/login';
     } catch (error) {
       const message = error.response ? error.response.data.message : "An error occurred. Please try again.";
       alert(message);  // Hiển thị thông báo lỗi
@@ -28,7 +28,7 @@ const CustomerRegister = () => {
 
   return (
     <div className="customer-register-container">
-      <h2>Register</h2>
+      <h2>CustomerRegister</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <input
