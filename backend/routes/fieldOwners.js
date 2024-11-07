@@ -1,9 +1,9 @@
 import { Router } from "express"
-import { UploadField, UploadService } from "../controller/field-owner.func"
-import { authenticateToken } from "../controller/verify"
+import { UploadField, UploadService } from "../controller/field-owner.func.js"
+import { authenticateToken } from "../controller/verify.js"
 
-const router = Router()
-router.post("/field", authenticateToken, UploadField)
-router.post("/field/service", authenticateToken, UploadService)
+const router3 = Router()
+router3.post("/", authenticateToken, UploadField)
+router3.post("/service", authenticateToken, UploadService)
 
-export default router
+export default router3

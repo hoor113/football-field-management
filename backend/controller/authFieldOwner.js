@@ -1,5 +1,6 @@
 import { FieldOwner } from '../models/field-owner.model.js';
 import jwt from 'jsonwebtoken';
+import express from "express"
 
 // Đăng ký chủ sân mới
 export const register = async (req, res) => {

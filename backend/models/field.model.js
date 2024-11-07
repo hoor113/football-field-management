@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { Rating } from "./rating.model";
+// import { Rating } from "./rating.model";
 const Schema = mongoose.Schema;
 
 const ServiceSchema = new Schema({

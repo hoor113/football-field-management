@@ -3,7 +3,9 @@ import dotenv from "dotenv"
 import { ConnectDB } from "./config/db.js"
 import router1 from "./routes/authRoutesCustomer.js"
 import router2 from "./routes/authRoutesFieldOwner.js"
+import router3 from "./routes/fieldOwners.js"
 import cors from 'cors'
+import cookieParser from "cookie-parser"
 
 dotenv.config()
 
@@ -13,23 +15,17 @@ app.use(cors({
   }));  
 
 app.use(express.json())
-const PORT = process.env.PORT || 5000
+app.use(cookieParser())
 
-// app.use((req, res) => {
-//     console.log("Requesting ", req)
-//     console.log("Responding ", res)
-// })
+const PORT = process.env.PORT || 5000
 
 // Route cho người dùng (customer)
 app.use("/api/customer", router1);
 
 // Route cho chủ sân (field owner)
-app.use("/api/fieldOwner", router2);
+app.use("/api/field_owner", router2);
 
-// app.get('/', (req, res) => {
-//     res.send()
-// })
-
+app.use("/api/field", router3)
 
 app.listen(PORT, () => {
     ConnectDB()
