@@ -26,8 +26,11 @@ app.use(express.json())
 //     console.log("Responding ", res)
 // })
 
-app.use('/api1', router1);
-app.use('/api2', router2);
+// Route cho người dùng (customer)
+app.use("/api/customer", router1);
+
+// Route cho chủ sân (field owner)
+app.use("/api/fieldOwner", router2);
 
 // app.get('/', (req, res) => {
 //     res.send()
