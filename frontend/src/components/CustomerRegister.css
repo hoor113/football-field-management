@@ -23,11 +23,11 @@
   font-size: 2rem;
   font-weight: 600;
   margin-bottom: 2rem;
-  color: #4a90e2; 
-  position: absolute; 
-  top: -1.5rem; 
+  color: #4a90e2;
+  position: absolute;
+  top: -1.5rem;
   left: 50%;
-  transform: translateX(-50%); 
+  transform: translateX(-50%);
 }
 
 .customer-register-form .form-group {
