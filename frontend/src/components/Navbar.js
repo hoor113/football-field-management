@@ -7,8 +7,8 @@ const Navbar = () => (
     <h1 className="navbar-logo">Football Field Management</h1>
     <div className="navbar-links">
       <Link to="/">Home</Link>
-      <Link to="/login">Login</Link>
-      <Link to="/register">Register</Link>
+      <Link to="/login">CustomerLogin</Link>
+      <Link to="/register">CustomerRegister</Link>
     </div>
   </nav>
 );
