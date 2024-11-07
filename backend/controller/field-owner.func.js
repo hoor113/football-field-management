@@ -8,7 +8,14 @@ export const UploadField = async (req, res) => {
     }
 
     try {
-        const NewField = new Field(field);
+        
+        const NewField = new Field({
+            name,
+            address,
+            base_price,
+            image_url,
+            total_grounds
+        });
         await NewField.save();
         return res.status(201).json({ success: true, message: "Field created successfully" });
     } catch (error) {
