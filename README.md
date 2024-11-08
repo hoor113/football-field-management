@@ -15,3 +15,4 @@ Cách chạy web app: (toàn bộ chạy trên terminal)
  + Thoát ra khỏi folder frontend - cd ..
  + Chạy web app - npm run dev
  + Enjoy
+Lưu ý: Chạy xong web app thì nếu cần edit frontend thì hãy xóa folder frontend/build
