@@ -6,6 +6,7 @@ import router2 from "./routes/authRoutesFieldOwner.js"
 import router3 from "./routes/fieldOwners.js"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
+import path from "path"
 
 dotenv.config()
 
@@ -26,6 +27,16 @@ app.use("/api/customer", router1);
 app.use("/api/fieldOwner", router2);
 
 app.use("/api/field", router3)
+
+const __dirname = path.resolve()
+
+if (process.env.NODE_ENV === 'production') {
+  app.use(express.static(path.join(__dirname, "/frontend/build")))
+
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "frontend", "build", "index.html"))
+  })
+}
 
 app.listen(PORT, () => {
     ConnectDB()
