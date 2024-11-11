@@ -13,7 +13,7 @@ const Navbar = () => (
         <button className="dropdown-btn">Login</button>
         <div className="dropdown-content">
           <Link to="/customer/login">Customer</Link>
-          <Link to="/fieldOwner/login">FieldOwner</Link>
+          <Link to="/field_owner/login">FieldOwner</Link>
         </div>
       </div>
 
@@ -21,7 +21,7 @@ const Navbar = () => (
         <button className="dropdown-btn">Register</button>
         <div className="dropdown-content">
           <Link to="/customer/register">Customer</Link>
-          <Link to="/fieldOwner/register">FieldOwner</Link>
+          <Link to="/field_owner/register">FieldOwner</Link>
         </div>
       </div>
     </div>

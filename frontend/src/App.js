@@ -13,9 +13,9 @@ const App = () => (
       <Routes>
         <Route path="/" element={<h1>Welcome to Football Field Management</h1>} />
         <Route path="/customer/login" element={<CustomerLogin />} />  
-        <Route path="/fieldOwner/login" element={<FieldOwnerLogin />} />  
+        <Route path="/field_owner/login" element={<FieldOwnerLogin />} />  
         <Route path="/customer/register" element={<CustomerRegister />} /> 
-        <Route path="/fieldOwner/register" element={<FieldOwnerRegister />} />
+        <Route path="/field_owner/register" element={<FieldOwnerRegister />} />
       </Routes>
     </div>
   </Router>

@@ -16,10 +16,10 @@ const FieldOwnerRegister = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/fieldOwner/register`, formData);
+            const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/field_owner/register`, formData);
             alert(response.data.message);  // Hiển thị thông báo thành công
             // Redirect to login page
-            window.location.href = '/fieldOwner/login';
+            window.location.href = '/field_owner/login';
         } catch (error) {
             const message = error.response ? error.response.data.message : "An error occurred. Please try again.";
             alert(message);  // Hiển thị thông báo lỗi
