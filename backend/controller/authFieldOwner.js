@@ -1,6 +1,7 @@
 import { FieldOwner } from '../models/field-owner.model.js';
 import jwt from 'jsonwebtoken';
 import express from "express"
+import { Field } from '../models/field.model.js';
 
 // Đăng ký chủ sân mới
 export const register = async (req, res) => {
@@ -82,3 +83,25 @@ export const login = async (req, res) => {
         res.status(500).json({ error: error.message });
     }
 };
+
+export const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export const getFieldOwner = async (req, res) => {
+    try {
+        console.log("Request user:", req.user)
+        const fieldOwnerGet = await FieldOwner.findById(req.user.id).select('fullname')
+        if (!fieldOwnerGet) {
+            return res.status(404).json({ message: "Failed to get full name"})
+        }
+        res.json({ fullname: fieldOwnerGet.fullname })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}

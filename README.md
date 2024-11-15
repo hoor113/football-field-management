@@ -10,9 +10,3 @@ Tải các dependencies nếu thiếu (npm install <tên dependencies (cách nha
  - cookie-parser
  - bcryptjs
 Cách chạy web app: (toàn bộ chạy trên terminal)
- + Từ trong folder chính truy cập vào folder frontend - cd frontend
- + Chạy npm run build
- + Thoát ra khỏi folder frontend - cd ..
- + Chạy web app - npm run dev
- + Enjoy
-Lưu ý: Chạy xong web app thì nếu cần edit frontend thì hãy xóa folder frontend/build

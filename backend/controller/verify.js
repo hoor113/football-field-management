@@ -9,7 +9,11 @@ export const authenticateToken = (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
-        req.userId = decoded.id
+        if (!decoded || !decoded.id) {
+            return res.status(400).json({ message: 'Invalid token structure.' });
+        }
+
+        req.user = decoded
         next()
     } catch (error) {
         return res.status(403).json({message: "Token is invalid or expired"})

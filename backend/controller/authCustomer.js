@@ -82,3 +82,25 @@ export const login = async (req, res) => {
         res.status(500).json({ message: 'An error occurred during login' });
     }
 };
+
+export const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    res.status(200).json({ message: 'Logged out successfully' });
+};
+
+export const getCustomer = async (req, res) => {
+    try {
+        console.log("Request user:", req.user)
+        const customerGet = await Customer.findById(req.user.id).select('fullname')
+        if (!customerGet) {
+            return res.status(404).json({ message: "Failed to get full name"})
+        }
+        res.json({ fullname: customerGet.fullname })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
