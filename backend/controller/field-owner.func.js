@@ -33,10 +33,10 @@ export const UploadField = async (req, res) => {
 
 
 export const UploadService = async (req, res) => {
-    // TODO:
     const {name, type, price} = req.body;
     if (!(name || type || price)) {
         return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
+    
 }
 
