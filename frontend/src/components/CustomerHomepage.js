@@ -19,6 +19,17 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
 
     // Fetch fields for the field owner
     useEffect(() => {
+        fetch("http://localhost:5000/api/field_owner", {
+            method: "GET",
+            credentials: "include"
+        })
+            .then((response) => response.json())
+            .then((data) => getFieldOwner(data.fieldOwner))
+            .catch((error) => console.error('Error fetching fields:', error));
+    }
+
+    )
+    useEffect(() => {
         fetch("http://localhost:5000/api/field/", {
             method: "GET",
             credentials: "include",
