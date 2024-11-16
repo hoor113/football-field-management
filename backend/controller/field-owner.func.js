@@ -33,10 +33,21 @@ export const UploadField = async (req, res) => {
 
 
 export const UploadService = async (req, res) => {
-    const {name, type, price} = req.body;
-    if (!(name || type || price)) {
+    const {fieldId, name, type, price} = req.body;
+    if (!(fieldId || name || type || price)) {
         return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
     
+    try {
+        const field = await Field.findById(fieldId)
+        if (!field) {
+            return res.status(404).json({ message: 'Field not found' });
+        }
+        field.services.push({name, type, price})
+        await field.save()
+        res.status(200).json({ message: 'Service added successfully', field });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
 }
 

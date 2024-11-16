@@ -18,10 +18,10 @@ export const AuthCustomer = () => {
             })
             .then((data) => {
                 setFullname(data.fullname);
-                setIsLoggedIn(true);
+                setIsLoggedIn(2);
             })
             .catch(() => {
-                setIsLoggedIn(false);
+                setIsLoggedIn(0);
                 setFullname(null);
             });
     }, []);
@@ -32,7 +32,7 @@ export const AuthCustomer = () => {
             method: "POST",
             credentials: "include",
         }).then(() => {
-            setIsLoggedIn(false);
+            setIsLoggedIn(0);
             setFullname(null);
         });
     };
