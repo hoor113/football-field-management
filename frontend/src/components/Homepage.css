@@ -1,0 +1,194 @@
+/* Container Styles */
+.fields-container {
+    padding: 2rem;
+    padding-bottom: 5rem;
+    width: 100%;
+    overflow-x: auto;
+}
+
+/* Field Card Styles */
+.field-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+    margin-bottom: 1rem;
+}
+
+.field-card:hover {
+    transform: translateY(-5px);
+}
+
+.field-title {
+    margin: 0 0 1rem 0;
+}
+
+.field-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Services Section */
+.services-section {
+    margin-top: 1rem;
+}
+
+.services-title {
+    margin: 0 0 0.5rem 0;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.service-item {
+    padding: 0.5rem;
+    background-color: #f5f5f5;
+    margin-bottom: 0.5rem;
+    border-radius: 4px;
+}
+
+/* Button Styles */
+.button-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-service-button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.floating-add-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 2rem;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 1000;
+}
+
+.field-form-modal {
+    width: 300px;
+}
+
+.modal-input {
+    margin-bottom: 1rem;
+    width: 100%;
+    padding: 0.5rem;
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.cancel-button {
+    padding: 0.5rem 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fields-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 1rem;
+    justify-content: flex-start;
+    min-height: calc(100vh - 200px);
+}
+
+.pagination-controls {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.pagination-button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.pagination-button:hover {
+    background-color: #0056b3;
+}
+
+.pagination-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 1rem;
+    color: #666;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Optional: Add smooth scrolling for the container */
+html {
+    scroll-behavior: smooth;
+}
