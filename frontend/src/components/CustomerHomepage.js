@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 // }
 
 export const HomePage = ({ isLoggedIn, fullname }) => {
-    const [fieldOwner, getFieldOwner] = useState('');
+    // const [fieldOwner, getFieldOwner] = useState('');
     const [fields, setFields] = useState([]);
     const [selectedField, setSelectedField] = useState(null);
     const [showServiceForm, setShowServiceForm] = useState(false);
@@ -18,17 +18,16 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
     const [price, setPrice] = useState('');
 
     // Fetch fields for the field owner
-    useEffect(() => {
-        fetch("http://localhost:5000/api/field_owner", {
-            method: "GET",
-            credentials: "include"
-        })
-            .then((response) => response.json())
-            .then((data) => getFieldOwner(data.fieldOwner))
-            .catch((error) => console.error('Error fetching fields:', error));
-    }
+    // useEffect(() => {
+    //     fetch("http://localhost:5000/api/field_owner", {
+    //         method: "GET",
+    //         credentials: "include"
+    //     })
+    //         .then((response) => response.json())
+    //         .then((data) => getFieldOwner(data.fieldOwner))
+    //         .catch((error) => console.error('Error fetching fields:', error));
+    // })
 
-    )
     useEffect(() => {
         fetch("http://localhost:5000/api/field/", {
             method: "GET",

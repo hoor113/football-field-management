@@ -51,3 +51,39 @@ export const UploadService = async (req, res) => {
     }
 }
 
+export const GetFields = async (req, res) => {
+    try {
+        console.log('Fetching fields for user ID:', req.user.id);
+        
+        // Find the field owner and populate the fields array
+        const fieldOwner = await FieldOwner.findById(req.user.id)
+            .populate({
+                path: 'fields',
+                // populate: {
+                //     path: 'services' // If you want to populate services as well
+                // }
+            });
+
+        if (!fieldOwner) {
+            return res.status(404).json({
+                success: false,
+                message: "Field owner not found"
+            });
+        }
+
+        console.log('Found fields:', fieldOwner.fields);
+        
+        return res.status(200).json({
+            success: true,
+            fields: fieldOwner.fields
+        });
+    } catch (error) {
+        console.error('Get Fields Error:', error);
+        return res.status(500).json({
+            success: false,
+            message: "Error fetching fields",
+            error: error.message
+        });
+    }
+};
+

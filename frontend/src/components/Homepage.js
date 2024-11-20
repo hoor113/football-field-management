@@ -20,6 +20,14 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const fieldsPerPage = 3; // Number of fields to show per page
 
+  // Add this helper function at the top of your component
+  const formatPrice = (price) => {
+    if (price?.$numberDecimal) {
+      return Number(price.$numberDecimal);
+    }
+    return Number(price);
+  };
+
   // Fetch fields for the field owner
   useEffect(() => {
     if (isLoggedIn === 1) {
@@ -180,46 +188,54 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
           {Array.isArray(fields) && fields.length > 0 ? (
             <>
               <div className="fields-grid">
-                {currentFields.map((field) => (
-                  <div key={field._id} className="field-card">
-                    <h2 className="field-title">{field.name}</h2>
-                    <img
-                      src={field.image_url}
-                      alt={field.name}
-                      className="field-image"
-                    />
-                    <p><strong>Address:</strong> {field.address}</p>
-                    <p><strong>Base Price:</strong> VND {field.base_price}</p>
-                    <p><strong>Total Grounds:</strong> {field.total_grounds}</p>
+                {currentFields.map((field) => {
+                  // Convert the price before rendering
+                  const basePrice = formatPrice(field.base_price);
+                  
+                  return (
+                    <div key={field._id} className="field-card">
+                      <h2 className="field-title">{field.name}</h2>
+                      <img
+                        src={field.image_url}
+                        alt={field.name}
+                        className="field-image"
+                      />
+                      <p><strong>Address:</strong> {field.address}</p>
+                      <p><strong>Base Price:</strong> VND {basePrice.toLocaleString()}</p>
+                      <p><strong>Total Grounds:</strong> {field.total_grounds}</p>
 
-                    {field.services && field.services.length > 0 && (
-                      <div className="services-section">
-                        <h3 className="services-title">Services:</h3>
-                        <ul className="services-list">
-                          {field.services.map((service, index) => (
-                            <li key={index} className="service-item">
-                              <div><strong>{service.name}</strong></div>
-                              <div>Type: {service.type}</div>
-                              <div>Price: ${service.price}</div>
-                            </li>
-                          ))}
-                        </ul>
+                      {field.services && field.services.length > 0 && (
+                        <div className="services-section">
+                          <h3 className="services-title">Services:</h3>
+                          <ul className="services-list">
+                            {field.services.map((service, index) => {
+                              const servicePrice = formatPrice(service.price);
+                              return (
+                                <li key={index} className="service-item">
+                                  <div><strong>{service.name}</strong></div>
+                                  <div>Type: {service.type}</div>
+                                  <div>Price: VND {servicePrice.toLocaleString()}</div>
+                                </li>
+                              );
+                            })}
+                          </ul>
+                        </div>
+                      )}
+
+                      <div className="button-container">
+                        <button
+                          onClick={() => {
+                            setSelectedField(field._id);
+                            setShowServiceForm(true);
+                          }}
+                          className="add-service-button"
+                        >
+                          + Add Service
+                        </button>
                       </div>
-                    )}
-
-                    <div className="button-container">
-                      <button
-                        onClick={() => {
-                          setSelectedField(field._id);
-                          setShowServiceForm(true);
-                        }}
-                        className="add-service-button"
-                      >
-                        + Add Service
-                      </button>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
               
               <div className="pagination-controls">
