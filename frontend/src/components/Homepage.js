@@ -118,7 +118,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
 
   // Add this function to handle field creation
   const handleAddField = () => {
-    fetch("http://localhost:5000/api/field_owner", {
+    fetch("http://localhost:5000/api/field", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
@@ -138,7 +138,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
           });
 
           // Fetch updated fields
-          const fieldsResponse = await fetch("http://localhost:5000/api/field", {
+          const fieldsResponse = await fetch("http://localhost:5000/api/field_owner/fields", {
             method: "GET",
             credentials: "include",
           });

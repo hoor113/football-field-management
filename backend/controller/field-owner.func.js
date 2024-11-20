@@ -9,8 +9,8 @@ export const UploadField = async (req, res) => {
     }
 
     try {
-        const owner_id = req.userId
-        console.log(req.userId)
+        const owner_id = req.user.id
+        console.log(req.user.id)
         const NewField = new Field({
             owner_id,
             name,

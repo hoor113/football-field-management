@@ -3,7 +3,7 @@ import { register, login, getFieldOwner, logout } from '../controller/authFieldO
 import { GetFields } from '../controller/field-owner.func.js';
 import { authenticateToken } from '../controller/verify.js';
 
-
+// api/field_owner/
 const router2 = Router();
 router2.post('/register', register);
 router2.post('/login', login);
