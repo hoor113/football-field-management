@@ -5,7 +5,7 @@ import CustomerLogin from './components/CustomerLogin.js';
 import CustomerRegister from './components/CustomerRegister.js';
 import FieldOwnerRegister from './components/FieldOwnerRegister.js';
 import FieldOwnerLogin from './components/FieldOwnerLogin.js';
-import HomePage from './components/CustomerHomepage.js';
+import HomePage from './components/Homepage.js';
 import { AuthCustomer } from './login/AuthCustomer.js';
 import { AuthFieldOwner } from './login/AuthFieldOwner.js';
 
