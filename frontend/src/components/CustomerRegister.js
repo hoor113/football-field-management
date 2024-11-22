@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import './CustomerRegister.css'
+import "../styles/CustomerRegister.css"
 
 const CustomerRegister = () => {
   const [formData, setFormData] = useState({
     username: '',
     password: '',
+    confirmPassword: '',
     fullname: '',
     sex: '',
     birthday: '',
@@ -13,8 +14,24 @@ const CustomerRegister = () => {
     email: ''
   });
 
+  const [passwordError, setPasswordError] = useState('');
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Password validation
+    if (formData.password !== formData.confirmPassword) {
+        setPasswordError("Passwords don't match!");
+        return;
+    }
+    if (formData.password.length < 6) {
+        setPasswordError("Password must be at least 6 characters long!");
+        return;
+    }
+    
+    // Reset error if validation passes
+    setPasswordError('');
+
     try {
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/customer/register`, formData);
       alert(response.data.message);  // Hiển thị thông báo thành công
@@ -46,6 +63,15 @@ const CustomerRegister = () => {
             onChange={(e) => setFormData({ ...formData, password: e.target.value })}
           />
         </div>
+        <div>
+          <input
+            type="password"
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
+          />
+        </div>
+        {passwordError && <div className="error-message">{passwordError}</div>}
         <div>
           <input
             type="text"
