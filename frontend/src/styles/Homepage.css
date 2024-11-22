@@ -1,0 +1,306 @@
+/* Container Styles */
+.fields-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1rem 2rem;
+    padding-bottom: 5rem;
+    width: 100%;
+    min-height: 100vh;
+}
+
+/* Field Card Styles */
+.field-card {
+    flex: 0 0 auto;
+    width: 300px;
+    background: white;
+    border-radius: 8px;
+    padding: 1.5rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 1rem;
+}
+
+.field-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.field-image {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+}
+
+/* Services Section */
+.services-section {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #eee;
+}
+
+.services-title {
+    margin: 0 0 0.5rem 0;
+}
+
+.services-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.service-item {
+    padding: 0.5rem;
+    margin-bottom: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 4px;
+}
+
+/* Button Styles */
+.button-container {
+    margin-top: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+.add-service-button {
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.floating-add-button {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+}
+
+.floating-add-button:hover {
+    transform: scale(1.1);
+    background-color: #0056b3;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    width: 90%;
+    max-width: 500px;
+}
+
+.field-form-modal {
+    width: 300px;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.cancel-button {
+    padding: 0.5rem 1rem;
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.submit-button {
+    padding: 0.5rem 1rem;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fields-grid {
+    display: flex;
+    flex-direction: row;
+    gap: 2rem;
+    padding: 0.5rem;
+    overflow-x: auto;
+    min-height: calc(100vh - 200px);
+}
+
+.pagination-controls {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 2rem;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    z-index: 100;
+}
+
+.pagination-button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.pagination-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 1rem;
+    color: #666;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Optional: Add smooth scrolling for the container */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Modal overlay */
+.modal::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: -1;
+}
+
+.welcome-header {
+    text-align: center;
+    color: #007bff;
+    margin: 1rem auto 0.5rem;
+    padding: 0.5rem;
+    font-size: 2rem;
+    font-weight: 600;
+    max-width: 1200px;
+}
+
+.operating-hours-section {
+    margin: 20px 0;
+}
+
+.operating-hours-list {
+    margin: 10px 0;
+}
+
+.operating-hours-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    margin: 5px 0;
+    background: #f5f5f5;
+    border-radius: 4px;
+}
+
+.remove-hours-button {
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+}
+
+.hours-inputs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.add-hours-button {
+    background: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.operating-hours-display {
+    margin: 15px 0;
+    padding: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.operating-hours-display h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.time-ranges {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.time-range-item {
+    display: inline-block;
+}
+
+.time-badge {
+    background-color: #e3f2fd;
+    color: #1976d2;
+    padding: 4px 12px;
+    border-radius: 16px;
+    font-size: 0.9em;
+    font-weight: 500;
+    display: inline-block;
+}
+
+.no-hours {
+    color: #666;
+    font-style: italic;
+}
