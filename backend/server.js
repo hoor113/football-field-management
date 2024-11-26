@@ -24,7 +24,7 @@ const PORT = process.env.PORT || 5000
 app.use("/api/customer", router1);
 
 // Route cho chủ sân (field owner)
-app.use("/api/fieldOwner", router2);
+app.use("/api/field_owner", router2);
 
 app.use("/api/field", router3)
 
