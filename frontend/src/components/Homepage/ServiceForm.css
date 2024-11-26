@@ -1,0 +1,18 @@
+.service-form-modal {
+    max-width: 400px;
+}
+
+.service-form-modal h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.service-form-modal .modal-input {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.service-form-modal .modal-buttons {
+    margin-top: 20px;
+} 

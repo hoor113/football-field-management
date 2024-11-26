@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 export const AuthFieldOwner = () => {
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [isLoggedIn, setIsLoggedIn] = useState(0);
     const [fullname, setFullname] = useState(null);
 
     // Check if user is logged in on initial load
@@ -18,10 +18,10 @@ export const AuthFieldOwner = () => {
             })
             .then((data) => {
                 setFullname(data.fullname);
-                setIsLoggedIn(true);
+                setIsLoggedIn(1);
             })
             .catch(() => {
-                setIsLoggedIn(false);
+                setIsLoggedIn(0);
                 setFullname(null);
             });
     }, []);
@@ -32,7 +32,7 @@ export const AuthFieldOwner = () => {
             method: "POST",
             credentials: "include",
         }).then(() => {
-            setIsLoggedIn(false);
+            setIsLoggedIn(0);
             setFullname(null);
         });
     };
