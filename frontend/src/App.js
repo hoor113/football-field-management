@@ -4,7 +4,8 @@ import Navbar from './components/Navbar.js';
 import CustomerLogin from './components/CustomerLogin.js';
 import CustomerRegister from './components/CustomerRegister.js';
 import FieldOwnerRegister from './components/fieldOwnerRegister.js';
-import FieldOwnerLogin from './components/FieldOwnerLogin.js';
+
+import FieldOwnerLogin from './components/fieldOwnerLogin.js';
 import HomePage from './components/Homepage/index.js';
 import { AuthCustomer } from './login/AuthCustomer.js';
 import { AuthFieldOwner } from './login/AuthFieldOwner.js';
@@ -31,4 +32,5 @@ const App = () => {
     );
 };
 
+// LE KHOI NGUYEN ỨA HỂ
 export default App;

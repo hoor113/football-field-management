@@ -91,7 +91,7 @@ export const logout = (req, res) => {
         sameSite: 'Strict',
     });
     res.status(200).json({ message: 'Logged out successfully' });
-};
+};  
 
 export const getFieldOwner = async (req, res) => {
     try {
