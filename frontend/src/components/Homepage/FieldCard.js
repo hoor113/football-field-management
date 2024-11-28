@@ -2,27 +2,27 @@ import React, { useState } from 'react';
 import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
 
-export const FieldCard = ({ field }) => {
+export const FieldCard = ({ field, isLoggedIn }) => {
     const [showServiceForm, setShowServiceForm] = useState(false);
 
     return (
         <div className="field-card">
             <div className="field-header">
                 <h2>{field.name}</h2>
-                <button 
+                {isLoggedIn === 1 ? <button
                     className="add-service-button"
                     onClick={() => setShowServiceForm(true)}
                 >
                     Add Services +
-                </button>
+                </button> : null}
             </div>
-            
+
             <img src={field.image_url} alt={field.name} className="field-image" />
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
             <p><strong>Base Price:</strong> VND {field.base_price.toLocaleString()}</p>
             <p><strong>Total Grounds:</strong> {field.total_grounds}</p>
-            
+
             <div className="operating-hours-display">
                 <h3>Operating Hours:</h3>
                 {field.operating_hours && field.operating_hours.length > 0 ? (
@@ -32,8 +32,8 @@ export const FieldCard = ({ field }) => {
                             .map((hours, index) => (
                                 <div key={index} className="time-range-item">
                                     <span className="time-badge">
-                                        {String(hours.start_hour).padStart(2, '0')}:00 
-                                        - 
+                                        {String(hours.start_hour).padStart(2, '0')}:00
+                                        -
                                         {String(hours.end_hour).padStart(2, '0')}:00
                                     </span>
                                 </div>
@@ -64,11 +64,19 @@ export const FieldCard = ({ field }) => {
             </div>
 
             {showServiceForm && (
-                <ServiceForm 
+                <ServiceForm
                     fieldId={field._id}
                     onClose={() => setShowServiceForm(false)}
                 />
             )}
+
+            {isLoggedIn === 2 ? <button
+                className="add-service-button"
+                // onClick={() => setShowServiceForm(true)}
+                // TODO: Add order now functionality
+            >
+                Order Now
+            </button> : null}
         </div>
     );
 }; 

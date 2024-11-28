@@ -34,7 +34,7 @@ const OccupationSchema = new Schema({
   end_time: { type: String, required: true },
   booking_id: { type: Schema.Types.ObjectId, ref: 'Booking' },
   customer_id: { type: Schema.Types.ObjectId, ref: 'Customer' },
-  status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' }
+  status: { type: String, enum: ['vacant', 'occupied'], default: 'vacant' }
 });
 
 const GroundSchema = new Schema({
@@ -64,10 +64,6 @@ const FieldSchema = new Schema({
   total_grounds: { type: Number, required: true },
   grounds: [GroundSchema],
   services: [ServiceSchema],
-  booking_window: { type: DateRangeSchema, default: {
-    start_date: new Date(),
-    end_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000) // Default 30 days ahead
-  }},
   operating_hours: {
     type: [OperatingHoursSchema],
     required: true,

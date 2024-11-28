@@ -23,14 +23,37 @@ export const getBookings = async (req, res) => {
     res.status(200).json({ bookings });
 }
 
-export const getFields = async (req, res) => {
+export const getRecommendedFields = async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
-        const fields = await Field.findAll({
-            limit: limit
-        });
+        const fields = await Field.find()
+            .limit(limit);
         res.status(200).json({ success: true, fields });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Error fetching fields', error: error.message });
     }
 }
+
+export const SearchFields = async (req, res) => {
+    try {
+        const searchTerm = req.query.q;
+        const fields = await Field.find({ 
+            name: { 
+                $regex: searchTerm, 
+                $options: 'i' 
+            } 
+        });
+        
+        res.status(200).json({ 
+            success: true, 
+            fields 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error searching fields', 
+            error: error.message 
+        });
+    }
+}
+

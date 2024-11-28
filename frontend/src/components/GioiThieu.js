@@ -14,7 +14,7 @@ const GioiThieu = () => {
         if (!isLoggedIn) {
             navigate('/customer/login');
         } else {
-            navigate('/danh-sach-san');
+            navigate('/');
         }
     };
 

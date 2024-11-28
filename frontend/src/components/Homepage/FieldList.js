@@ -12,7 +12,7 @@ export const FieldList = ({ fields, currentPage, fieldsPerPage, onPageChange }) 
         <div className="field-list-container">
             <div className="fields-grid">
                 {currentFields.map(field => (
-                    <FieldCard key={field._id} field={field} />
+                    <FieldCard key={field._id} field={field} isLoggedIn={1} />
                 ))}
             </div>
             
