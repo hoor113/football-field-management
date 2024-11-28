@@ -1,0 +1,96 @@
+.footer {
+    background-color: #1e4c9a;
+    color: white;
+    padding: 40px 0;
+    margin-top: auto;
+}
+
+.footer-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+}
+
+.footer-section h3 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #ffd700;
+}
+
+.footer-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.footer-links a:hover {
+    color: #ffd700;
+}
+
+.company-info p {
+    margin-bottom: 10px;
+    font-size: 0.9rem;
+}
+
+.contact-info {
+    margin-bottom: 20px;
+}
+
+.phone-number {
+    color: #ffd700;
+    text-decoration: none;
+    font-size: 1.2rem;
+    font-weight: bold;
+    display: block;
+    margin: 10px 0;
+}
+
+.call-button {
+    background-color: #ffc107;
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.call-button:hover {
+    background-color: #ffca2c;
+}
+
+.social-links h4 {
+    margin: 20px 0 10px;
+    font-size: 1rem;
+}
+
+.social-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.social-icons a {
+    color: white;
+    font-size: 24px;
+    transition: color 0.3s;
+}
+
+.social-icons a:hover {
+    color: #ffd700;
+}
+
+@media (max-width: 768px) {
+    .footer-container {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+} 

@@ -47,7 +47,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
         return (
             <div className="container">
                 <h1 className="welcome-header">Welcome Field Owner {fullname}!</h1>
-                
+
                 <FieldList
                     fields={fields}
                     currentPage={currentPage}
@@ -92,8 +92,22 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
         );
     }
     return (
-        <div className="container">
-            <h1 className="welcome-header">Welcome to Field Manager!</h1>
+        <div className="banner">
+            <div className="banner-content">
+                <h1 style={{ color: '#ffffff' }}>HỆ THỐNG HỖ TRỢ TÌM KIẾM SÂN BÃI NHANH</h1>
+                <p>Dữ liệu được cập nhật thường xuyên giúp cho người dùng tìm được sân một cách nhanh nhất</p>
+                <div className="search-bar">
+                    {/* <select>
+                        <option>Lọc theo loại sân</option>
+                        <option>Sân cỏ nhân tạo</option>
+                        <option>Sân cỏ tự nhiên</option>
+                    </select> */}
+                    <input type="text" placeholder="Nhập tên sân hoặc địa chỉ..." />
+                    <input type="text" placeholder="Nhập khu vực" />
+                    <button className="search-button">Tìm kiếm</button>
+                </div>
+            </div>
+            
         </div>
     );
 };
