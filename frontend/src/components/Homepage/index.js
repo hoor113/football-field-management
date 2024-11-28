@@ -5,6 +5,7 @@ import { ServiceForm } from './ServiceForm';
 import { useField } from './hooks/useField';
 import { handleAddField } from './functions/fieldOperations';
 import './Homepage.css';
+import { SearchSection } from './SearchSection';
 
 export const HomePage = ({ isLoggedIn, fullname }) => {
     const { fields, setFields } = useField(isLoggedIn);
@@ -79,11 +80,20 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
         );
     }
 
+    // Customer Homepage
+    else if (isLoggedIn === 2) {
+        return (
+            <div className="container">
+                <h1 className="welcome-header">
+                    {`Welcome Customer ${fullname}!`}
+                </h1>
+                <SearchSection />
+            </div>
+        );
+    }
     return (
         <div className="container">
-            <h1 className="welcome-header">
-                {isLoggedIn === 2 ? `Welcome Customer ${fullname}!` : 'Welcome to Field Manager!'}
-            </h1>
+            <h1 className="welcome-header">Welcome to Field Manager!</h1>
         </div>
     );
 };
