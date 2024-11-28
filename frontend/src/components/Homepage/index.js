@@ -6,36 +6,44 @@ import { useField } from './hooks/useField';
 import { handleAddField } from './functions/fieldOperations';
 import './Homepage.css';
 import { SearchSection } from './SearchSection';
+import ZirkzeeImage from './images/zirkzee.jpg';
+import AntonyImage from './images/antony.jpg';
+import NicholasJacksonImage from './images/jackson.jpg';
+import MykhayloMudrykImage from './images/mudryk.jpg';
 
 const NewsSection = () => {
     const newsItems = [
         {
             id: 1,
-            image: "path_to_image_1.jpg",
-            title: "Tin tức bóng đá 1",
-            summary: "Tóm tắt nội dung bài báo 1 ở đây. Có thể là một số thông tin về giải đấu hoặc sự kiện bóng đá...",
-            date: "20/03/2024"
+            image: ZirkzeeImage,
+            title: "NHM MU vui mừng với hình ảnh mới nhất của Joshua Zirkzee",
+            summary: "Joshua Zirkzee chưa chính thức hội quân cùng MU, dù đang trong thời gian...",
+            date: "28/11/2024",
+            link: "https://bongda24h.vn/bong-da-anh/nhm-mu-vui-mung-voi-hinh-anh-moi-nhat-cua-joshua-zirkzee-172-394712.html"
         },
         {
             id: 2,
-            image: "path_to_image_2.jpg",
-            title: "Tin tức bóng đá 2",
-            summary: "Tóm tắt nội dung bài báo 2 ở đây. Thông tin về các trận đấu hoặc cập nhật mới...",
-            date: "19/03/2024"
+            image: AntonyImage,
+            title: "Antony gia nhập MU, phá cột mốc chuyển nhượng của Ronaldo",
+            summary: "Manchester United đã công bố trên trang chủ họ đã hoàn tất vụ chuyển nhượng ...",
+            date: "28/11/2024",
+            link: "https://www.24h.com.vn/bong-da/antony-100-trieu-euro-da-kiem-tra-y-te-o-mu-ferdinand-lo-vet-xe-do-nhu-grealish-c48a1391592.html"
         },
         {
             id: 3,
-            image: "path_to_image_3.jpg",
-            title: "Tin tức bóng đá 3",
-            summary: "Tóm tắt nội dung bài báo 3 ở đây. Có thể là thông tin về các cầu thủ...",
-            date: "18/03/2024"
+            image: NicholasJacksonImage,
+            title: "'Phượng hoàng' Jackson",
+            summary: "Ít ai ngờ rằng Nicolas Jackson lại có thể vươn lên trở thành trụ cột của Chelsea...",
+            date: "28/11/2024",
+            link: "https://znews.vn/phuong-hoang-jackson-post1513288.html"
         },
         {
             id: 4,
-            image: "path_to_image_4.jpg",
-            title: "Tin tức bóng đá 4",
-            summary: "Tóm tắt nội dung bài báo 4 ở đây. Thông tin về các sự kiện sắp diễn ra...",
-            date: "17/03/2024"
+            image: MykhayloMudrykImage,
+            title: "Mudryk thách đấu CĐV Chelsea",
+            summary: "Bị chê đá kém, tiền vệ trị giá 119 triệu USD Mykhailo Mudryk thách đấu CĐV Chelsea...",
+            date: "28/11/2024",
+            link: "https://vnexpress.net/mudryk-thach-dau-cdv-chelsea-4709172.html"
         }
     ];
 
@@ -52,7 +60,9 @@ const NewsSection = () => {
                             <h3>{news.title}</h3>
                             <p className="news-date">{news.date}</p>
                             <p className="news-summary">{news.summary}</p>
-                            <button className="read-more-btn">Đọc thêm</button>
+                            <a href={news.link} target="_blank" rel="noopener noreferrer" className="read-more-btn">
+                                Đọc thêm
+                            </a>
                         </div>
                     </div>
                 ))}
@@ -60,6 +70,99 @@ const NewsSection = () => {
         </div>
     );
 };
+
+const FeaturedFields = () => (
+    <div className="featured-fields">
+        <h2>Sân Bóng Nổi Bật</h2>
+        <div className="fields-grid">
+            {/* Hiển thị 3-4 sân bóng được đánh giá cao nhất */}
+        </div>
+    </div>
+);
+
+const Statistics = () => (
+    <div className="statistics-section">
+        <div className="stat-item">
+            <h3>500+</h3>
+            <p>Sân Bóng</p>
+        </div>
+        <div className="stat-item">
+            <h3>10,000+</h3>
+            <p>Người Dùng</p>
+        </div>
+        <div className="stat-item">
+            <h3>50,000+</h3>
+            <p>Lượt Đặt Sân</p>
+        </div>
+    </div>
+);
+
+const Testimonials = () => (
+    <div className="testimonials-section">
+        <h2>Khách Hàng Nói Gì Về Chúng Tôi</h2>
+        <div className="testimonials-slider">
+            {/* Slider hiển thị các đánh giá */}
+        </div>
+    </div>
+);
+
+const HowItWorks = () => (
+    <div className="how-it-works">
+        <h2>Cách Thức Hoạt Động</h2>
+        <div className="steps">
+            <div className="step">
+                <div className="step-number">1</div>
+                <h3>Tìm Sân</h3>
+                <p>Tìm sân phù hợp theo khu vực</p>
+            </div>
+            <div className="step">
+                <div className="step-number">2</div>
+                <h3>Đặt Sân</h3>
+                <p>Chọn thời gian và đặt sân</p>
+            </div>
+            <div className="step">
+                <div className="step-number">3</div>
+                <h3>Thanh Toán</h3>
+                <p>Thanh toán an toàn</p>
+            </div>
+        </div>
+    </div>
+);
+
+const Features = () => (
+    <div className="features-section">
+        <h2>Tại Sao Chọn Chúng Tôi</h2>
+        <div className="features-grid">
+            <div className="feature">
+                <i className="icon-fast"></i>
+                <h3>Đặt Sân Nhanh Chóng</h3>
+                <p>Chỉ với vài thao tác đơn giản</p>
+            </div>
+            <div className="feature">
+                <i className="icon-secure"></i>
+                <h3>Thanh Toán An Toàn</h3>
+                <p>Bảo mật thông tin thanh toán</p>
+            </div>
+            {/* Thêm các feature khác */}
+        </div>
+    </div>
+);
+
+const AppDownload = () => (
+    <div className="app-download">
+        <div className="app-content">
+            <h2>Tải Ứng Dụng Ngay</h2>
+            <p>Đặt sân dễ dàng hơn với ứng dụng di động</p>
+            <div className="download-buttons">
+                <button className="app-store">App Store</button>
+                <button className="play-store">Google Play</button>
+            </div>
+        </div>
+        <div className="app-image">
+            <img src="/images/app-preview.png" alt="App Preview" />
+        </div>
+    </div>
+);
 
 export const HomePage = ({ isLoggedIn, fullname }) => {
     const { fields, setFields } = useField(isLoggedIn);
@@ -162,8 +265,14 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
                         <button className="search-button">Tìm kiếm</button>
                     </div>
                 </div>
-                
+
             </div>
+            <HowItWorks />
+            <FeaturedFields />
+            <Statistics />
+            <Features />
+            <Testimonials />
+            <AppDownload />
             <NewsSection />
         </>
     );
