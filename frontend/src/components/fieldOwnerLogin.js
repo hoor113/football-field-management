@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
-import "../styles/fieldOwnerLogin.css"
+import "../styles/FieldOwnerLogin.css"
 
 const FieldOwnerLogin = () => {
     const [formData, setFormData] = useState({
