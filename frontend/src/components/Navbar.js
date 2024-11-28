@@ -3,52 +3,66 @@ import { Link } from 'react-router-dom';
 import "../styles/Navbar.css";
 
 const Navbar = ({ isLoggedIn, handleLogout, fullname }) => {
+    const scrollToBottom = (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: document.documentElement.scrollHeight,
+            behavior: 'smooth'
+        });
+    };
+
     return (
         <nav className="navbar">
             <Link to="/" className="navbar-logo-link">
-                <h1 className="navbar-logo">Football Field Management</h1>
+                <h1 className="navbar-logo">
+                    <i className="fas fa-futbol"></i>
+                    Football Field Management
+                </h1>
             </Link>
 
             <div className="navbar-links">
-                <Link to="/">Trang chủ</Link>
-                {/* <Link to="/danh-sach-san">Danh sách sân bãi</Link> */}
-                <Link to="/gioi-thieu">Giới thiệu</Link>
-                <Link to="/chinh-sach">Chính sách</Link>
-                <Link to="/dieu-khoan">Điều khoản</Link>
-                <Link to="/lien-he">Liên hệ</Link>
-
-                {!isLoggedIn ? (
-                    <div className="auth-buttons">
-                        <div className="dropdown">
-                            <button className="dropdown-btn">Đăng Ký</button>
-                            <div className="dropdown-content">
-                                <Link to="/customer/register">Khách Hàng</Link>
-                                <Link to="/field_owner/register">Chủ Sân</Link>
-                            </div>
-                        </div>
-                        <div className="dropdown">
-                            <button className="dropdown-btn">Đăng Nhập</button>
-                            <div className="dropdown-content">
-                                <Link to="/customer/login">Khách Hàng</Link>
-                                <Link to="/field_owner/login">Chủ Sân</Link>
-                            </div>
-                        </div>
-                    </div>
-                ) : (
-                    <div className="dropdown">
-                        <button className="dropdown-btn user-btn">
-                            <span className="user-name">{fullname}</span>
-                            <span className="dropdown-arrow">▼</span>
-                        </button>
-                        <div className="dropdown-content user-dropdown">
-                            <Link to="/profile">Hồ Sơ</Link>
-                            <Link to="/statistics">Thống Kê</Link>
-                            <button onClick={handleLogout} className="logout-btn">Đăng xuất</button>
-                        </div>
-                    </div>
-                )}
-
+                <Link to="/" className="nav-item">Trang chủ</Link>
+                <Link to="/gioi-thieu" className="nav-item">Giới thiệu</Link>
+                <Link to="/chinh-sach" className="nav-item">Chính sách</Link>
+                <Link to="/dieu-khoan" className="nav-item">Điều khoản</Link>
+                <a href="#" className="nav-item" onClick={scrollToBottom}>Liên hệ</a>
             </div>
+
+            {!isLoggedIn ? (
+                <div className="auth-buttons">
+                    <div className="dropdown">
+                        <button className="dropdown-btn signup-btn">
+                            <i className="fas fa-user-plus"></i> Đăng Ký
+                        </button>
+                        <div className="dropdown-content">
+                            <Link to="/customer/register">Khách Hàng</Link>
+                            <Link to="/field_owner/register">Chủ Sân</Link>
+                        </div>
+                    </div>
+                    <div className="dropdown">
+                        <button className="dropdown-btn login-btn">
+                            <i className="fas fa-sign-in-alt"></i> Đăng Nhập
+                        </button>
+                        <div className="dropdown-content">
+                            <Link to="/customer/login">Khách Hàng</Link>
+                            <Link to="/field_owner/login">Chủ Sân</Link>
+                        </div>
+                    </div>
+                </div>
+            ) : (
+                <div className="dropdown">
+                    <button className="dropdown-btn user-btn">
+                        <span className="user-name">{fullname}</span>
+                        <span className="dropdown-arrow">▼</span>
+                    </button>
+                    <div className="dropdown-content user-dropdown">
+                        <Link to="/profile">Hồ Sơ</Link>
+                        <Link to="/statistics">Thống Kê</Link>
+                        <button onClick={handleLogout} className="logout-btn">Đăng xuất</button>
+                    </div>
+                </div>
+            )}
+
         </nav>
     );
 }
