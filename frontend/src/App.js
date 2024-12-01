@@ -13,6 +13,10 @@ import GioiThieu from './components/GioiThieu';
 import Footer from './components/Footer';
 import ChinhSach from './components/ChinhSach';
 import DieuKhoan from './components/DieuKhoan';
+import { OrderField } from './components/Homepage/OrderField';
+import CustomerProfile from './components/CustomerProfile';
+import FieldOwnerProfile from './components/FieldOwnerProfile';
+
 
 const App = () => {
     const customerAuth = AuthCustomer();
@@ -24,9 +28,9 @@ const App = () => {
     return (
         <Router>
             <div className="app-container">
-                <Navbar 
-                    isLoggedIn={isLoggedIn} 
-                    handleLogout={handleLogout} 
+                <Navbar
+                    isLoggedIn={isLoggedIn}
+                    handleLogout={handleLogout}
                     fullname={fullname}
                     userType={userType}
                 />
@@ -40,6 +44,10 @@ const App = () => {
                         <Route path="/gioi-thieu" element={<GioiThieu />} />
                         <Route path="/chinh-sach" element={<ChinhSach />} />
                         <Route path="/dieu-khoan" element={<DieuKhoan />} />
+                        <Route path="/order/:fieldId" element={<OrderField />} />
+                        <Route path="/customer/profile" element={<CustomerProfile />} />
+                        <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />
+
                     </Routes>
                 </main>
                 <Footer />
