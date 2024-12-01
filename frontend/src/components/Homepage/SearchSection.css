@@ -34,4 +34,8 @@
     white-space: nowrap; /* Prevents text wrapping */
 }
 
+.recommended-fields h2 {
+    margin-bottom: 5px;
+}
+
 /* ... rest of the styles remain the same ... */ 

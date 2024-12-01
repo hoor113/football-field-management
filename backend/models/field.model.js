@@ -5,14 +5,12 @@ const Schema = mongoose.Schema;
 const ServiceSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
+  description: { type: String, default: 'No description available' },
+  image_url: { type: String, default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzBeng5o2seSmkdywgldLhL4PQd0nAhJWNnQ&s' },
+  unit: { type: String, required: true, default: 'times' },
   price: { type: Number, required: true }
 });
 
-// Add date range schema for booking windows
-const DateRangeSchema = new Schema({
-  start_date: { type: Date, required: true },
-  end_date: { type: Date, required: true }
-});
 
 // Define a single time slot (e.g., 7:00-9:00, 9:00-11:00)
 const TimeSlotSchema = new Schema({

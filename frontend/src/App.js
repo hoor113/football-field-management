@@ -13,6 +13,7 @@ import GioiThieu from './components/GioiThieu';
 import Footer from './components/Footer';
 import ChinhSach from './components/ChinhSach';
 import DieuKhoan from './components/DieuKhoan';
+import { OrderField } from './components/Homepage/OrderField';
 
 const App = () => {
     const customerAuth = AuthCustomer();
@@ -34,6 +35,7 @@ const App = () => {
                         <Route path="/gioi-thieu" element={<GioiThieu />} />
                         <Route path="/chinh-sach" element={<ChinhSach />} />
                         <Route path="/dieu-khoan" element={<DieuKhoan />} />
+                        <Route path="/order/:fieldId" element={<OrderField />} />
                     </Routes>
                 </main>
                 <Footer />

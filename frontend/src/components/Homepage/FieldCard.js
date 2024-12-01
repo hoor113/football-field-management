@@ -1,9 +1,15 @@
 import React, { useState } from 'react';
 import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
+import { useNavigate } from 'react-router-dom';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
+    const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
+
+    const handleOrderClick = () => {
+        navigate(`/order/${field._id}`, { state: { field } });
+    };
 
     return (
         <div className="field-card">
@@ -72,8 +78,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             {isLoggedIn === 2 ? <button
                 className="add-service-button"
-                // onClick={() => setShowServiceForm(true)}
-                // TODO: Add order now functionality
+                onClick={handleOrderClick}
             >
                 Order Now
             </button> : null}

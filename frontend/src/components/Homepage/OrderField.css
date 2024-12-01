@@ -1,0 +1,306 @@
+.order-page-container {
+    display: flex;
+    min-height: 100vh;
+    padding: 30px;
+    gap: 30px;
+    background-color: #f5f5f5;
+}
+
+/* Left side - smaller portion (1 part) */
+.field-description-plate {
+    flex: 1;
+    background: white;
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    height: fit-content;
+    max-width: 38.2%; /* Based on golden ratio */
+}
+
+.field-image-container {
+    width: 100%;
+    height: 250px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.field-image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.placeholder-image {
+    width: 100%;
+    height: 100%;
+    background-color: #f0f0f0;
+    border-radius: 8px;
+}
+
+/* Right side - larger portion (1.618 parts) */
+.order-form-section {
+    flex: 1.618;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 25px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Update existing sections with consistent padding */
+.booking-time-section,
+.services-section,
+.order-summary {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.field-description-content {
+    padding: 15px 0;
+}
+
+.field-name {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.field-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.base-price-box {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.price-label {
+    display: block;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.price-amount {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Service section styling */
+.services-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.service-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+/* Form controls */
+.ground-select,
+input[type="date"],
+.hours-inputs select {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    font-size: 1rem;
+}
+
+/* Submit button */
+.submit-order-btn {
+    width: 100%;
+    padding: 15px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.submit-order-btn:hover {
+    background: #0056b3;
+}
+
+/* Quantity controls */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.quantity-btn {
+    width: 35px;
+    height: 35px;
+    border: none;
+    background: #e0e0e0;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s;
+    padding-bottom: 2px;
+}
+
+.quantity-btn:hover {
+    background: #cccccc;
+}
+
+.quantity-display {
+    min-width: 30px;
+    text-align: center;
+    font-size: 1.1em;
+    font-weight: 500;
+}
+
+/* Add these styles for disabled state */
+.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+}
+
+/* Style for select and input elements */
+select, input[type="date"] {
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+    background-color: white;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 100%;
+}
+
+select:disabled, input[type="date"]:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+    border-color: #ddd;
+}
+
+/* Style for the hours selection container */
+.hours-inputs {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.hours-inputs span {
+    opacity: 0.6;
+}
+
+/* Add hover effect for enabled inputs */
+select:not(:disabled):hover, 
+input[type="date"]:not(:disabled):hover {
+    border-color: #007bff;
+}
+
+/* Add focus styles */
+select:not(:disabled):focus, 
+input[type="date"]:not(:disabled):focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+/* Update services section positioning */
+.services-section {
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+/* Order Summary Box Styling */
+.order-summary-box {
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.order-summary-box h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.4em;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #dee2e6;
+}
+
+.summary-label {
+    color: #666;
+    font-size: 1.1em;
+}
+
+.summary-details {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.summary-price {
+    font-weight: 500;
+    color: #333;
+    font-size: 1.1em;
+}
+
+.total-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 2px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.total-label {
+    font-size: 1.2em;
+    font-weight: 600;
+    color: #333;
+}
+
+.total-amount {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: #007bff;
+}
+
+/* Update submit button positioning */
+.submit-order-btn {
+    margin-top: 20px;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2em;
+    font-weight: 600;
+}
