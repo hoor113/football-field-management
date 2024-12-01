@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { register, login, getCustomer, logout } from '../controller/authCustomer.js';
+import { register, login, getCustomer, logout, getProfile, updateProfile } from '../controller/authCustomer.js';
 import { authenticateToken } from '../controller/verify.js';
 import { makeBooking } from '../controller/customer.func.js';
 
@@ -10,5 +10,7 @@ router1.post('/login', login);
 router1.get("/", authenticateToken, getCustomer)
 router1.post("/logout", logout)
 router1.post("/book", authenticateToken, makeBooking)
+router1.get("/profile", authenticateToken, getProfile)
+router1.put("/profile/update", authenticateToken, updateProfile)
 
 export default router1;

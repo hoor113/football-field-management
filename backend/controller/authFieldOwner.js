@@ -56,7 +56,7 @@ export const login = async (req, res) => {
         // Kiểm tra mật khẩu
         const isMatch = await fieldOwner.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials because error password' });
+            return res.status(400).json({ message: 'Invalid credentials because error password or username' });
         }
 
         // Kiểm tra biến môi trường JWT_SECRET
@@ -105,3 +105,78 @@ export const getFieldOwner = async (req, res) => {
         res.status(500).json({ error: error.message })
     }
 }
+
+export const getProfile = async (req, res) => {
+    try {
+        const fieldOwner = await FieldOwner.findById(req.user.id)
+            .select('fullname username email phone_no');
+        
+        if (!fieldOwner) {
+            return res.status(404).json({ message: "Không tìm thấy thông tin chủ sân" });
+        }
+
+        res.json({
+            fullname: fieldOwner.fullname,
+            username: fieldOwner.username,
+            email: fieldOwner.email,
+            phone: fieldOwner.phone_no
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi lấy thông tin profile' });
+    }
+};
+
+export const updateProfile = async (req, res) => {
+    try {
+        const { fullname, email, phone, currentPassword, newPassword } = req.body;
+        
+        // Validate input
+        if (!fullname || !email || !phone) {
+            return res.status(400).json({ message: "Vui lòng điền đầy đủ thông tin" });
+        }
+
+        // Tìm customer hiện tại
+        const fieldOwner = await FieldOwner.findById(req.user.id);
+        if (!fieldOwner) {
+            return res.status(404).json({ message: "Không tìm thấy thông tin chủ sân" });
+        }
+
+        // Kiểm tra email đã tồn tại chưa (trừ email hiện tại của user)
+        const existingEmail = await FieldOwner.findOne({ 
+            email, 
+            _id: { $ne: req.user.id } 
+        });
+        
+        if (existingEmail) {
+            return res.status(400).json({ message: "Email đã được sử dụng" });
+        }
+
+        // Nếu có currentPassword, kiểm tra và cập nhật password mới
+        if (currentPassword) {
+            const isPasswordValid = await fieldOwner.comparePassword(currentPassword);
+            if (!isPasswordValid) {
+                return res.status(400).json({ message: "Mật khẩu hiện tại không đúng" });
+            }
+            if (!newPassword) {
+                return res.status(400).json({ message: "Vui lòng nhập mật khẩu mới" });
+            }
+            fieldOwner.password = newPassword;
+        }
+
+        // Cập nhật thông tin khác
+        fieldOwner.fullname = fullname;
+        fieldOwner.email = email;
+        fieldOwner.phone_no = phone;
+
+        await fieldOwner.save(); // Sử dụng save() để trigger middleware mã hóa password
+
+        res.json({
+            fullname: fieldOwner.fullname,
+            username: fieldOwner.username,
+            email: fieldOwner.email,
+            phone: fieldOwner.phone_no
+        });
+    } catch (error) {
+        res.status(500).json({ message: 'Lỗi khi cập nhật thông tin' });
+    }
+};
