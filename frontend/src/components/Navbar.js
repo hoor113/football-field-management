@@ -2,13 +2,19 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import "../styles/Navbar.css";
 
-const Navbar = ({ isLoggedIn, handleLogout, fullname }) => {
+const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
     const scrollToBottom = (e) => {
         e.preventDefault();
         window.scrollTo({
             top: document.documentElement.scrollHeight,
             behavior: 'smooth'
         });
+    };
+
+    const handleLogoutClick = () => {
+        localStorage.removeItem('token');
+        handleLogout();
+        window.location.href = '/';
     };
 
     return (
@@ -56,9 +62,9 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname }) => {
                         <span className="dropdown-arrow">▼</span>
                     </button>
                     <div className="dropdown-content user-dropdown">
-                        <Link to="/profile">Hồ Sơ</Link>
+                        <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/profile`}>Hồ Sơ</Link>
                         <Link to="/statistics">Thống Kê</Link>
-                        <button onClick={handleLogout} className="logout-btn">Đăng xuất</button>
+                        <button onClick={handleLogoutClick} className="logout-btn">Đăng xuất</button>
                     </div>
                 </div>
             )}
