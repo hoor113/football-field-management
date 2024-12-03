@@ -41,7 +41,7 @@ const GroundSchema = new Schema({
   status: { type: Boolean, default: true },
   size: { type: String, required: true },
   material: { type: String, required: true },
-  price: { type: Number, required: true },
+  // price: { type: Number, required: true },
   occupied_slots: [OccupationSchema]
 });
 

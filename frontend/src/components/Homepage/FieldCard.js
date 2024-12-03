@@ -70,14 +70,12 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 />
             )}
 
-<<<<<<< HEAD
             {isLoggedIn === 2 ? <button
                 className="add-service-button"
                 onClick={handleOrderClick}
             >
                 Order Now
             </button> : null}
-=======
             {isLoggedIn === 1 ? (
                 <button
                     className="add-service-button"
@@ -86,17 +84,6 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                     Add Services +
                 </button>
             ) : null}
-
-            {isLoggedIn === 2 ? (
-                <button
-                    className="add-service-button"
-                    // onClick={() => setShowServiceForm(true)}
-                    // TODO: Add order now functionality
-                >
-                    Order Now
-                </button>
-            ) : null}
->>>>>>> a7b95d4db3c6e08cffb8b146571a4007a98fd194
         </div>
     );
 }; 
