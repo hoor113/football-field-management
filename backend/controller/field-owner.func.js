@@ -195,3 +195,20 @@ export const GetFields = async (req, res) => {
     }
 };
 
+export const getFieldDetails = async (req, res) => {
+    try {
+        const fieldOwnerId = req.user.id; // Giả sử ID người dùng có sẵn trong req.user
+
+        // Tìm chủ sân và lấy thông tin chi tiết của các sân
+        const fieldOwner = await FieldOwner.findById(fieldOwnerId).populate('fields');
+        if (!fieldOwner) {
+            return res.status(404).json({ message: 'Không tìm thấy chủ sân' });
+        }
+
+        res.json({ fields: fieldOwner.fields });
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin sân:', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy thông tin sân' });
+    }
+};
+

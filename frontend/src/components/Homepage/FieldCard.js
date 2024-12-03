@@ -9,12 +9,6 @@ export const FieldCard = ({ field, isLoggedIn }) => {
         <div className="field-card">
             <div className="field-header">
                 <h2>{field.name}</h2>
-                {isLoggedIn === 1 ? <button
-                    className="add-service-button"
-                    onClick={() => setShowServiceForm(true)}
-                >
-                    Add Services +
-                </button> : null}
             </div>
 
             <img src={field.image_url} alt={field.name} className="field-image" />
@@ -70,13 +64,24 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 />
             )}
 
-            {isLoggedIn === 2 ? <button
-                className="add-service-button"
-                // onClick={() => setShowServiceForm(true)}
-                // TODO: Add order now functionality
-            >
-                Order Now
-            </button> : null}
+            {isLoggedIn === 1 ? (
+                <button
+                    className="add-service-button"
+                    onClick={() => setShowServiceForm(true)}
+                >
+                    Add Services +
+                </button>
+            ) : null}
+
+            {isLoggedIn === 2 ? (
+                <button
+                    className="add-service-button"
+                    // onClick={() => setShowServiceForm(true)}
+                    // TODO: Add order now functionality
+                >
+                    Order Now
+                </button>
+            ) : null}
         </div>
     );
 }; 
