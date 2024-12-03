@@ -179,3 +179,23 @@ export const updateProfile = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi cập nhật thông tin' });
     }
 };
+
+export const getBookedFieldsCount = async (req, res) => {
+    try {
+        const customerId = req.user.id; // Giả sử ID người dùng có sẵn trong req.user
+
+        // Tìm khách hàng và đếm số lần đặt sân
+        const customer = await Customer.findById(customerId).populate('bookings');
+        
+        if (!customer) {
+            return res.status(404).json({ message: "Không tìm thấy khách hàng" });
+        }
+
+        const bookedFieldsCount = customer.bookings.length;
+
+        res.json({ count: bookedFieldsCount });
+    } catch (error) {
+        console.error('Lỗi khi lấy số lần đặt sân:', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số lần đặt sân' });
+    }
+};

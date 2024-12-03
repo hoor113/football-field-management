@@ -71,14 +71,28 @@ const NewsSection = () => {
     );
 };
 
-const FeaturedFields = () => (
-    <div className="featured-fields">
-        <h2>Sân Bóng Nổi Bật</h2>
-        <div className="fields-grid">
-            {/* Hiển thị 3-4 sân bóng được đánh giá cao nhất */}
+const FeaturedFields = () => {
+    const featuredFields = [
+        { id: 1, name: "Sân A", location: "Hà Nội", rating: 4.5 },
+        { id: 2, name: "Sân B", location: "TP. Hồ Chí Minh", rating: 4.7 },
+        { id: 3, name: "Sân C", location: "Đà Nẵng", rating: 4.6 },
+    ];
+
+    return (
+        <div className="featured-fields">
+            <h2>Sân Bóng Nổi Bật</h2>
+            <div className="fields-grid">
+                {featuredFields.map(field => (
+                    <div key={field.id} className="field-card">
+                        <h3>{field.name}</h3>
+                        <p>{field.location}</p>
+                        <p>Rating: {field.rating}</p>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const Statistics = () => (
     <div className="statistics-section">
@@ -97,14 +111,27 @@ const Statistics = () => (
     </div>
 );
 
-const Testimonials = () => (
-    <div className="testimonials-section">
-        <h2>Khách Hàng Nói Gì Về Chúng Tôi</h2>
-        <div className="testimonials-slider">
-            {/* Slider hiển thị các đánh giá */}
+const Testimonials = () => {
+    const testimonials = [
+        { id: 1, name: "Nguyễn Văn A", feedback: "Dịch vụ tuyệt vời!" },
+        { id: 2, name: "Trần Thị B", feedback: "Rất hài lòng với chất lượng sân." },
+        { id: 3, name: "Lê Văn C", feedback: "Sẽ giới thiệu cho bạn bè." },
+    ];
+
+    return (
+        <div className="testimonials-section">
+            <h2>Khách Hàng Nói Gì Về Chúng Tôi</h2>
+            <div className="testimonials-slider">
+                {testimonials.map(testimonial => (
+                    <div key={testimonial.id} className="testimonial-card">
+                        <p>"{testimonial.feedback}"</p>
+                        <h4>- {testimonial.name}</h4>
+                    </div>
+                ))}
+            </div>
         </div>
-    </div>
-);
+    );
+};
 
 const HowItWorks = () => (
     <div className="how-it-works">
@@ -143,7 +170,16 @@ const Features = () => (
                 <h3>Thanh Toán An Toàn</h3>
                 <p>Bảo mật thông tin thanh toán</p>
             </div>
-            {/* Thêm các feature khác */}
+            <div className="feature">
+                <i className="icon-support"></i>
+                <h3>Hỗ Trợ 24/7</h3>
+                <p>Đội ngũ hỗ trợ luôn sẵn sàng</p>
+            </div>
+            <div className="feature">
+                <i className="icon-quality"></i>
+                <h3>Chất Lượng Đảm Bảo</h3>
+                <p>Cam kết chất lượng dịch vụ</p>
+            </div>
         </div>
     </div>
 );
@@ -215,6 +251,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
                 <button
                     className="floating-add-button"
                     onClick={() => setShowFieldForm(true)}
+                    title="Nhấn vào để thêm sân"
                 >
                     +
                 </button>

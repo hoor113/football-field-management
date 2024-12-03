@@ -180,3 +180,18 @@ export const updateProfile = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi cập nhật thông tin' });
     }
 };
+
+export const getPostedFieldsCount = async (req, res) => {
+    try {
+        const fieldOwnerId = req.user.id; // Giả sử ID người dùng có sẵn trong req.user
+
+        // Tìm chủ sân và đếm số lượng sân
+        const fieldOwner = await FieldOwner.findById(fieldOwnerId).populate('fields');
+        const postedFieldsCount = fieldOwner ? fieldOwner.fields.length : 0;
+
+        res.json({ count: postedFieldsCount });
+    } catch (error) {
+        console.error('Lỗi khi lấy số sân đã đăng:', error);
+        res.status(500).json({ message: 'Có lỗi xảy ra khi lấy số sân đã đăng' });
+    }
+};

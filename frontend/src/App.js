@@ -18,8 +18,8 @@ import CustomerProfile from './components/CustomerProfile';
 import FieldOwnerProfile from './components/FieldOwnerProfile';
 import OrderConfirmation from './components/Homepage/OrderConfirmation';
 import NotificationPage from './pages/NotificationPage';
-
-
+import CustomerStatistics from './components/CustomerStatistics';
+import FieldOwnerStatistics from './components/FieldOwnerStatistics';
 
 const App = () => {
     const customerAuth = AuthCustomer();
@@ -52,6 +52,8 @@ const App = () => {
                         <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />
                         <Route path="/order-confirmation" element={<OrderConfirmation />} />
                         <Route path="/notifications" element={<NotificationPage />} />
+                        <Route path="/customer/statistics" element={<CustomerStatistics />} />
+                        <Route path="/field_owner/statistics" element={<FieldOwnerStatistics />} />
                     </Routes>
                 </main>
                 <Footer />

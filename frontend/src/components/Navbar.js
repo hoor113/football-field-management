@@ -116,7 +116,11 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     </button>
                     <div className="dropdown-content user-dropdown">
                         <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/profile`}>Hồ Sơ</Link>
-                        <Link to="/statistics">Thống Kê</Link>
+                        {userType === 'field_owner' ? (
+                            <Link to="/field_owner/statistics">Thống Kê</Link>
+                        ) : (
+                            <Link to="/customer/statistics">Thống Kê</Link>
+                        )}
                         <button onClick={handleLogoutClick} className="logout-btn">Đăng xuất</button>
                     </div>
                 </div>

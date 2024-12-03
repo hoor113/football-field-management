@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import { register, login, getFieldOwner, logout } from '../controller/authFieldOwner.js';
-import { GetFields } from '../controller/field-owner.func.js';
+import { register, login, getFieldOwner, logout, getPostedFieldsCount } from '../controller/authFieldOwner.js';
+import { getFieldDetails } from '../controller/field-owner.func.js';
 import { authenticateToken } from '../controller/verify.js';
 import { getProfile, updateProfile } from '../controller/authFieldOwner.js';
 import { acceptBooking, cancelBooking, getBookingNoti, markNotificationAsRead } from '../controller/field-owner.func.js';
@@ -11,12 +11,14 @@ router2.post('/register', register);
 router2.post('/login', login);
 router2.get("/", authenticateToken, getFieldOwner)
 router2.post("/logout", logout)
-router2.get("/fields", authenticateToken, GetFields)
+router2.get("/fields", authenticateToken, getFieldDetails)
 router2.get("/profile", authenticateToken, getProfile)
 router2.put("/profile/update", authenticateToken, updateProfile)
+
 router2.post('/accept/:bookingId', acceptBooking);
 router2.post('/cancel/:bookingId', cancelBooking);
 router2.get('/noti', authenticateToken, getBookingNoti);
 router2.put('/notification/:notificationId/read', authenticateToken, markNotificationAsRead);
+router2.get("/posted-fields", authenticateToken, getPostedFieldsCount)
 
 export default router2;

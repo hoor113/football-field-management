@@ -89,9 +89,9 @@ const Profile = () => {
 					if (!userInfo.newPassword) {
 							newErrors.newPassword = 'Vui lòng nhập mật khẩu mới';
 					}
-					// else if (userInfo.newPassword.length < 6) {
-					// 		newErrors.newPassword = 'Mật khẩu phải có ít nhất 6 ký tự';
-					// }
+					else if (userInfo.newPassword.length < 6) {
+							newErrors.newPassword = 'Mật khẩu phải có ít nhất 6 ký tự';
+					}
 					if (userInfo.newPassword !== userInfo.confirmPassword) {
 							newErrors.confirmPassword = 'Mật khẩu xác nhận không khớp';
 					}
