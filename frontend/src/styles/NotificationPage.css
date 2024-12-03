@@ -1,0 +1,117 @@
+.notification-page {
+    padding: 2rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.notification-page h1 {
+    margin-bottom: 2rem;
+    color: #333;
+    text-align: center;
+}
+
+.notifications-container {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.notification-box {
+    background: white;
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    position: relative;
+}
+
+.customer-info,
+.booking-details {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.customer-info h3,
+.booking-details h3 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.customer-info p,
+.booking-details p {
+    margin: 0.5rem 0;
+    color: #444;
+}
+
+.services {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.services h4 {
+    color: #666;
+    margin-bottom: 0.5rem;
+}
+
+.services ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.services li {
+    padding: 0.25rem 0;
+    color: #666;
+}
+
+.notification-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.accept-btn,
+.decline-btn {
+    flex: 1;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.accept-btn {
+    background: #4CAF50;
+    color: white;
+}
+
+.accept-btn:hover {
+    background: #45a049;
+}
+
+.decline-btn {
+    background: #f44336;
+    color: white;
+}
+
+.decline-btn:hover {
+    background: #da190b;
+}
+
+.loading,
+.error,
+.no-notifications {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.error {
+    color: #f44336;
+} 

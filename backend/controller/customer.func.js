@@ -2,35 +2,33 @@ import { Customer } from "../models/customer.model.js";
 import jwt from "jsonwebtoken";
 import { Booking } from "../models/booking.model.js";
 import { Field } from "../models/field.model.js";
+import { Notification } from '../models/notification.model.js';
 
 // Helper function to check if a time slot is currently available
-const isTimeSlotAvailable = (ground, startTime, endTime) => {
+const isTimeSlotAvailable = (ground, startTime, endTime, bookingDate) => {
     const currentTime = new Date();
-    const currentHour = currentTime.getHours();
-    const startHour = parseInt(startTime.split(':')[0]);
+    const startDateTime = new Date(bookingDate);
 
-    // Don't allow booking past times
-    if (startHour < currentHour) {
-        return false;
+    // Check if the start time is in the past
+    if (startTime < currentTime) {
+        return false; // Cannot book in the past
     }
 
     // Check if the slot overlaps with any occupied slots
     return !ground.occupied_slots.some(slot => {
         if (slot.status === 'occupied') {
-            const slotStartHour = parseInt(slot.start_time.split(':')[0]);
-            const slotEndHour = parseInt(slot.end_time.split(':')[0]);
-            
+            const slotStartDateTime = new Date(slot.entry_time);
             // Check for overlap
-            return (startHour < slotEndHour && endTime > slotStartHour);
+            return startDateTime.getTime() === slotStartDateTime.getTime();
         }
-        return false;
+        return false; // Slot is not occupied
     });
 };
 
 export const makeBooking = async (req, res) => {
-    const { field_id, ground_id, start_time, end_time, services } = req.body;
-    
-    if (!(field_id && ground_id && start_time && end_time)) {
+    const { field_id, ground_id, start_time, end_time, price, services, booking_date } = req.body;
+
+    if (!(field_id && ground_id && start_time && end_time && booking_date)) {
         return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
 
@@ -46,30 +44,41 @@ export const makeBooking = async (req, res) => {
         }
 
         // Check if the time slot is available
-        if (!isTimeSlotAvailable(ground, start_time, end_time)) {
-            return res.status(400).json({ 
-                success: false, 
-                message: "This time slot is not available" 
+        if (!isTimeSlotAvailable(ground, start_time, end_time, booking_date)) {
+            return res.status(400).json({
+                success: false,
+                message: "This time slot is not available"
             });
         }
 
+        // Process time
+        let startHour = parseInt(start_time.split(':')[0]);
+        let endHour = parseInt(end_time.split(':')[0]);
+
+        // Convert booking date and time strings to Date objects
+        let startDateTime = new Date(booking_date);
+        let endDateTime = new Date(booking_date);
+        startDateTime.setHours(startHour, 0, 0, 0);
+        endDateTime.setHours(endHour, 0, 0, 0);
+
         const customer_id = req.user.id;
-        
+
         // Create the booking
-        const booking = await Booking.create({ 
-            customer_id, 
-            field_id, 
-            ground_id, 
-            start_time, 
-            end_time, 
-            services 
+        const booking = await Booking.create({
+            customer_id,
+            field_id,
+            ground_id,
+            start_time,
+            end_time,
+            price,
+            services
         });
 
         // Update ground occupation
         ground.occupied_slots.push({
             date: new Date(),
-            start_time,
-            end_time,
+            start_time: startDateTime,
+            end_time: endDateTime,
             booking_id: booking._id,
             customer_id,
             status: 'occupied'
@@ -77,16 +86,16 @@ export const makeBooking = async (req, res) => {
 
         await field.save();
 
-        res.status(200).json({ 
+        res.status(200).json({
             success: true,
-            message: 'Booking created successfully', 
-            booking 
+            message: 'Booking created successfully',
+            booking
         });
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
-            message: 'Server error', 
-            error: error.message 
+            message: 'Server error',
+            error: error.message
         });
     }
 };
@@ -111,22 +120,22 @@ export const getRecommendedFields = async (req, res) => {
 export const SearchFields = async (req, res) => {
     try {
         const searchTerm = req.query.q;
-        const fields = await Field.find({ 
-            name: { 
-                $regex: searchTerm, 
-                $options: 'i' 
-            } 
+        const fields = await Field.find({
+            name: {
+                $regex: searchTerm,
+                $options: 'i'
+            }
         });
-        
-        res.status(200).json({ 
-            success: true, 
-            fields 
+
+        res.status(200).json({
+            success: true,
+            fields
         });
     } catch (error) {
-        res.status(500).json({ 
-            success: false, 
-            message: 'Error searching fields', 
-            error: error.message 
+        res.status(500).json({
+            success: false,
+            message: 'Error searching fields',
+            error: error.message
         });
     }
 }

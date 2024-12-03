@@ -13,7 +13,7 @@ dotenv.config()
 
 const app = express()
 app.use(cors({
-    origin: 'http://localhost:3000' // Your ReactJS frontend address
+    origin: 'http://localhost:3000'
 }));  
 
 app.use(express.json())
@@ -27,7 +27,6 @@ async function updateGroundStates() {
         const currentTime = new Date();
         const currentHour = currentTime.getHours();
         
-        // Find all fields
         const fields = await Field.find({});
         
         for (const field of fields) {
@@ -36,8 +35,6 @@ async function updateGroundStates() {
             field.grounds.forEach(ground => {
                 ground.occupied_slots.forEach(slot => {
                     const slotEndHour = parseInt(slot.end_time.split(':')[0]);
-
-                    // If end hour has passed and status is still occupied, update to vacant
                     if (currentHour >= slotEndHour && slot.status === 'occupied') {
                         slot.status = 'vacant';
                         hasUpdates = true;
@@ -45,7 +42,6 @@ async function updateGroundStates() {
                 });
             });
 
-            // Save field if there were any updates
             if (hasUpdates) {
                 await field.save();
             }
@@ -55,10 +51,7 @@ async function updateGroundStates() {
     }
 }
 
-// Set up periodic check (every hour)
 setInterval(updateGroundStates, 60 * 60 * 1000);
-
-// Run initial check when server starts
 updateGroundStates();
 
 // Routes

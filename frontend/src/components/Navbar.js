@@ -1,20 +1,47 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import "../styles/Navbar.css";
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import '../styles/Navbar.css';
+import notiBell from './icons/noti-bell.svg';
 
 const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
-    const scrollToBottom = (e) => {
-        e.preventDefault();
-        window.scrollTo({
-            top: document.documentElement.scrollHeight,
-            behavior: 'smooth'
-        });
-    };
+    const [notifications, setNotifications] = useState([]);
+    const [unreadCount, setUnreadCount] = useState(0);
+    const navigate = useNavigate();
 
     const handleLogoutClick = () => {
         localStorage.removeItem('token');
         handleLogout();
         window.location.href = '/';
+    };
+    useEffect(() => {
+        if (userType === 'field_owner') {
+            fetchNotifications();
+        }
+    }, [userType]);
+
+    const fetchNotifications = async () => {
+        try {
+            const response = await fetch('/api/field_owner/noti', {
+                credentials: 'include'
+            });
+            const data = await response.json();
+            if (data.success) {
+                setNotifications(data.notifications || []);
+                setUnreadCount(data.notifications?.filter(n => !n.isRead).length || 0);
+            } else {
+                console.error('Failed to fetch notifications:', data.message);
+                setNotifications([]);
+                setUnreadCount(0);
+            }
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+            setNotifications([]);
+            setUnreadCount(0);
+        }
+    };
+
+    const handleSeeMore = () => {
+        navigate('/notifications');
     };
 
     return (
@@ -31,8 +58,34 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                 <Link to="/gioi-thieu" className="nav-item">Giới thiệu</Link>
                 <Link to="/chinh-sach" className="nav-item">Chính sách</Link>
                 <Link to="/dieu-khoan" className="nav-item">Điều khoản</Link>
-                <a href="#" className="nav-item" onClick={scrollToBottom}>Liên hệ</a>
+                {/* <a href="#" className="nav-item" onClick={scrollToBottom}>Liên hệ</a> */}
             </div>
+
+            {userType === 'field_owner' && (
+                <div className="notification-dropdown">
+                    <div className="notification-icon">
+                        <img src={notiBell} alt="notifications" className="bell-icon" />
+                        {unreadCount > 0 && (
+                            <span className="notification-badge">{unreadCount}</span>
+                        )}
+                    </div>
+                    <div className="dropdown-content">
+                        {notifications && notifications.length > 0 ? (
+                            notifications.slice(0, 5).map(notification => (
+                                <div key={notification.id} className="notification-item">
+                                    <p>{notification.message}</p>
+                                    <small>{new Date(notification.createdAt).toLocaleString()}</small>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="notification-item">
+                                <p>No notifications</p>
+                            </div>
+                        )}
+                        <button onClick={handleSeeMore} className="see-more">See more...</button>
+                    </div>
+                </div>
+            )}
 
             {!isLoggedIn ? (
                 <div className="auth-buttons">
@@ -68,6 +121,8 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     </div>
                 </div>
             )}
+            
+            
 
         </nav>
     );

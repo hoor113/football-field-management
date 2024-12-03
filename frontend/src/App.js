@@ -16,6 +16,9 @@ import DieuKhoan from './components/DieuKhoan';
 import { OrderField } from './components/Homepage/OrderField';
 import CustomerProfile from './components/CustomerProfile';
 import FieldOwnerProfile from './components/FieldOwnerProfile';
+import OrderConfirmation from './components/Homepage/OrderConfirmation';
+import NotificationPage from './pages/NotificationPage';
+
 
 
 const App = () => {
@@ -47,7 +50,8 @@ const App = () => {
                         <Route path="/order/:fieldId" element={<OrderField />} />
                         <Route path="/customer/profile" element={<CustomerProfile />} />
                         <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />
-
+                        <Route path="/order-confirmation" element={<OrderConfirmation />} />
+                        <Route path="/notifications" element={<NotificationPage />} />
                     </Routes>
                 </main>
                 <Footer />

@@ -1,6 +1,8 @@
 import mongoose from "mongoose"
 import { Field } from "../models/field.model.js"
 import { FieldOwner } from "../models/field-owner.model.js";
+import { Booking } from '../models/booking.model.js';
+import { Notification } from '../models/notification.model.js'; // Import the Notification model
 
 export const UploadField = async (req, res) => { 
     const {
@@ -29,7 +31,7 @@ export const UploadField = async (req, res) => {
             status: true,
             size: '7', // Default size
             material: 'Grass', // Default material
-            price_per_hour: base_price // Using base_price as default
+            price: base_price // Using base_price as default
         }));
 
         const NewField = new Field({
@@ -119,7 +121,7 @@ export const UpdateField = async (req, res) => {
         //                 status: true,
         //                 size: '7',
         //                 material: 'Grass',
-        //                 price_per_hour: base_price || field.base_price
+        //                 price: base_price || field.base_price
         //             })
         //         );
         //         updatedField.grounds = [...field.grounds, ...additionalGrounds];
@@ -195,3 +197,135 @@ export const GetFields = async (req, res) => {
     }
 };
 
+export const getBookingNoti = async (req, res) => {
+    try {
+        // 1. Get the field owner's ID from the authenticated request
+        const ownerId = req.user.id;
+
+        // 2. Find the field owner and populate their fields
+        const fieldOwner = await FieldOwner.findById(ownerId)
+            .select('fields')
+            .populate('fields');
+
+        if (!fieldOwner) {
+            return res.status(404).json({
+                success: false,
+                message: 'Field owner not found'
+            });
+        }
+
+        // 3. Extract field IDs
+        const fieldIds = fieldOwner.fields.map(field => field._id);
+
+        // 4. Find all bookings related to these fields
+        const bookings = await Booking.find({
+            field_id: { $in: fieldIds }
+        }).sort({ order_time: -1 }); // Sort by newest first
+
+        // 5. Get notifications for these bookings
+        const notifications = await Notification.find({
+            ownerId: ownerId,
+            bookingId: { $in: bookings.map(booking => booking._id) }
+        })
+        .populate({
+            path: 'bookingId',
+            populate: {
+                path: 'customer_id',
+                select: 'fullname email phone_no' // Select the fields you want to include
+            }
+        })
+        .sort({ createdAt: -1 }); // Sort by newest first
+
+        res.status(200).json({
+            success: true,
+            notifications: notifications.map(notification => ({
+                id: notification._id,
+                message: notification.message,
+                bookingDetails: notification.bookingId,
+                customerDetails: notification.bookingId.customer_id,
+                isRead: notification.isRead,
+                createdAt: notification.createdAt
+            }))
+        });
+
+    } catch (error) {
+        console.error('Error fetching notifications:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching notifications',
+            error: error.message
+        });
+    }
+};
+
+export const markNotificationAsRead = async (req, res) => {
+    try {
+        const { notificationId } = req.params;
+        const ownerId = req.user.id;
+
+        const notification = await Notification.findOneAndUpdate(
+            { _id: notificationId, ownerId: ownerId },
+            { isRead: true },
+            { new: true }
+        );
+
+        if (!notification) {
+            return res.status(404).json({
+                success: false,
+                message: 'Notification not found'
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: 'Notification marked as read',
+            notification
+        });
+
+    } catch (error) {
+        console.error('Error marking notification as read:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error marking notification as read',
+            error: error.message
+        });
+    }
+};
+
+export const acceptBooking = async (req, res) => {
+    const { bookingId } = req.params;
+
+    try {
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+
+        // Update booking status to accepted
+        booking.status = 'confirmed'; // Assuming you have a status field
+        await booking.save();
+
+        res.status(200).json({ success: true, message: 'Booking accepted', booking });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};
+
+export const cancelBooking = async (req, res) => {
+    const { bookingId } = req.params;
+
+    try {
+        const booking = await Booking.findById(bookingId);
+        if (!booking) {
+            return res.status(404).json({ success: false, message: 'Booking not found' });
+        }
+
+        // Update booking status to canceled
+        booking.status = 'cancelled'; // Assuming you have a status field
+        await booking.save();
+
+        res.status(200).json({ success: true, message: 'Booking canceled', booking });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+    }
+};

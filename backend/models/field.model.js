@@ -41,7 +41,7 @@ const GroundSchema = new Schema({
   status: { type: Boolean, default: true },
   size: { type: String, required: true },
   material: { type: String, required: true },
-  price_per_hour: { type: Number, required: true },
+  price: { type: Number, required: true },
   occupied_slots: [OccupationSchema]
 });
 
@@ -89,7 +89,7 @@ const FieldSchema = new Schema({
         };
 
         // Get operating hours from the field
-        const hours = this.operating_hours[0] || { start_hour: 7, end_hour: 22 };
+        const hours = this.operating_hours[0] || { start_hour: 7, end_hour: 23 };
 
         // Generate schedule for each day
         return [0, 1, 2, 3, 4, 5, 6].map(day => ({

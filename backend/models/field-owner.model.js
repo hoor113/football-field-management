@@ -7,11 +7,13 @@ const FieldOwnerSchema = new Schema({
   password: { type: String, required: true }, // Hashed
   fullname: { type: String, required: true },
   sex: { type: String, required: true },
+  avatar_link: { type: String },
   birthday: { type: Date, required: true },
   phone_no: { type: String, required: true },
   creation_date: { type: Date, default: Date.now },
   email: { type: String, required: true, unique: true },
-  fields: [{ type: Schema.Types.ObjectId, ref: 'Field' }]
+  fields: [{ type: Schema.Types.ObjectId, ref: 'Field' }],
+  orders: []
 });
 
 //Mã hóa mật khẩu trước khi lưu
