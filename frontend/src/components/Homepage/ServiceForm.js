@@ -37,7 +37,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
     return (
         <div className="modal-overlay">
             <div className="service-form-modal">
-                <button className="close-button" onClick={onClose}>×</button>
+                {/* <button className="close-button" onClick={onClose}>×</button> */}
                 
                 <div className="modal-header">
                     <h2>Add New Service</h2>

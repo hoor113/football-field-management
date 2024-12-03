@@ -15,7 +15,8 @@ import ChinhSach from './components/ChinhSach';
 import DieuKhoan from './components/DieuKhoan';
 import CustomerProfile from './components/CustomerProfile';
 import FieldOwnerProfile from './components/FieldOwnerProfile';
-
+import CustomerStatistics from './components/CustomerStatistics';
+import FieldOwnerStatistics from './components/FieldOwnerStatistics';
 const App = () => {
     const customerAuth = AuthCustomer();
     const fieldOwnerAuth = AuthFieldOwner();
@@ -44,6 +45,8 @@ const App = () => {
                         <Route path="/dieu-khoan" element={<DieuKhoan />} />
                         <Route path="/customer/profile" element={<CustomerProfile />} />
                         <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />
+                        <Route path="/customer/statistics" element={<CustomerStatistics />} />
+                        <Route path="/field_owner/statistics" element={<FieldOwnerStatistics />} />
                     </Routes>
                 </main>
                 <Footer />
