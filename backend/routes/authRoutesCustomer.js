@@ -3,7 +3,7 @@ import { register, login, getCustomer, logout, getProfile, updateProfile } from 
 import { authenticateToken } from '../controller/verify.js';
 import { makeBooking } from '../controller/customer.func.js';
 import { getBookedFieldsCount } from '../controller/authCustomer.js';
-
+import { getBookingNoti } from '../controller/customer.func.js';
 // api/customer/
 const router1 = Router();
 router1.post('/register', register);
@@ -14,5 +14,6 @@ router1.post("/book", authenticateToken, makeBooking)
 router1.get("/profile", authenticateToken, getProfile)
 router1.put("/profile/update", authenticateToken, updateProfile)
 router1.get("/booked-fields", authenticateToken, getBookedFieldsCount)
+router1.get('/noti', authenticateToken, getBookingNoti);
 
 export default router1;

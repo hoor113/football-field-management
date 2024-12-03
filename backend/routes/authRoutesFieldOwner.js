@@ -18,7 +18,7 @@ router2.put("/profile/update", authenticateToken, updateProfile)
 router2.post('/accept/:bookingId', acceptBooking);
 router2.post('/cancel/:bookingId', cancelBooking);
 router2.get('/noti', authenticateToken, getBookingNoti);
-router2.put('/notification/:notificationId/read', authenticateToken, markNotificationAsRead);
+router2.put('/notification/read/:notificationId', authenticateToken, markNotificationAsRead);
 router2.get("/posted-fields", authenticateToken, getPostedFieldsCount)
 
 export default router2;

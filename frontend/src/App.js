@@ -17,7 +17,8 @@ import { OrderField } from './components/Homepage/OrderField';
 import CustomerProfile from './components/CustomerProfile';
 import FieldOwnerProfile from './components/FieldOwnerProfile';
 import OrderConfirmation from './components/Homepage/OrderConfirmation';
-import NotificationPage from './pages/NotificationPage';
+import NotificationPageCustomer from './components/NotificationPageCustomer';
+import NotificationPageFieldOwner from './components/NotificationPageFieldOwner';
 import CustomerStatistics from './components/CustomerStatistics';
 import FieldOwnerStatistics from './components/FieldOwnerStatistics';
 
@@ -51,7 +52,8 @@ const App = () => {
                         <Route path="/customer/profile" element={<CustomerProfile />} />
                         <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />
                         <Route path="/order-confirmation" element={<OrderConfirmation />} />
-                        <Route path="/notifications" element={<NotificationPage />} />
+                        <Route path="/notifications" element={<NotificationPageFieldOwner />} />
+                        <Route path="/customer/notifications" element={<NotificationPageCustomer />} />
                         <Route path="/customer/statistics" element={<CustomerStatistics />} />
                         <Route path="/field_owner/statistics" element={<FieldOwnerStatistics />} />
                     </Routes>

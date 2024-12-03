@@ -14,10 +14,8 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
         window.location.href = '/';
     };
     useEffect(() => {
-        if (userType === 'field_owner') {
             fetchNotifications();
-        }
-    }, [userType]);
+    });
 
     const fetchNotifications = async () => {
         try {
@@ -41,7 +39,11 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
     };
 
     const handleSeeMore = () => {
-        navigate('/notifications');
+        if (userType === 'field_owner') {
+            navigate('/notifications');
+        } else if (userType === 'customer') {
+            navigate('/customer/notifications');
+        }
     };
 
     return (
@@ -125,9 +127,6 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     </div>
                 </div>
             )}
-            
-            
-
         </nav>
     );
 }

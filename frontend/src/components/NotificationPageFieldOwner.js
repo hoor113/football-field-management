@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import '../styles/NotificationPage.css';
 
-const NotificationPage = () => {
+const NotificationPageFieldOwner = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -26,7 +26,7 @@ const NotificationPage = () => {
         }
     };
 
-    const handleAccept = async (bookingId) => {
+    const handleAccept = async (bookingId, notificationId) => {
         try {
             const response = await fetch(`/api/field_owner/accept/${bookingId}`, {
                 method: 'POST',
@@ -37,7 +37,7 @@ const NotificationPage = () => {
             const data = await response.json();
             if (data.success) {
                 // Update isRead status using the correct endpoint
-                await fetch(`/api/field_owner/notifications/${bookingId}/read`, {
+                await fetch(`/api/field_owner/notification/read/${notificationId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -45,7 +45,7 @@ const NotificationPage = () => {
                 });
                 // Remove the notification from the list after accepting
                 setNotifications(prevNotifications => 
-                    prevNotifications.filter(notif => notif.bookingId._id !== bookingId)
+                    prevNotifications.filter(notif => notif.bookingDetails._id !== bookingId)
                 );
             }
         } catch (error) {
@@ -53,7 +53,7 @@ const NotificationPage = () => {
         }
     };
 
-    const handleDecline = async (bookingId) => {
+    const handleDecline = async (bookingId, notificationId) => {
         try {
             const response = await fetch(`/api/field_owner/cancel/${bookingId}`, {
                 method: 'POST',
@@ -64,7 +64,7 @@ const NotificationPage = () => {
             const data = await response.json();
             if (data.success) {
                 // Update isRead status using the correct endpoint
-                await fetch(`/api/field_owner/notifications/${bookingId}/read`, {
+                await fetch(`/api/field_owner/notification/read/${notificationId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -72,7 +72,7 @@ const NotificationPage = () => {
                 });
                 // Remove the notification from the list after declining
                 setNotifications(prevNotifications => 
-                    prevNotifications.filter(notif => notif.bookingId._id !== bookingId)
+                    prevNotifications.filter(notif => notif.bookingDetails._id !== bookingId)
                 );
             }
         } catch (error) {
@@ -106,26 +106,26 @@ const NotificationPage = () => {
                             {/* Customer Information */}
                             <div className="customer-info">
                                 <h3>Customer Details</h3>
-                                <p><strong>Name:</strong> {notification.bookingId.customer_id.fullname}</p>
-                                <p><strong>Email:</strong> {notification.bookingId.customer_id.email}</p>
-                                <p><strong>Phone:</strong> {notification.bookingId.customer_id.phone || 'N/A'}</p>
+                                <p><strong>Name:</strong> {notification.customerDetails.fullname}</p>
+                                <p><strong>Email:</strong> {notification.customerDetails.email}</p>
+                                <p><strong>Phone:</strong> {notification.customerDetails.phone_no}</p>
                             </div>
 
                             {/* Booking Details */}
                             <div className="booking-details">
                                 <h3>Booking Details</h3>
-                                <p><strong>Booking ID:</strong> {notification.bookingId._id}</p>
-                                <p><strong>Start Time:</strong> {formatDateTime(notification.bookingId.start_time)}</p>
-                                <p><strong>End Time:</strong> {formatDateTime(notification.bookingId.end_time)}</p>
-                                <p><strong>Ground:</strong> Ground {notification.bookingId.ground_id}</p>
-                                <p><strong>Total Price:</strong> {formatPrice(notification.bookingId.price)}</p>
+                                <p><strong>Booking ID:</strong> {notification.bookingDetails._id}</p>
+                                <p><strong>Start Time:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
+                                <p><strong>End Time:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
+                                <p><strong>Ground:</strong> Ground {notification.bookingDetails.ground_id}</p>
+                                <p><strong>Total Price:</strong> {formatPrice(notification.bookingDetails.price)}</p>
                                 
                                 {/* Additional Services */}
-                                {notification.bookingId.services?.length > 0 && (
+                                {notification.bookingDetails.services?.length > 0 && (
                                     <div className="services">
                                         <h4>Additional Services:</h4>
                                         <ul>
-                                            {notification.bookingId.services.map(service => (
+                                            {notification.bookingDetails.services.map(service => (
                                                 <li key={service._id}>
                                                     {service.name} - {formatPrice(service.price)} x {service.quantity}
                                                 </li>
@@ -138,13 +138,13 @@ const NotificationPage = () => {
                             {/* Action Buttons */}
                             <div className="notification-actions">
                                 <button 
-                                    onClick={() => handleAccept(notification.bookingId._id)} 
+                                    onClick={() => handleAccept(notification.bookingDetails._id, notification.id)} 
                                     className="accept-btn"
                                 >
                                     Accept Booking
                                 </button>
                                 <button 
-                                    onClick={() => handleDecline(notification.bookingId._id)} 
+                                    onClick={() => handleDecline(notification.bookingDetails._id, notification.id)} 
                                     className="decline-btn"
                                 >
                                     Decline Booking
@@ -158,4 +158,4 @@ const NotificationPage = () => {
     );
 };
 
-export default NotificationPage;
+export default NotificationPageFieldOwner;
