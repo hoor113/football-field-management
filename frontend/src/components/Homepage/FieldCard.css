@@ -110,3 +110,21 @@
     border-radius: 6px;
     margin: 0;
 }
+
+.add-service-button,
+.delete-field-button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.delete-field-button {
+    background-color: #dc3545; /* Red color for delete button */
+}
