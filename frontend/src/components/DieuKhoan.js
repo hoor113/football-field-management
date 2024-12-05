@@ -50,7 +50,7 @@ const DieuKhoan = () => {
             {/* Thêm các section còn lại tương tự */}
 
             <section>
-                <h2>12. Giải Quyết Tranh Chấp</h2>
+                <h2>5. Giải Quyết Tranh Chấp</h2>
                 <ul>
                     <li>Mọi tranh chấp phát sinh liên quan đến dịch vụ sẽ được giải quyết thông qua thương lượng giữa các bên.</li>
                     <li>Nếu không thể giải quyết bằng thương lượng, tranh chấp sẽ được đưa ra giải quyết tại cơ quan có thẩm quyền.</li>

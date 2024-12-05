@@ -53,7 +53,7 @@ const ChinhSach = () => {
             {/* Các section còn lại tương tự */}
             
             <section>
-                <h2>9. Thay Đổi Chính Sách</h2>
+                <h2>5. Thay Đổi Chính Sách</h2>
                 <p>Chính sách này có thể được điều chỉnh, cập nhật bất kỳ lúc nào. Người dùng vui lòng theo dõi và cập nhật thông tin thường xuyên trên hệ thống.</p>
             </section>
         </div>
