@@ -45,6 +45,32 @@ export const OrderField = () => {
     }));
   };
 
+  const handleSendNotification = async (bookingId) => {
+    try {
+      const notificationData = {
+        recipient_id: field.owner_id,
+        message: `New booking request for ${field.name}`,
+        booking_id: bookingId,
+        type: 'request'
+      };
+
+      const response = await fetch('http://localhost:5000/api/customer/send_notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(notificationData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send notification');
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
   const handlePlaceOrder = async () => {
     // Check if all required fields are filled
     if (!selectedDate || !selectedGround || !selectedHours.start || !selectedHours.end) {
@@ -105,6 +131,8 @@ export const OrderField = () => {
       const data = await response.json();
 
       if (response.ok) {
+        // Send notification after successful booking
+        await handleSendNotification(data.bookingId);
         navigate(`/order-confirmation`, { state: { message: data.message } });
       } else {
         alert(data.message || 'Failed to place order');

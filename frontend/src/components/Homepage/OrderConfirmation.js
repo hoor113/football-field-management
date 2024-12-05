@@ -1,14 +1,25 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { FaCheckCircle } from 'react-icons/fa'; // Make sure to install react-icons if not already installed
 
 const OrderConfirmation = () => {
     const location = useLocation();
+    const navigate = useNavigate();
     const { message } = location.state || { message: 'Your order has been placed successfully!' };
 
     return (
         <div className="confirmation-container">
-            <h1>Order Confirmation</h1>
-            <p>{message}</p>
-            <p>Your order is currently pending.</p>
+            <div className="confirmation-content">
+                <FaCheckCircle className="success-icon" />
+                <h1>Order Confirmation</h1>
+                <p className="confirmation-message">{message}</p>
+                <p className="status-message">Your order is currently pending.</p>
+                <button 
+                    className="return-home-btn"
+                    onClick={() => navigate('/')}
+                >
+                    Return to Homepage
+                </button>
+            </div>
         </div>
     );
 };

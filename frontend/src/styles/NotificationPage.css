@@ -5,113 +5,93 @@
 }
 
 .notification-page h1 {
+    text-align: center;
     margin-bottom: 2rem;
     color: #333;
-    text-align: center;
 }
 
 .notifications-container {
     display: flex;
     flex-direction: column;
-    gap: 2rem;
+    gap: 1rem;
 }
 
 .notification-box {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    position: relative;
-}
-
-.customer-info,
-.booking-details {
-    background: #f8f9fa;
-    padding: 1.5rem;
+    background-color: white;
     border-radius: 8px;
-    margin-bottom: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.customer-info h3,
-.booking-details h3 {
-    color: #2c3e50;
-    margin-bottom: 1rem;
-    font-size: 1.2rem;
+.notification-box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
-.customer-info p,
-.booking-details p {
-    margin: 0.5rem 0;
-    color: #444;
+.notification-box.unread {
+    background-color: #f0f7ff;
+    border-left: 4px solid #0066cc;
 }
 
-.services {
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid #dee2e6;
-}
-
-.services h4 {
-    color: #666;
+.notification-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: 0.5rem;
 }
 
-.services ul {
-    list-style: none;
-    padding-left: 0;
+.notification-status {
+    font-size: 1.2rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 50%;
 }
 
-.services li {
-    padding: 0.25rem 0;
+.notification-status.booking_success {
+    color: #28a745;
+}
+
+.notification-status.booking_failed {
+    color: #dc3545;
+}
+
+.notification-time {
     color: #666;
+    font-size: 0.9rem;
 }
 
-.notification-actions {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1.5rem;
+.notification-message {
+    color: #333;
+    font-size: 1rem;
+    margin: 0;
+    line-height: 1.4;
 }
 
-.accept-btn,
-.decline-btn {
-    flex: 1;
-    padding: 0.75rem;
-    border: none;
-    border-radius: 6px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.2s ease;
+.unread-indicator {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 8px;
+    height: 8px;
+    background-color: #0066cc;
+    border-radius: 50%;
 }
 
-.accept-btn {
-    background: #4CAF50;
-    color: white;
-}
-
-.accept-btn:hover {
-    background: #45a049;
-}
-
-.decline-btn {
-    background: #f44336;
-    color: white;
-}
-
-.decline-btn:hover {
-    background: #da190b;
-}
-
-.loading,
-.error,
 .no-notifications {
+    text-align: center;
+    color: #666;
+    padding: 2rem;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.loading, .error {
     text-align: center;
     padding: 2rem;
     color: #666;
-    background: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .error {
-    color: #f44336;
+    color: #dc3545;
 } 

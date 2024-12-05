@@ -28,11 +28,10 @@ const DailyScheduleSchema = new Schema({
 // Update occupation schema with booking window
 const OccupationSchema = new Schema({
   date: { type: Date, required: true },
-  start_time: { type: String, required: true },
-  end_time: { type: String, required: true },
+  start_time: { type: Date, required: true },
+  end_time: { type: Date, required: true },
   booking_id: { type: Schema.Types.ObjectId, ref: 'Booking' },
   customer_id: { type: Schema.Types.ObjectId, ref: 'Customer' },
-  status: { type: String, enum: ['vacant', 'occupied'], default: 'vacant' }
 });
 
 const GroundSchema = new Schema({

@@ -120,11 +120,12 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     </button>
                     <div className="dropdown-content user-dropdown">
                         <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/profile`}>Hồ Sơ</Link>
-                        {userType === 'field_owner' ? (
-                            <Link to="/field_owner/statistics">Thống Kê</Link>
+                        <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/statistics`}>Thống Kê</Link>
+                        {/* {userType === 'field_owner' ? (
+                            <Link to="/field_owner/history">Lịch Sử Cho Thuê Sân</Link>
                         ) : (
-                            <Link to="/customer/statistics">Thống Kê</Link>
-                        )}
+                            <Link to="/customer/history">Lịch Sử Đặt Sân</Link>
+                        )} */}
                         <button onClick={handleLogoutClick} className="logout-btn">Đăng xuất</button>
                     </div>
                 </div>
