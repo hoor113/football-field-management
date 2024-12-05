@@ -2,13 +2,45 @@ import React, { useState } from 'react';
 import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
+import Modal from './Modal';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
+    };
+
+    const handleDeleteField = async () => {
+        setIsModalOpen(true);
+    };
+
+    const confirmDelete = async () => {
+        setIsModalOpen(false);
+        try {
+            const response = await fetch(`http://localhost:5000/api/field_owner/deleteField/${field._id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to delete the field:', errorText);
+                return;
+            }
+
+            const result = await response.json();
+            // removeField(field._id);
+            alert(result.message);
+        } catch (error) {
+            console.error('An unexpected error occurred:', error.message);
+            alert('An unexpected error occurred. Please try again later.');
+        }
     };
 
     return (
@@ -20,7 +52,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             <img src={field.image_url} alt={field.name} className="field-image" />
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
-            <p><strong>Base Price:</strong> VND {field.base_price.toLocaleString()}</p>
+            <p><strong>Base Price:</strong>  {field.base_price.toLocaleString()} VND</p>
             <p><strong>Total Grounds:</strong> {field.total_grounds}</p>
 
             <div className="operating-hours-display">
@@ -53,7 +85,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                                 <div className="service-name">{service.name}</div>
                                 <div className="service-type">{service.type}</div>
                                 <div className="service-price">
-                                    VND {service.price.toLocaleString()}
+                                    {service.price.toLocaleString()} VND 
                                 </div>
                             </div>
                         ))}
@@ -70,14 +102,27 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 />
             )}
 
-            
+            <Modal
+                isOpen={isModalOpen}
+                onClose={() => setIsModalOpen(false)}
+                onConfirm={confirmDelete}
+            />
+
             {isLoggedIn === 1 ? (
-                <button
-                    className="add-service-button"
-                    onClick={() => setShowServiceForm(true)}
-                >
-                    Add Services +
-                </button>
+                <>
+                    <button
+                        className="add-service-button"
+                        onClick={() => setShowServiceForm(true)}
+                    >
+                        Add Services +
+                    </button>
+                    <button
+                        className="delete-field-button"
+                        onClick={handleDeleteField}
+                    >
+                        Delete Field
+                    </button>
+                </>
             ) : null}
             {isLoggedIn === 2 ? <button
                 className="add-service-button"
