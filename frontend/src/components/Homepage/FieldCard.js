@@ -38,6 +38,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             const result = await response.json();
             // removeField(field._id);
             alert(result.message);
+            window.location.reload();
         } catch (error) {
             console.error('An unexpected error occurred:', error.message);
             alert('An unexpected error occurred. Please try again later.');
@@ -64,8 +65,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             const result = await response.json();
             alert(result.message);
-            // Optionally, update the UI with the new field data
-            // setField(result.field); // Assuming you have a state to manage field data
+            window.location.reload();
         } catch (error) {
             console.error('An unexpected error occurred:', error.message);
             alert('An unexpected error occurred. Please try again later.');
