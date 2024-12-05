@@ -14,12 +14,14 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
         window.location.href = '/';
     };
     useEffect(() => {
+        if (userType === 'field_owner' || userType === 'customer') {
             fetchNotifications();
-    });
+        }
+    }, [userType]);
 
     const fetchNotifications = async () => {
         try {
-            const response = await fetch('/api/field_owner/noti', {
+            const response = await fetch(`/api/${userType}/noti`, {
                 credentials: 'include'
             });
             const data = await response.json();
@@ -63,7 +65,7 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                 {/* <a href="#" className="nav-item" onClick={scrollToBottom}>Liên hệ</a> */}
             </div>
 
-            {userType === 'field_owner' && (
+            {(userType === 'field_owner' || userType === 'customer') && (
                 <div className="notification-dropdown">
                     <div className="notification-icon">
                         <img src={notiBell} alt="notifications" className="bell-icon" />

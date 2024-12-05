@@ -3,7 +3,7 @@ import { register, login, getFieldOwner, logout, getPostedFieldsCount } from '..
 import { getFieldDetails } from '../controller/field-owner.func.js';
 import { authenticateToken } from '../controller/verify.js';
 import { getProfile, updateProfile } from '../controller/authFieldOwner.js';
-import { acceptBooking, cancelBooking, getBookingNoti, markNotificationAsRead } from '../controller/field-owner.func.js';
+import { acceptBooking, cancelBooking, markNotificationAsRead, getBookingNoti } from '../controller/field-owner.func.js';
 // import { getNotificationsByOwnerId, markNotificationAsRead } from '../controller/notification.func.js';
 // api/field_owner/
 const router2 = Router();

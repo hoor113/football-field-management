@@ -140,45 +140,23 @@ export const SearchFields = async (req, res) => {
     }
 }
 
-export const getBookingNoti = async (req, res) => {
+export const getResponseNoti = async (req, res) => {
     try {
         // 1. Get the field owner's ID from the authenticated request
         const customerId = req.user.id;
 
-        // 2. Find the field owner and populate their fields
-        const customer = await Customer.findById(customerId)
-            .select('fields')
-            .populate('fields');
-
-        if (!customer) {
-            return res.status(404).json({
-                success: false,
-                message: 'Field owner not found'
-            });
-        }
-
-        // 3. Extract field IDs
-        const fieldIds = customer.fields.map(field => field._id);
-
-        // 4. Find all bookings related to these fields
-        const bookings = await Booking.find({
-            field_id: { $in: fieldIds }
-        }).sort({ order_time: -1 }); // Sort by newest first
-
-        // 5. Get notifications for these bookings
         const notifications = await Notification.find({
-            customerId: customerId,
-            bookingId: { $in: bookings.map(booking => booking._id) },
-            isRead: false
+            customerId: customerId
         })
         .populate({
             path: 'bookingId',
+            select: 'field_id booking_time status',
             populate: {
-                path: 'customer_id',
-                select: 'fullname email phone_no' // Select the fields you want to include
+                path: 'field_id',
+                select: 'name address'
             }
         })
-        .sort({ createdAt: -1 }); // Sort by newest first
+        .sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
@@ -186,13 +164,13 @@ export const getBookingNoti = async (req, res) => {
                 id: notification._id,
                 message: notification.message,
                 bookingDetails: notification.bookingId,
-                status: notification.bookingId.status,
-                createdAt: notification.createdAt
+                createdAt: notification.createdAt,
+                isRead: notification.isRead
             }))
         });
 
     } catch (error) {
-        console.error('Error fetching notifications:', error);
+        console.error('Error fetching customer notifications:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching notifications',

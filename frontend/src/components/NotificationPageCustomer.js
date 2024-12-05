@@ -10,6 +10,10 @@ const NotificationPageCustomer = () => {
         fetchNotifications();
     }, []);
 
+    useEffect(() => {
+        console.log(notifications);
+    }, [notifications]);
+
     const fetchNotifications = async () => {
         try {
             setLoading(true);
@@ -27,6 +31,22 @@ const NotificationPageCustomer = () => {
             setLoading(false);
         }
     };
+
+    const setToRead = async (notificationId) => {
+        try {
+            const response = await fetch(`/api/customer/noti/read/${notificationId}`, {
+                method: 'PUT',
+                credentials: 'include'
+            });
+            if (!response.ok) {
+                throw new Error('Failed to set notifications to read');
+            }
+            const data = await response.json();
+            setNotifications(data.notifications);
+        } catch (error) {
+            setError(error.message);
+        }
+    }
 
     const formatDateTime = (dateString) => {
         return new Date(dateString).toLocaleString();
