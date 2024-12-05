@@ -3,11 +3,12 @@ import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
-
+import EditFieldForm from './EditFieldForm';
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false);
 
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
@@ -37,6 +38,34 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             const result = await response.json();
             // removeField(field._id);
             alert(result.message);
+            window.location.reload();
+        } catch (error) {
+            console.error('An unexpected error occurred:', error.message);
+            alert('An unexpected error occurred. Please try again later.');
+        }
+    };
+
+    const handleEditField = async (updatedFieldData) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/field_owner/editField/${field._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                },
+                body: JSON.stringify(updatedFieldData),
+            });
+
+            if (!response.ok) {
+                const errorText = await response.text();
+                console.error('Failed to update the field:', errorText);
+                alert('Failed to update the field. Please try again.');
+                return;
+            }
+
+            const result = await response.json();
+            alert(result.message);
+            window.location.reload();
         } catch (error) {
             console.error('An unexpected error occurred:', error.message);
             alert('An unexpected error occurred. Please try again later.');
@@ -114,7 +143,13 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                         className="add-service-button"
                         onClick={() => setShowServiceForm(true)}
                     >
-                        Add Services +
+                        Add Services
+                    </button>
+                    <button
+                        className="edit-field-button"
+                        onClick={() => setIsEditModalOpen(true)}
+                    >
+                        Edit Field
                     </button>
                     <button
                         className="delete-field-button"
@@ -130,6 +165,18 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             >
                 Order Now
             </button> : null}
+
+            {isEditModalOpen && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <EditFieldForm
+                            field={field}
+                            onClose={() => setIsEditModalOpen(false)}
+                            onSubmit={handleEditField}
+                        />
+                    </div>
+                </div>
+            )}
         </div>
     );
 }; 

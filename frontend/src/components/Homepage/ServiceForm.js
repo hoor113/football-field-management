@@ -29,6 +29,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
             alert('Service added successfully!');
             onClose();
+            window.location.reload();
         } catch (error) {
             alert('Error adding service: ' + error.message);
         }
