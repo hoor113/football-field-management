@@ -4,6 +4,7 @@ import { ConnectDB } from "./config/db.js"
 import router1 from "./routes/authRoutesCustomer.js"
 import router2 from "./routes/authRoutesFieldOwner.js"
 import router3 from "./routes/fieldOwners.js"
+import router4 from "./routes/tournaments.routes.js"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
 import path from "path"
@@ -22,8 +23,16 @@ const PORT = process.env.PORT || 5000
 
 // Routes
 app.use("/api/customer", router1);
+
+
+
+// Route cho chủ sân (field owner)
 app.use("/api/field_owner", router2);
 app.use("/api/field", router3);
+
+
+//route tổ chức giải đấu
+app.use("/api/tournaments", router4)
 
 const __dirname = path.resolve()
 
