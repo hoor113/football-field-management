@@ -295,6 +295,7 @@ export const acceptBooking = async (req, res) => {
     const { bookingId } = req.params;
 
     try {
+        // Find booking and verify it exists
         const booking = await Booking.findById(bookingId);
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found' });
@@ -303,17 +304,40 @@ export const acceptBooking = async (req, res) => {
         // Update booking status to accepted
         booking.status = 'confirmed';
 
-        const field = await Field.findById(booking.field_id).populate('grounds');
-        field.grounds.find(ground => ground._id === booking.ground_id).occupied_slots.push({
+        // Find field and populate grounds
+        const field = await Field.findById(booking.field_id);
+        if (!field) {
+            return res.status(404).json({ success: false, message: 'Field not found' });
+        }
+
+        // Find the specific ground
+        const ground = field.grounds.find(ground => 
+            ground._id.toString() === booking.ground_id.toString()
+        );
+        
+        if (!ground) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Ground not found in this field' 
+            });
+        }
+
+        // Add the occupied slot
+        ground.occupied_slots.push({
             date: new Date(),
             start_time: booking.start_time,
             end_time: booking.end_time,
             booking_id: booking._id,
             customer_id: booking.customer_id,
         });
-        await booking.save();
 
-        // Create a notification for the customer
+        // Save both booking and field
+        await Promise.all([
+            booking.save(),
+            field.save()
+        ]);
+
+        // Create notification for customer
         await Notification.create({
             customerId: booking.customer_id,
             bookingId: booking._id,
@@ -322,9 +346,19 @@ export const acceptBooking = async (req, res) => {
             type: 'success'
         });
 
-        res.status(200).json({ success: true, message: 'Booking accepted', booking });
+        res.status(200).json({ 
+            success: true, 
+            message: 'Booking accepted', 
+            booking 
+        });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        console.error('Error accepting booking:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Server error', 
+            error: error.message 
+        });
     }
 };
 

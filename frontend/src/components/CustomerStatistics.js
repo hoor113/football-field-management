@@ -23,8 +23,8 @@ const CustomerStatistics = () => {
 
     return (
         <div className="customer-statistics">
-            <h2>Thống Kê Khách Hàng</h2>
-            <p>Số sân đã đặt: {bookingsCount}</p>
+            <h2>Lịch Sử Đặt Sân</h2>
+            <p>Tổng số lần đặt sân từ lúc lập tài khoản: {bookingsCount}</p>
         </div>
     );
 };
