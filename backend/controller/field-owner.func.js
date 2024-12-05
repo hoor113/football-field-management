@@ -383,3 +383,51 @@ export const deleteField = async (req, res) => {
     }
 };
 
+export const editFieldAttributes = async (req, res) => {
+    const { fieldId } = req.params;
+    const { name, description, address, base_price, image_url, total_grounds, operating_hours } = req.body;
+    const ownerId = req.user.id;
+
+    try {
+        // Kiểm tra xem sân có tồn tại và thuộc về chủ sở hữu không
+        const field = await Field.findOne({ _id: fieldId, owner_id: ownerId });
+
+        if (!field) {
+            return res.status(404).json({
+                success: false,
+                message: "Field not found or you don't have permission to edit it"
+            });
+        }
+
+        // Cập nhật thông tin sân
+        const updatedField = await Field.findByIdAndUpdate(
+            fieldId,
+            {
+                $set: {
+                    ...(name && { name }),
+                    ...(description && { description }),
+                    ...(address && { address }),
+                    ...(base_price && { base_price }),
+                    ...(image_url && { image_url }),
+                    ...(total_grounds && { total_grounds }),
+                    ...(operating_hours && { operating_hours })
+                }
+            },
+            { new: true }
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Field attributes updated successfully",
+            field: updatedField
+        });
+
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while updating field attributes",
+            error: error.message
+        });
+    }
+};
+
