@@ -191,3 +191,26 @@ export const markAllNotificationsAsRead = async (req, res) => {
     }
 };
 
+// Function to search fields by name or location
+export const HPsearchFields = async (req, res) => {
+    try {
+        const { name, address } = req.query;
+
+        // Build the query object
+        const query = {};
+        if (name) {
+            query.name = { $regex: name, $options: 'i' }; // Case-insensitive search
+        }
+        if (address) {
+            query.address = { $regex: address, $options: 'i' }; // Case-insensitive search
+        }
+
+        // Find fields matching the query
+        const fields = await Field.find(query);
+        res.status(200).json({ success: true, fields });
+    } catch (error) {
+        console.error('Error searching fields:', error);
+        res.status(500).json({ success: false, message: 'Error searching fields', error: error.message });
+    }
+};
+
