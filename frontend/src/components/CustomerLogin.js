@@ -24,27 +24,31 @@ const CustomerLogin = () => {
   };
 
   return (
-    <div className="login-container">
-      <h2>CustomerLogin</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            placeholder="Username"
-            value={formData.username}
-            onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-          />
-        </div>
-        <div>
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
+    <div className="customer-login-container">
+      <div className="customer-login-box">
+        <h2 className="customer-login-title">Customer Login</h2>
+        <form onSubmit={handleSubmit} className="customer-login-form">
+          <div className="customer-login-form-group">
+            <input
+              type="text"
+              placeholder="Username"
+              value={formData.username}
+              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+              className="customer-login-input"
+            />
+          </div>
+          <div className="customer-login-form-group">
+            <input
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+              className="customer-login-input"
+            />
+          </div>
+          <button type="submit" className="customer-login-button">Login</button>
+        </form>
+      </div>
     </div>
   );
 };
