@@ -15,5 +15,5 @@ router1.put("/profile/update", authenticateToken, updateProfile)
 router1.get("/bookings", authenticateToken, getBookings)
 router1.get('/noti', authenticateToken, getResponseNoti);
 router1.post('/send_notification', authenticateToken, sendNotification);
-router1.post('/noti/read_all', authenticateToken, markAllNotificationsAsRead);
+router1.put('/noti/read_all', authenticateToken, markAllNotificationsAsRead);
 export default router1;

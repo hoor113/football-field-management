@@ -48,11 +48,11 @@
     border-radius: 50%;
 }
 
-.notification-status.booking_success {
+.notification-status.success {
     color: #28a745;
 }
 
-.notification-status.booking_failed {
+.notification-status.failed {
     color: #dc3545;
 }
 

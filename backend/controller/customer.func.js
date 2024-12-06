@@ -170,15 +170,24 @@ export const getResponseNoti = async (req, res) => {
 
 export const markAllNotificationsAsRead = async (req, res) => {
     try {
-        const customerId = req.user.id; // Assuming the user ID is available in req.user
+        const customerId = req.user.id;
 
-        // Update all notifications for the customer to be marked as read
-        await Notification.updateMany({ ownerId: customerId }, { isRead: true });
+        await Notification.updateMany(
+            { customerId: customerId }, 
+            { $set: { isRead: true } }
+        );
 
-        res.status(200).json({ success: true, message: 'All notifications marked as read' });
+        res.status(200).json({ 
+            success: true, 
+            message: 'All notifications marked as read' 
+        });
     } catch (error) {
         console.error('Error marking notifications as read:', error);
-        res.status(500).json({ success: false, message: 'Error marking notifications as read', error: error.message });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Error marking notifications as read', 
+            error: error.message 
+        });
     }
 };
 
