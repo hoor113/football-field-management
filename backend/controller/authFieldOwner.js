@@ -109,6 +109,12 @@ export const getFieldOwner = async (req, res) => {
     }
 }
 
+export const getFieldOwnerById = async (req, res) => {
+    const { ownerId } = req.params;
+    const fieldOwner = await FieldOwner.findById(ownerId);
+    res.json(fieldOwner.fullname);
+};
+
 export const getProfile = async (req, res) => {
     try {
         const fieldOwner = await FieldOwner.findById(req.user.id)

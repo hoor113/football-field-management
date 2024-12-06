@@ -13,18 +13,26 @@ export const OrderField = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Fetch owner name using field.owner_id
     const fetchOwnerName = async () => {
       try {
         const response = await fetch(`http://localhost:5000/api/field_owner/${field.owner_id}`, {
           credentials: 'include'
         });
+        
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
         const data = await response.json();
-        if (data.success) {
+        if (data.success && data.owner?.fullname) {
           setOwnerName(data.owner.fullname);
+        } else {
+          console.warn('Owner name not found in response:', data);
+          setOwnerName('Not available');
         }
       } catch (error) {
         console.error('Error fetching owner name:', error);
+        setOwnerName('Not available');
       }
     };
 
@@ -188,7 +196,7 @@ export const OrderField = () => {
           </div>
           <div className="base-price-box">
             <span className="price-label">BASE PRICE</span>
-            <span className="price-amount">${field.base_price}</span>
+            <span className="price-amount">{field.base_price} VNĐ</span>
           </div>
         </div>
       </div>
@@ -209,7 +217,7 @@ export const OrderField = () => {
               <option value="">Choose a ground...</option>
               {field.grounds.map(ground => (
                 <option key={ground._id} value={ground._id}>
-                  {ground.name} - {ground.size}
+                  {ground.name} - Sân {ground.size} người
                 </option>
               ))}
             </select>
@@ -230,34 +238,39 @@ export const OrderField = () => {
 
           <div className="hours-selection">
             <label>Select Time Range:</label>
-            <div className="hours-inputs">
-              <select
-                value={`${selectedHours.start}-${selectedHours.end}`}
-                onChange={(e) => {
-                  const [start, end] = e.target.value.split('-');
-                  setSelectedHours({
-                    start: start,
-                    end: end
-                  });
-                }}
-                disabled={!selectedGround}
-                className={!selectedGround ? 'disabled' : ''}
-              >
-                <option value="-">Select time slot...</option>
-                {selectedDate && field.service_times
-                  .find(schedule => schedule.day_of_week === new Date(selectedDate).getDay())
-                  ?.time_slots
-                  .filter(slot => slot.is_available)
-                  .map((slot, index) => (
-                    <option
-                      key={index}
-                      value={`${slot.start_time}-${slot.end_time}`}
-                    >
-                      {slot.start_time} - {slot.end_time}
-                    </option>
-                  ))
-                }
-              </select>
+            <div className="time-slots-container">
+              {!selectedGround || !selectedDate ? (
+                <div className="empty-time-slots">Chưa chọn sân và ngày</div>
+              ) : (
+                <div className="time-slots-grid">
+                  {selectedDate && field.service_times
+                    .find(schedule => schedule.day_of_week === new Date(selectedDate).getDay())
+                    ?.time_slots
+                    .map((slot, index) => (
+                      <div
+                        key={index}
+                        className={`time-slot ${slot.is_available ? 'vacant' : 'occupied'} ${
+                          selectedHours.start === slot.start_time ? 'selected' : ''
+                        }`}
+                        onClick={() => {
+                          if (slot.is_available) {
+                            setSelectedHours({
+                              start: slot.start_time,
+                              end: slot.end_time
+                            });
+                          }
+                        }}
+                      >
+                        <div className="status-indicator"></div>
+                        <div className="time-display">
+                          <span className="start-time">{slot.start_time}</span>
+                          <span className="end-time">{slot.end_time}</span>
+                        </div>
+                      </div>
+                    ))
+                  }
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -324,7 +337,7 @@ export const OrderField = () => {
                     {service?.name} x{quantity}:
                   </div>
                   <div className="summary-price">
-                    ${(service?.price * quantity).toFixed(2)}
+                    {(service?.price * quantity)} VNĐ
                   </div>
                 </div>
               );
@@ -336,13 +349,13 @@ export const OrderField = () => {
           <div className="total-section">
             <div className="total-label">Total Amount:</div>
             <div className="total-amount">
-              ${(
+              {(
                 (field.base_price || 0) +
                 Object.entries(serviceQuantities).reduce((total, [serviceId, quantity]) => {
                   const service = field.services.find(s => s._id === serviceId);
                   return total + (service?.price * quantity || 0);
                 }, 0)
-              ).toFixed(2)}
+              )} VNĐ
             </div>
           </div>
         </div>

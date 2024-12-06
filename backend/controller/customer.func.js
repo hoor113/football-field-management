@@ -8,9 +8,13 @@ import { Notification } from '../models/notification.model.js';
 const isTimeSlotAvailable = (ground, startTime) => {
     const currentTime = new Date();
     const startDateTime = new Date(startTime);
+    const currentTimestamp = Date.now(); // Get current time in milliseconds
+    const startTimestamp = new Date(startTime).getTime(); // Convert start time to milliseconds
+    console.log('Start timestamp:', startTimestamp);
+    console.log('Current timestamp:', currentTimestamp);
 
     // Check if the start time is in the past
-    if (startTime < currentTime) {
+    if (startTimestamp < currentTimestamp) {
         return false; // Cannot book in the past
     }
 
@@ -42,10 +46,10 @@ export const makeBooking = async (req, res) => {
         }
 
         // Check if the time slot is available
-        if (!isTimeSlotAvailable(ground, start_time, end_time, booking_date)) {
+        if (!isTimeSlotAvailable(ground, start_time)) {
             return res.status(400).json({
                 success: false,
-                message: "This time slot is not available"
+                message: "This time slot is not available. You are either booking in the past or the slot is already occupied."
             });
         }
 
