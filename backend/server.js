@@ -4,10 +4,10 @@ import { ConnectDB } from "./config/db.js"
 import router1 from "./routes/authRoutesCustomer.js"
 import router2 from "./routes/authRoutesFieldOwner.js"
 import router3 from "./routes/fieldOwners.js"
+import router4 from "./routes/tournaments.routes.js"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
 import path from "path"
-import { Field } from "./models/field.model.js"
 
 dotenv.config()
 
@@ -21,43 +21,18 @@ app.use(cookieParser())
 
 const PORT = process.env.PORT || 5000
 
-// Function to update ground states
-async function updateGroundStates() {
-    try {
-        const currentTime = new Date();
-        const currentHour = currentTime.getHours();
-        
-        const fields = await Field.find({});
-        
-        for (const field of fields) {
-            let hasUpdates = false;
-            
-            field.grounds.forEach(ground => {
-                ground.occupied_slots.forEach(slot => {
-                    const slotEndHour = parseInt(slot.end_time.split(':')[0]);
-                    if (currentHour >= slotEndHour && slot.status === 'occupied') {
-                        slot.status = 'vacant';
-                        hasUpdates = true;
-                    }
-                });
-            });
-
-            if (hasUpdates) {
-                await field.save();
-            }
-        }
-    } catch (error) {
-        console.error('Error updating ground states:', error);
-    }
-}
-
-setInterval(updateGroundStates, 60 * 60 * 1000);
-updateGroundStates();
-
 // Routes
 app.use("/api/customer", router1);
+
+
+
+// Route cho chủ sân (field owner)
 app.use("/api/field_owner", router2);
 app.use("/api/field", router3);
+
+
+//route tổ chức giải đấu
+app.use("/api/tournaments", router4)
 
 const __dirname = path.resolve()
 

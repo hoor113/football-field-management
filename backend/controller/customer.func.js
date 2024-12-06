@@ -5,9 +5,9 @@ import { Field } from "../models/field.model.js";
 import { Notification } from '../models/notification.model.js';
 
 // Helper function to check if a time slot is currently available
-const isTimeSlotAvailable = (ground, startTime, endTime, bookingDate) => {
+const isTimeSlotAvailable = (ground, startTime) => {
     const currentTime = new Date();
-    const startDateTime = new Date(bookingDate);
+    const startDateTime = new Date(startTime);
 
     // Check if the start time is in the past
     if (startTime < currentTime) {
@@ -16,12 +16,10 @@ const isTimeSlotAvailable = (ground, startTime, endTime, bookingDate) => {
 
     // Check if the slot overlaps with any occupied slots
     return !ground.occupied_slots.some(slot => {
-        if (slot.status === 'occupied') {
-            const slotStartDateTime = new Date(slot.entry_time);
-            // Check for overlap
-            return startDateTime.getTime() === slotStartDateTime.getTime();
-        }
-        return false; // Slot is not occupied
+        const slotStartDateTime = new Date(slot.start_time);
+        // Check for overlap
+        return startDateTime.getTime() === slotStartDateTime.getTime();
+
     });
 };
 
@@ -51,16 +49,6 @@ export const makeBooking = async (req, res) => {
             });
         }
 
-        // Process time
-        let startHour = parseInt(start_time.split(':')[0]);
-        let endHour = parseInt(end_time.split(':')[0]);
-
-        // Convert booking date and time strings to Date objects
-        let startDateTime = new Date(booking_date);
-        let endDateTime = new Date(booking_date);
-        startDateTime.setHours(startHour, 0, 0, 0);
-        endDateTime.setHours(endHour, 0, 0, 0);
-
         const customer_id = req.user.id;
 
         // Create the booking
@@ -74,22 +62,12 @@ export const makeBooking = async (req, res) => {
             services
         });
 
-        // Update ground occupation
-        ground.occupied_slots.push({
-            date: new Date(),
-            start_time: startDateTime,
-            end_time: endDateTime,
-            booking_id: booking._id,
-            customer_id,
-            status: 'occupied'
-        });
-
         await field.save();
 
         res.status(200).json({
             success: true,
             message: 'Booking created successfully',
-            booking
+            bookingId: booking._id
         });
     } catch (error) {
         res.status(500).json({
@@ -102,7 +80,7 @@ export const makeBooking = async (req, res) => {
 
 export const getBookings = async (req, res) => {
     const customer_id = req.user.id
-    const bookings = await Booking.findAll({ where: { customer_id } });
+    const bookings = await Booking.find({ customer_id });
     res.status(200).json({ bookings });
 }
 
@@ -139,4 +117,68 @@ export const SearchFields = async (req, res) => {
         });
     }
 }
+
+export const sendNotification = async (req, res) => {
+    const { recipient_id, message, booking_id, type } = req.body;
+    const notification = await Notification.create({
+        ownerId: recipient_id,
+        message: message,
+        bookingId: booking_id,
+        type: type
+    });
+    res.status(200).json({ success: true, notification });
+}
+
+export const getResponseNoti = async (req, res) => {
+    try {
+        // 1. Get the field owner's ID from the authenticated request
+        const customerId = req.user.id;
+
+        const notifications = await Notification.find({
+            customerId: customerId
+        })
+            .populate({
+                path: 'bookingId',
+                select: 'field_id booking_time status',
+                populate: {
+                    path: 'field_id',
+                    select: 'name address'
+                }
+            })
+            .sort({ createdAt: -1 });
+
+        res.status(200).json({
+            success: true,
+            notifications: notifications.map(notification => ({
+                id: notification._id,
+                message: notification.message,
+                bookingDetails: notification.bookingId,
+                createdAt: notification.createdAt,
+                isRead: notification.isRead
+            }))
+        });
+
+    } catch (error) {
+        console.error('Error fetching customer notifications:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error fetching notifications',
+            error: error.message
+        });
+    }
+};
+
+export const markAllNotificationsAsRead = async (req, res) => {
+    try {
+        const customerId = req.user.id; // Assuming the user ID is available in req.user
+
+        // Update all notifications for the customer to be marked as read
+        await Notification.updateMany({ ownerId: customerId }, { isRead: true });
+
+        res.status(200).json({ success: true, message: 'All notifications marked as read' });
+    } catch (error) {
+        console.error('Error marking notifications as read:', error);
+        res.status(500).json({ success: false, message: 'Error marking notifications as read', error: error.message });
+    }
+};
 

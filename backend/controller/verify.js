@@ -19,3 +19,11 @@ export const authenticateToken = (req, res, next) => {
         return res.status(403).json({message: "Token is invalid or expired"})
     }
 }
+
+export const checkRole = (allowedRoles) => (req, res, next) => {
+    const userRole = req.user.role; // Lấy thông tin role từ token
+    if (!allowedRoles.includes(userRole)) {
+      return res.status(403).json({ message: "Không có quyền truy cập" });
+    }
+    next();
+  };

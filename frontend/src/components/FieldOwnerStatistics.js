@@ -8,7 +8,7 @@ const FieldOwnerStatistics = () => {
     useEffect(() => {
         const fetchPostedFields = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/field_owner/posted-fields');
+                const response = await fetch('http://localhost:5000/api/field_owner/posted_fields');
                 const data = await response.json();
                 setPostedFields(data.count);
             } catch (error) {

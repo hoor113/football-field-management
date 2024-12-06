@@ -45,6 +45,32 @@ export const OrderField = () => {
     }));
   };
 
+  const handleSendNotification = async (bookingId) => {
+    try {
+      const notificationData = {
+        recipient_id: field.owner_id,
+        message: `New booking request for ${field.name}`,
+        booking_id: bookingId,
+        type: 'request'
+      };
+
+      const response = await fetch('http://localhost:5000/api/customer/send_notification', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify(notificationData)
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send notification');
+      }
+    } catch (error) {
+      console.error('Error sending notification:', error);
+    }
+  };
+
   const handlePlaceOrder = async () => {
     // Check if all required fields are filled
     if (!selectedDate || !selectedGround || !selectedHours.start || !selectedHours.end) {
@@ -56,12 +82,8 @@ export const OrderField = () => {
     console.log('Selected Start Hour:', selectedHours.start);
     console.log('Selected End Hour:', selectedHours.end);
 
-    // Calculate total price
-    const ground = field.grounds.find(g => g._id === selectedGround);
-
-
-    // Total price for the ground
-    const totalGroundPrice = (ground.price || 0);
+    // Total price for the field (base price only)
+    const totalGroundPrice = (field.base_price || 0);
 
     // Total price for services
     const totalServicePrice = Object.entries(serviceQuantities).reduce((total, [serviceId, quantity]) => {
@@ -109,6 +131,8 @@ export const OrderField = () => {
       const data = await response.json();
 
       if (response.ok) {
+        // Send notification after successful booking
+        await handleSendNotification(data.bookingId);
         navigate(`/order-confirmation`, { state: { message: data.message } });
       } else {
         alert(data.message || 'Failed to place order');
@@ -274,17 +298,18 @@ export const OrderField = () => {
         <div className="order-summary-box">
           <h2>Order Summary</h2>
 
+          {/* Field Base Price */}
+          <div className="summary-item">
+            <div className="summary-label">Field Price:</div>
+            <div className="summary-price">${field.base_price || 0}</div>
+          </div>
 
-
-          {/* Ground Booking Summary */}
+          {/* Ground Selection Info (without price) */}
           {selectedGround && (
             <div className="summary-item">
-              <div className="summary-label">Ground Booking:</div>
+              <div className="summary-label">Selected Ground:</div>
               <div className="summary-details">
                 <div>{field.grounds.find(g => g._id === selectedGround)?.name}</div>
-                <div className="summary-price">
-                  ${field.grounds.find(g => g._id === selectedGround)?.price || 0}
-                </div>
               </div>
             </div>
           )}
@@ -307,14 +332,12 @@ export const OrderField = () => {
             return null;
           })}
 
-          {/* Total Calculation */}
+          {/* Update Total Calculation */}
           <div className="total-section">
             <div className="total-label">Total Amount:</div>
             <div className="total-amount">
               ${(
-                (selectedGround ?
-                  (field.grounds.find(g => g._id === selectedGround)?.price || 0)
-                  : 0) +
+                (field.base_price || 0) +
                 Object.entries(serviceQuantities).reduce((total, [serviceId, quantity]) => {
                   const service = field.services.find(s => s._id === serviceId);
                   return total + (service?.price * quantity || 0);

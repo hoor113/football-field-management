@@ -14,14 +14,14 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
         window.location.href = '/';
     };
     useEffect(() => {
-        if (userType === 'field_owner') {
+        if (userType === 'field_owner' || userType === 'customer') {
             fetchNotifications();
         }
     }, [userType]);
 
     const fetchNotifications = async () => {
         try {
-            const response = await fetch('/api/field_owner/noti', {
+            const response = await fetch(`/api/${userType}/noti`, {
                 credentials: 'include'
             });
             const data = await response.json();
@@ -41,7 +41,11 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
     };
 
     const handleSeeMore = () => {
-        navigate('/notifications');
+        if (userType === 'field_owner') {
+            navigate('/notifications');
+        } else if (userType === 'customer') {
+            navigate('/customer/notifications');
+        }
     };
 
     return (
@@ -61,7 +65,7 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                 {/* <a href="#" className="nav-item" onClick={scrollToBottom}>Liên hệ</a> */}
             </div>
 
-            {userType === 'field_owner' && (
+            {(userType === 'field_owner' || userType === 'customer') && (
                 <div className="notification-dropdown">
                     <div className="notification-icon">
                         <img src={notiBell} alt="notifications" className="bell-icon" />
@@ -116,18 +120,16 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     </button>
                     <div className="dropdown-content user-dropdown">
                         <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/profile`}>Hồ Sơ</Link>
-                        {userType === 'field_owner' ? (
-                            <Link to="/field_owner/statistics">Thống Kê</Link>
+                        <Link to={`/${userType === 'field_owner' ? 'field_owner' : 'customer'}/statistics`}>Thống Kê</Link>
+                        {/* {userType === 'field_owner' ? (
+                            <Link to="/field_owner/history">Lịch Sử Cho Thuê Sân</Link>
                         ) : (
-                            <Link to="/customer/statistics">Thống Kê</Link>
-                        )}
+                            <Link to="/customer/history">Lịch Sử Đặt Sân</Link>
+                        )} */}
                         <button onClick={handleLogoutClick} className="logout-btn">Đăng xuất</button>
                     </div>
                 </div>
             )}
-            
-            
-
         </nav>
     );
 }

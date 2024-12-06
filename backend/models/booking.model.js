@@ -23,7 +23,7 @@ const BookingSchema = new Schema({
     default: 'pending'
   },
   services: { type: [BookedServiceSchema], default: [] },
-  price: { type: Schema.Types.Decimal128, required: true },
+  price: { type: Number, required: true },
 });
 
 export const Booking =  mongoose.model("Booking", BookingSchema)

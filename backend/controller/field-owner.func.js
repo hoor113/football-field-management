@@ -3,7 +3,6 @@ import { Field } from "../models/field.model.js"
 import { FieldOwner } from "../models/field-owner.model.js";
 import { Booking } from '../models/booking.model.js';
 import { Notification } from '../models/notification.model.js'; // Import the Notification model
-
 export const UploadField = async (req, res) => {
     const {
         name,
@@ -225,7 +224,8 @@ export const getBookingNoti = async (req, res) => {
         // 5. Get notifications for these bookings
         const notifications = await Notification.find({
             ownerId: ownerId,
-            bookingId: { $in: bookings.map(booking => booking._id) }
+            bookingId: { $in: bookings.map(booking => booking._id) },
+            isRead: false
         })
             .populate({
                 path: 'bookingId',
@@ -243,7 +243,6 @@ export const getBookingNoti = async (req, res) => {
                 message: notification.message,
                 bookingDetails: notification.bookingId,
                 customerDetails: notification.bookingId.customer_id,
-                isRead: notification.isRead,
                 createdAt: notification.createdAt
             }))
         });
@@ -302,8 +301,26 @@ export const acceptBooking = async (req, res) => {
         }
 
         // Update booking status to accepted
-        booking.status = 'confirmed'; // Assuming you have a status field
+        booking.status = 'confirmed';
+
+        const field = await Field.findById(booking.field_id).populate('grounds');
+        field.grounds.find(ground => ground._id === booking.ground_id).occupied_slots.push({
+            date: new Date(),
+            start_time: booking.start_time,
+            end_time: booking.end_time,
+            booking_id: booking._id,
+            customer_id: booking.customer_id,
+        });
         await booking.save();
+
+        // Create a notification for the customer
+        await Notification.create({
+            customerId: booking.customer_id,
+            bookingId: booking._id,
+            message: 'Your booking has been accepted.',
+            isRead: false,
+            type: 'success'
+        });
 
         res.status(200).json({ success: true, message: 'Booking accepted', booking });
     } catch (error) {
@@ -321,8 +338,17 @@ export const cancelBooking = async (req, res) => {
         }
 
         // Update booking status to canceled
-        booking.status = 'cancelled'; // Assuming you have a status field
+        booking.status = 'cancelled';
         await booking.save();
+
+        // Create a notification for the customer
+        await Notification.create({
+            customerId: booking.customer_id,
+            bookingId: booking._id,
+            message: 'Your booking has been declined.',
+            isRead: false,
+            type: 'failed'
+        });
 
         res.status(200).json({ success: true, message: 'Booking canceled', booking });
     } catch (error) {
