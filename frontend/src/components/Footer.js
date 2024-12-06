@@ -10,13 +10,6 @@ const Footer = () => {
                 <div className="footer-section">
                     <h3>GIỚI THIỆU</h3>
                     <p>Trang Web của chúng tôi cung cấp các tiện ích thông minh giúp cho bạn tìm sân bãi và đặt sân một cách hiệu quả nhất.</p>
-                    <br></br>
-                    <div className="footer-links">
-                        <Link to="/chinh-sach-bao-mat">Chính sách bảo mật</Link>
-                        <Link to="/chinh-sach-huy">Chính sách huỷ (đổi trả)</Link>
-                        <Link to="/chinh-sach-kiem-hang">Chính sách kiểm hàng</Link>
-                        <Link to="/chinh-sach-thanh-toan">Chính sách thanh toán</Link>
-                    </div>
                 </div>
 
                 <div className="footer-section">
