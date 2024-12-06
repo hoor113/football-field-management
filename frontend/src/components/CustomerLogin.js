@@ -25,29 +25,39 @@ const CustomerLogin = () => {
 
   return (
     <div className="customer-login-container">
-      <div className="customer-login-box">
-        <h2 className="customer-login-title">Customer Login</h2>
-        <form onSubmit={handleSubmit} className="customer-login-form">
-          <div className="customer-login-form-group">
-            <input
-              type="text"
-              placeholder="Username"
-              value={formData.username}
-              onChange={(e) => setFormData({ ...formData, username: e.target.value })}
-              className="customer-login-input"
-            />
-          </div>
-          <div className="customer-login-form-group">
-            <input
-              type="password"
-              placeholder="Password"
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="customer-login-input"
-            />
-          </div>
-          <button type="submit" className="customer-login-button">Login</button>
-        </form>
+      {/* Left side - Banner */}
+      <div className="customer-login-banner">
+        <h1 className="customer-login-banner-text">
+          Hãy nâng tầm trải nghiệm đặt sân ngay bây giờ
+        </h1>
+      </div>
+
+      {/* Right side - Form */}
+      <div className="customer-login-form-container">
+        <div className="customer-login-box">
+          <h2 className="customer-login-title">Customer Login</h2>
+          <form onSubmit={handleSubmit} className="customer-login-form">
+            <div className="customer-login-form-group">
+              <input
+                type="text"
+                placeholder="Username"
+                value={formData.username}
+                onChange={(e) => setFormData({ ...formData, username: e.target.value })}
+                className="customer-login-input"
+              />
+            </div>
+            <div className="customer-login-form-group">
+              <input
+                type="password"
+                placeholder="Password"
+                value={formData.password}
+                onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                className="customer-login-input"
+              />
+            </div>
+            <button type="submit" className="customer-login-button">Login</button>
+          </form>
+        </div>
       </div>
     </div>
   );
