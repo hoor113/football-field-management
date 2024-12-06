@@ -21,6 +21,7 @@ import NotificationPageCustomer from './components/NotificationPageCustomer';
 import NotificationPageFieldOwner from './components/NotificationPageFieldOwner';
 import CustomerStatistics from './components/CustomerStatistics';
 import FieldOwnerStatistics from './components/FieldOwnerStatistics';
+import SearchResults from './components/Homepage/SearchResults.js';
 
 const App = () => {
     const customerAuth = AuthCustomer();
@@ -56,6 +57,7 @@ const App = () => {
                         <Route path="/customer/notifications" element={<NotificationPageCustomer />} />
                         <Route path="/customer/statistics" element={<CustomerStatistics />} />
                         <Route path="/field_owner/statistics" element={<FieldOwnerStatistics />} />
+                        <Route path="/search-results" element={<SearchResults />} />
                     </Routes>
                 </main>
                 <Footer />
