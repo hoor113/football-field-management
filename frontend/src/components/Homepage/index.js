@@ -10,6 +10,7 @@ import ZirkzeeImage from './images/zirkzee.jpg';
 import AntonyImage from './images/antony.jpg';
 import NicholasJacksonImage from './images/jackson.jpg';
 import MykhayloMudrykImage from './images/mudryk.jpg';
+import { useNavigate } from 'react-router-dom';
 
 const NewsSection = () => {
     const newsItems = [
@@ -201,12 +202,16 @@ const AppDownload = () => (
 );
 
 export const HomePage = ({ isLoggedIn, fullname }) => {
+    const navigate = useNavigate();
     const { fields, setFields } = useField(isLoggedIn);
     const [showFieldForm, setShowFieldForm] = useState(false);
     const [showServiceForm, setShowServiceForm] = useState(false);
     const [selectedField, setSelectedField] = useState(null);
     const [currentPage, setCurrentPage] = useState(1);
     const fieldsPerPage = 3;
+    const [searchName, setSearchName] = useState('');
+    const [searchAddress, setSearchAddress] = useState('');
+    const [filteredFields, setFilteredFields] = useState([]);
 
     const handleServiceSubmit = async (serviceData) => {
         try {
@@ -233,6 +238,18 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
         } catch (error) {
             console.error('Error adding service:', error);
             alert(error.message);
+        }
+    };
+
+    const handleSearch = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/field/fields/search?name=${searchName}&address=${searchAddress}`);
+            const data = await response.json();
+            setFilteredFields(data.fields);
+            // Redirect to the search results page
+            navigate('/search-results', { state: { fields: data.fields } });
+        } catch (error) {
+            console.error('Error fetching search results:', error);
         }
     };
 
@@ -289,21 +306,38 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
         <>
             <div className="banner">
                 <div className="banner-content">
-                    <h1 style={{ color: '#ffffff' }}>HỆ THỐNG HỖ TRỢ TÌM KIẾM SÂN BÃI NHANH</h1>
+                    <h1 style={{ color: '#ffffff' }}>TRANG CHỦ HỖ TRỢ TÌM KIẾM SÂN BÃI NHANH</h1>
                     <p>Dữ liệu được cập nhật thường xuyên giúp cho người dùng tìm được sân một cách nhanh nhất</p>
                     <div className="search-bar">
-                        {/* <select>
-                            <option>Lọc theo loại sân</option>
-                            <option>Sân cỏ nhân tạo</option>
-                            <option>Sân cỏ tự nhiên</option>
-                        </select> */}
-                        <input type="text" placeholder="Nhập tên sân hoặc địa chỉ..." />
-                        <input type="text" placeholder="Nhập khu vực" />
-                        <button className="search-button">Tìm kiếm</button>
+                        <input
+                            type="text"
+                            placeholder="Nhập tên sân"
+                            value={searchName}
+                            onChange={(e) => setSearchName(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            placeholder="Nhập địa chỉ"
+                            value={searchAddress}
+                            onChange={(e) => setSearchAddress(e.target.value)}
+                        />
+                        <button className="search-button" onClick={handleSearch}>Tìm kiếm</button>
                     </div>
                 </div>
-
             </div>
+            {/* <div className="search-results">
+                {filteredFields.length > 0 ? (
+                    filteredFields.map(field => (
+                        <div key={field.id} className="field-card">
+                            <h3>{field.name}</h3>
+                            <p>{field.location}</p>
+                            <p>Rating: {field.rating}</p>
+                        </div>
+                    ))
+                ) : (
+                    <p>No fields found</p>
+                )}
+            </div> */}
             <HowItWorks />
             <FeaturedFields />
             <Statistics />

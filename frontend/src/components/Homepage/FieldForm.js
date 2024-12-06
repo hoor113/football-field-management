@@ -68,7 +68,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
     };
 
     onSubmit(formattedField);
-    window.location.reload();
+    // window.location.reload();
   };
 
   return (
