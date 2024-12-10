@@ -11,7 +11,7 @@ const FieldOwnerLogin = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/field-owner/login`, formData);
+      const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/field_owner/login`, formData);
       localStorage.setItem('token', response.data.token);
       window.location.href = '/';
     } catch (error) {
