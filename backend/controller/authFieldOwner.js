@@ -109,11 +109,15 @@ export const getFieldOwner = async (req, res) => {
     }
 }
 
-export const getFieldOwnerById = async (req, res) => {
-    const { ownerId } = req.params;
-    const fieldOwner = await FieldOwner.findById(ownerId);
-    res.json(fieldOwner.fullname);
-};
+// export const getFieldOwnerById = async (req, res) => {
+//     const { ownerId } = req.params;
+//     try {
+//         const fieldOwner = await FieldOwner.findById(ownerId);
+//         res.json(fieldOwner.fullname);
+//     } catch (error) {
+//         res.status(500).json({ error: error.message });
+//     }
+// };
 
 export const getProfile = async (req, res) => {
     try {

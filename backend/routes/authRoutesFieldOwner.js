@@ -2,7 +2,8 @@ import { Router } from 'express';
 import { register, login, getFieldOwner, logout, getPostedFieldsCount } from '../controller/authFieldOwner.js';
 import { getFieldDetails } from '../controller/field-owner.func.js';
 import { authenticateToken } from '../controller/verify.js';
-import { getProfile, updateProfile, getFieldOwnerById } from '../controller/authFieldOwner.js';
+import { getProfile, updateProfile } from '../controller/authFieldOwner.js';
+// import { getFieldOwnerById } from '../controller/authFieldOwner.js';
 import { acceptBooking, cancelBooking, getBookingNoti, markNotificationAsRead, deleteField, editFieldAttributes } from '../controller/field-owner.func.js';
 // import { getNotificationsByOwnerId, markNotificationAsRead } from '../controller/notification.func.js';
 // api/field_owner/
@@ -10,7 +11,7 @@ const router2 = Router();
 router2.post('/register', register);
 router2.post('/login', login);
 router2.get("/", authenticateToken, getFieldOwner)
-router2.get("/:ownerId", getFieldOwnerById)
+// router2.get("/:ownerId", getFieldOwnerById)
 router2.post("/logout", logout)
 router2.get("/fields", authenticateToken, getFieldDetails)
 router2.get("/profile", authenticateToken, getProfile)

@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { Booking } from "../models/booking.model.js";
 import { Field } from "../models/field.model.js";
 import { Notification } from '../models/notification.model.js';
+import { Rating } from "../models/rating.model.js";
 
 // Helper function to check if a time slot is currently available
 const isTimeSlotAvailable = (ground, startTime) => {
@@ -215,6 +216,38 @@ export const HPsearchFields = async (req, res) => {
     } catch (error) {
         console.error('Error searching fields:', error);
         res.status(500).json({ success: false, message: 'Error searching fields', error: error.message });
+    }
+};
+
+export const submitRating = async (req, res) => {
+    const { rating, comment, field_id } = req.body;
+    const customer_id = req.user.id;
+
+    try {
+        const newRating = new Rating({
+            customer_id,
+            field_id,
+            stars: rating,
+            comment,
+        });
+
+        await newRating.save();
+
+        res.status(201).json({ success: true, message: 'Rating submitted successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error submitting rating', error: error.message });
+    }
+};
+
+export const getFieldRatings = async (req, res) => {
+    const { fieldId } = req.params;
+
+    try {
+        const ratings = await Rating.find({ field_id: fieldId }).populate('customer_id', 'comment');
+
+        res.status(200).json({ success: true, ratings });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Error fetching ratings', error: error.message });
     }
 };
 

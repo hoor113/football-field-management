@@ -22,6 +22,7 @@ import CustomerStatistics from './components/CustomerStatistics';
 import FieldOwnerStatistics from './components/FieldOwnerStatistics';
 import SearchResults from './components/Homepage/SearchResults.js';
 
+
 // Create a wrapper component that handles the conditional rendering
 const AppContent = () => {
     const location = useLocation();
