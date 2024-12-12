@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import './CommentsSection.css';
 
 export const CommentsSection = ({ fieldId }) => {
     const [comments, setComments] = useState([]);
@@ -31,16 +32,25 @@ export const CommentsSection = ({ fieldId }) => {
         }
     }, [fieldId]);
 
+    const formatDate = (dateString) => {
+        const options = { hour: '2-digit', minute: '2-digit', day: '2-digit', month: '2-digit', year: 'numeric' };
+        return new Date(dateString).toLocaleDateString('en-GB', options).replace(',', ' at');
+    };
+
     return (
         <div className="comments-section">
             <h2>Comments</h2>
             {comments.length > 0 ? (
                 comments.map((comment, index) => (
                     <div key={index} className="comment">
+                        <div className="comment-header">
+                            <span className="comment-user">{comment.customer_id.name}</span>
+                            <span className="comment-date">{formatDate(comment.created_at)}</span>
+                        </div>
                         <div className="comment-stars">
                             {'★'.repeat(comment.stars)}{'☆'.repeat(5 - comment.stars)}
                         </div>
-                        <p>{comment.comment}</p>
+                        <p className="comment-text">{comment.comment}</p>
                     </div>
                 ))
             ) : (
