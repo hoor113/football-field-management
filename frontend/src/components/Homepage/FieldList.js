@@ -1,5 +1,5 @@
 import React from 'react';
-import { FieldCard } from './FieldCard';
+import { FieldCard } from './FieldCard.js';
 import './FieldList.css';
 
 export const FieldList = ({ fields, currentPage, fieldsPerPage, onPageChange }) => {
@@ -20,7 +20,7 @@ export const FieldList = ({ fields, currentPage, fieldsPerPage, onPageChange }) 
                 <button 
                     onClick={() => onPageChange(currentPage - 1)} 
                     disabled={currentPage === 1}
-                    className="pagination-button"
+                    className="pagination-button-prev"
                 >
                     Previous
                 </button>
@@ -30,7 +30,7 @@ export const FieldList = ({ fields, currentPage, fieldsPerPage, onPageChange }) 
                 <button 
                     onClick={() => onPageChange(currentPage + 1)} 
                     disabled={currentPage === totalPages}
-                    className="pagination-button"
+                    className="pagination-button-next"
                 >
                     Next
                 </button>
