@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/NotificationPage.css';
+import '../styles/NotificationPageFieldOwner.css';
 
 const NotificationPageFieldOwner = () => {
     const [notifications, setNotifications] = useState([]);
@@ -88,6 +88,10 @@ const NotificationPageFieldOwner = () => {
     };
 
     const formatPrice = (price) => {
+        // Kiểm tra nếu price là Decimal128 từ MongoDB
+        if (price && price.$numberDecimal) {
+            price = parseFloat(price.$numberDecimal);
+        }
         return parseFloat(price).toLocaleString('en-US', {
             style: 'currency',
             currency: 'USD'
@@ -166,37 +170,46 @@ const NotificationPageFieldOwner = () => {
                 ) : (
                     notifications.map(notification => (
                         <div key={notification._id} className="notification-box">
-                            {/* Customer Information */}
-                            <div className="customer-info">
-                                <h3>Customer Details</h3>
-                                <p><strong>Name:</strong> {notification.customerDetails.fullname}</p>
-                                <p><strong>Email:</strong> {notification.customerDetails.email}</p>
-                                <p><strong>Phone:</strong> {notification.customerDetails.phone_no}</p>
+                            <div className="notification-grid">
+                                {/* Customer Information */}
+                                <div className="customer-info">
+                                    <h3>Customer Details</h3>
+                                    <div className="info-content">
+                                        <p><i className="fas fa-user"></i> <strong>Name:</strong> {notification.customerDetails.fullname}</p>
+                                        <p><i className="fas fa-envelope"></i> <strong>Email:</strong> {notification.customerDetails.email}</p>
+                                        <p><i className="fas fa-phone"></i> <strong>Phone:</strong> {notification.customerDetails.phone_no}</p>
+                                    </div>
+                                </div>
+
+                                {/* Booking Details */}
+                                <div className="booking-details">
+                                    <h3>Booking Details</h3>
+                                    <div className="info-content">
+                                        <p><i className="fas fa-bookmark"></i> <strong>Booking ID:</strong> {notification.bookingDetails._id}</p>
+                                        <p><i className="fas fa-clock"></i> <strong>Start Time:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
+                                        <p><i className="fas fa-clock"></i> <strong>End Time:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
+                                        <p><i className="fas fa-map-marker-alt"></i> <strong>Ground:</strong> {`${notification.bookingDetails.field_id.name}`}</p>
+                                        <p><i className="fas fa-money-bill-wave"></i> <strong>Total Price:</strong> {formatPrice(notification.bookingDetails.price)}</p>
+                                    </div>
+                                </div>
                             </div>
 
-                            {/* Booking Details */}
-                            <div className="booking-details">
-                                <h3>Booking Details</h3>
-                                <p><strong>Booking ID:</strong> {notification.bookingDetails._id}</p>
-                                <p><strong>Start Time:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
-                                <p><strong>End Time:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
-                                <p><strong>Ground:</strong> Ground {notification.bookingDetails.ground_id}</p>
-                                <p><strong>Total Price:</strong> {formatPrice(notification.bookingDetails.price)}</p>
-                                
-                                {/* Additional Services */}
-                                {notification.bookingDetails.services?.length > 0 && (
-                                    <div className="services">
-                                        <h4>Additional Services:</h4>
-                                        <ul>
-                                            {notification.bookingDetails.services.map(service => (
-                                                <li key={service._id}>
-                                                    {service.name} - {formatPrice(service.price)} x {service.quantity}
-                                                </li>
-                                            ))}
-                                        </ul>
+                            {/* Additional Services */}
+                            {notification.bookingDetails.services?.length > 0 && (
+                                <div className="services-section">
+                                    <h4><i className="fas fa-concierge-bell"></i> Additional Services:</h4>
+                                    <div className="services-grid">
+                                        {notification.bookingDetails.services.map(service => (
+                                            <div key={service._id} className="service-item">
+                                                <span className="service-name">{service.name}</span>
+                                                <span className="service-price">
+                                                    {formatPrice(service.price)} x {service.quantity}
+                                                </span>
+                                            </div>
+                                        ))}
                                     </div>
-                                )}
-                            </div>
+                                </div>
+                            )}
 
                             {/* Action Buttons */}
                             <div className="notification-actions">
@@ -204,13 +217,13 @@ const NotificationPageFieldOwner = () => {
                                     onClick={() => handleAcceptClick(notification.bookingDetails._id, notification.id)} 
                                     className="accept-btn"
                                 >
-                                    Accept Booking
+                                    <i className="fas fa-check"></i> Accept Booking
                                 </button>
                                 <button 
                                     onClick={() => handleDeclineClick(notification.bookingDetails._id, notification.id)} 
                                     className="decline-btn"
                                 >
-                                    Decline Booking
+                                    <i className="fas fa-times"></i> Decline Booking
                                 </button>
                             </div>
                         </div>
