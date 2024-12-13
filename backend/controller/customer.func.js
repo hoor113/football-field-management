@@ -93,6 +93,7 @@ export const getRecommendedFields = async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
         const fields = await Field.find()
+            .populate('owner_id', 'fullname email')
             .limit(limit);
         res.status(200).json({ success: true, fields });
     } catch (error) {

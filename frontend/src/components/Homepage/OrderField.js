@@ -7,7 +7,7 @@ import { CommentsSection } from './CommentsSection';
 export const OrderField = () => {
   const location = useLocation();
   const field = location.state?.field;
-  // const [ownerName, setOwnerName] = useState('');
+//   const [ownerName, setOwnerName] = useState('');
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedGround, setSelectedGround] = useState('');
   const [selectedHours, setSelectedHours] = useState({ start: '', end: '' });
@@ -168,7 +168,7 @@ export const OrderField = () => {
                     </p>
                     <p className="field-owner">
                         <span className="label">Owner:</span>
-                        {/* {ownerName} */} WIP
+                        {field.owner_id.fullname}
                     </p>
                     {/* <p className="field-description">
                             <span className="label">Description:</span>
