@@ -415,3 +415,95 @@ input[type="date"]:not(:disabled):focus {
 select option[disabled] {
     color: #95a5a6;
 }
+
+/* Update heading styles */
+.order-form-section h2,
+.booking-time-section h2,
+.services-section h2 {
+    margin-bottom: 15px;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: 600;
+}
+
+/* Update label styles */
+.ground-selection label,
+.date-selection label,
+.hours-selection label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+    font-size: 0.95em;
+}
+
+/* Update service item styles */
+.service-item h3 {
+    color: #333;
+    font-size: 1em;
+    font-weight: 600;
+    margin: 0;
+}
+
+.service-price {
+    color: #666;
+    font-size: 0.9em;
+    margin: 0;
+}
+
+/* Update order summary styles */
+.order-summary-box h2 {
+    color: #333;
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.summary-label {
+    color: #333;
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.summary-price {
+    color: #666;
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+.total-section {
+    margin-top: 20px;
+    padding-top: 15px;
+}
+
+.total-label {
+    color: #333;
+    font-size: 1.1em;
+    font-weight: 600;
+}
+
+.total-amount {
+    color: #007bff;
+    font-size: 1.2em;
+    font-weight: 700;
+}
+
+/* Update select and input styles */
+select, 
+input[type="date"] {
+    font-size: 0.95em;
+    color: #333;
+}
+
+/* Update quantity display style */
+.quantity-display {
+    color: #333;
+    font-size: 0.95em;
+    font-weight: 500;
+}
+
+/* Update submit button style */
+.submit-order-btn {
+    font-size: 1em;
+    font-weight: 600;
+}

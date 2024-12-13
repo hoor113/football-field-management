@@ -323,7 +323,7 @@ export const OrderField = () => {
                     {/* Field Base Price */}
                     <div className="summary-item">
                         <div className="summary-label">Field Price:</div>
-                        <div className="summary-price">${field.base_price || 0}</div>
+                        <div className="summary-price">{field.base_price || 0} VNĐ</div>
                     </div>
 
                     {/* Ground Selection Info (without price) */}

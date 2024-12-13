@@ -44,7 +44,7 @@ export const CommentsSection = ({ fieldId }) => {
                 comments.map((comment, index) => (
                     <div key={index} className="comment">
                         <div className="comment-header">
-                            <span className="comment-user">{comment.customer_id.name}</span>
+                            <span className="comment-user">{comment.customer_id.fullname}</span>
                             <span className="comment-date">{formatDate(comment.created_at)}</span>
                         </div>
                         <div className="comment-stars">

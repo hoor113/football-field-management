@@ -159,7 +159,8 @@ export const getResponseNoti = async (req, res) => {
                 message: notification.message,
                 bookingDetails: notification.bookingId,
                 createdAt: notification.createdAt,
-                isRead: notification.isRead
+                isRead: notification.isRead,
+                type: notification.type
             }))
         });
 
@@ -243,7 +244,7 @@ export const getFieldRatings = async (req, res) => {
     const { fieldId } = req.params;
 
     try {
-        const ratings = await Rating.find({ field_id: fieldId }).populate('customer_id', 'comment');
+        const ratings = await Rating.find({ field_id: fieldId }).populate('customer_id');
 
         res.status(200).json({ success: true, ratings });
     } catch (error) {
