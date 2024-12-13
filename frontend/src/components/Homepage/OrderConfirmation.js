@@ -1,4 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
+import './OrderConfirmation.css';
 import { FaCheckCircle } from 'react-icons/fa'; // Make sure to install react-icons if not already installed
 
 const OrderConfirmation = () => {
