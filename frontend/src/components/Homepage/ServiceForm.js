@@ -73,12 +73,12 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                     />
                     
                     <div className="form-buttons">
-                        <button type="button" onClick={onClose} className="cancel-button">
-                            Cancel
-                        </button>
                         <button type="submit" className="submit-button">
                             Add Service
                         </button>
+                        <button type="button" onClick={onClose} className="cancel-button">
+                            Cancel
+                        </button>                      
                     </div>
                 </form>
             </div>

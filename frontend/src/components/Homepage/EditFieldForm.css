@@ -68,7 +68,7 @@
     background-color: #388E3C;
 }
 
-/* Thêm style mới cho nút Edit Field */
+/* Thêm style mới cho nút Edit Field
 .edit-field-button {
     width: 100%;
     padding: 10px;
@@ -82,9 +82,9 @@
     transition: all 0.3s ease;
     /* max-height: 20px; */
     /* margin: 5px 0; */
-}
 
-.edit-field-button:hover {
+
+/* .edit-field-button:hover {
     background-color: #09f21d;
     border-color: #09f21d;
-}
+} */
