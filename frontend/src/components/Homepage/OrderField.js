@@ -4,6 +4,7 @@ import './OrderField.css';
 import { RatingSection } from './RatingSection';
 import { CommentsSection } from './CommentsSection';
 import DateSelector from './DateSelector';
+import { ServiceSelectionBoard } from './ServiceSelectionBoard';
 
 export const OrderField = () => {
   const location = useLocation();
@@ -12,6 +13,8 @@ export const OrderField = () => {
   const [selectedGround, setSelectedGround] = useState('');
   const [selectedHours, setSelectedHours] = useState({ start: '', end: '' });
   const [serviceQuantities, setServiceQuantities] = useState({});
+  // const [showServicesList, setShowServicesList] = useState(false);
+  const [showServiceBoard, setShowServiceBoard] = useState(false);
   const navigate = useNavigate();
 
   const handleDateSelect = (date) => {
@@ -126,6 +129,22 @@ export const OrderField = () => {
       console.error('Error placing order:', error);
       alert('Error placing order');
     }
+  };
+
+  const handleAddService = (service) => {
+    setServiceQuantities(prev => ({
+      ...prev,
+      [service._id]: (prev[service._id] || 0) + 1
+    }));
+    setShowServiceBoard(false);
+  };
+
+  const handleRemoveService = (serviceId) => {
+    setServiceQuantities(prev => {
+      const newQuantities = { ...prev };
+      delete newQuantities[serviceId];
+      return newQuantities;
+    });
   };
 
   if (!field) return <div>Loading...</div>;
@@ -256,33 +275,64 @@ export const OrderField = () => {
           {/* Services Selection */}
           <div className="services-section">
             <h2>Additional Services</h2>
-            <div className="services-list">
-              {field.services.map(service => (
-                <div key={service._id} className="service-item">
-                  <div className="service-info">
-                    <h3>{service.name}</h3>
-                    <p className="service-price">{service.price} VNĐ</p>
-                  </div>
-                  <div className="quantity-controls">
-                    <button
-                      onClick={() => handleQuantityChange(service._id, -1)}
-                      className="quantity-btn"
-                    >
-                      -
-                    </button>
-                    <span className="quantity-display">
-                      {serviceQuantities[service._id] || 0}
-                    </span>
-                    <button
-                      onClick={() => handleQuantityChange(service._id, 1)}
-                      className="quantity-btn"
-                    >
-                      +
-                    </button>
-                  </div>
-                </div>
-              ))}
-            </div>
+            
+            {/* Selected Services List */}
+            {Object.keys(serviceQuantities).length > 0 && (
+              <div className="selected-services-list">
+                {field.services
+                  .filter(service => serviceQuantities[service._id] > 0)
+                  .map(service => (
+                    <div key={service._id} className="selected-service-item">
+                      <div className="service-info">
+                        <div className="service-header">
+                          <h3>{service.name}</h3>
+                          <button 
+                            className="remove-service-btn"
+                            onClick={() => handleRemoveService(service._id)}
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <p className="service-price">{service.price} VNĐ</p>
+                      </div>
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => handleQuantityChange(service._id, -1)}
+                          className="quantity-btn"
+                        >
+                          -
+                        </button>
+                        <span className="quantity-display">
+                          {serviceQuantities[service._id] || 0}
+                        </span>
+                        <button
+                          onClick={() => handleQuantityChange(service._id, 1)}
+                          className="quantity-btn"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {/* Add Service Button - Always visible */}
+            <button 
+              className="add-service-btn"
+              onClick={() => setShowServiceBoard(true)}
+            >
+              + Thêm dịch vụ
+            </button>
+
+            {/* Service Selection Board */}
+            {showServiceBoard && (
+              <ServiceSelectionBoard
+                services={field.services}
+                onAddService={handleAddService}
+                onClose={() => setShowServiceBoard(false)}
+              />
+            )}
           </div>
 
           {/* New Order Summary Box */}
