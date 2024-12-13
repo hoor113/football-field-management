@@ -15,14 +15,15 @@ const BookingSchema = new Schema({
   start_time: { type: Date, required: true },
   end_time: { type: Date, required: true },
   order_time: { type: Date, default: Date.now },
-  price: { type: Schema.Types.Decimal128, required: true },
+  
   status: {
     type: String,
     required: true,
     enum: ['pending', 'confirmed', 'cancelled'],
     default: 'pending'
   },
-  services: [BookedServiceSchema]
+  services: { type: [BookedServiceSchema], default: [] },
+  price: { type: Number, required: true },
 });
 
 export const Booking =  mongoose.model("Booking", BookingSchema)
