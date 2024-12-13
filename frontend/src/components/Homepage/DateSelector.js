@@ -4,7 +4,11 @@ import './DateSelector.css';
 const DateSelector = ({ onDateSelect }) => {
     const [selectedDate, setSelectedDate] = useState(null);
     const [currentWeek, setCurrentWeek] = useState([]);
-    const [weekLabel, setWeekLabel] = useState('');
+    const [monthYearLabel, setMonthYearLabel] = useState('');
+
+    // Get today's date with time set to midnight for accurate comparison
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
     // Get the week dates
     const getWeekDates = (date) => {
@@ -20,29 +24,37 @@ const DateSelector = ({ onDateSelect }) => {
         return week;
     };
 
-    // Format week label (e.g., "Tuần 51 - 2024")
-    const formatWeekLabel = (date) => {
-        const weekNumber = Math.ceil((date.getDate() - date.getDay() + 1) / 7);
+    // Format month and year label (e.g., "Tháng 12 - 2024")
+    const formatMonthYearLabel = (date) => {
+        const month = date.toLocaleString('vi-VN', { month: 'long' });
         const year = date.getFullYear();
-        const month = date.toLocaleString('vi-VN', { month: 'long' }); // Get month name in Vietnamese
-        return `${month} - Tuần ${weekNumber} - ${year}`;
+        return `${month} - ${year}`;
     };
 
     // Initialize current week
     useEffect(() => {
-        const today = new Date();
         const week = getWeekDates(today);
         setCurrentWeek(week);
-        setWeekLabel(formatWeekLabel(today));
+        setMonthYearLabel(formatMonthYearLabel(today));
     }, []);
 
     // Navigate to previous/next week
     const navigateWeek = (direction) => {
         const firstDay = new Date(currentWeek[0]);
         firstDay.setDate(firstDay.getDate() + (direction * 7));
+
+        // Prevent navigating to past weeks
+        if (direction < 0) {
+            const lastDayOfNewWeek = new Date(firstDay);
+            lastDayOfNewWeek.setDate(firstDay.getDate() + 6);
+            if (lastDayOfNewWeek < today) {
+                return; // Don't navigate if entire week is in the past
+            }
+        }
+
         const newWeek = getWeekDates(firstDay);
         setCurrentWeek(newWeek);
-        setWeekLabel(formatWeekLabel(firstDay));
+        setMonthYearLabel(formatMonthYearLabel(firstDay));
     };
 
     // Format day display
@@ -54,11 +66,22 @@ const DateSelector = ({ onDateSelect }) => {
         };
     };
 
+    // Check if a date is in the past
+    const isPastDate = (date) => {
+        date.setHours(0, 0, 0, 0);
+        return date < today;
+    };
+
     return (
         <div className="date-selector">
-            <div className="week-navigator">
-                <button onClick={() => navigateWeek(-1)}>&lt;</button>
-                <span>{weekLabel}</span>
+            <div className="month-navigator">
+                <button 
+                    onClick={() => navigateWeek(-1)}
+                    disabled={currentWeek[6] < today}
+                >
+                    &lt;
+                </button>
+                <span>{monthYearLabel}</span>
                 <button onClick={() => navigateWeek(1)}>&gt;</button>
             </div>
             <div className="days-grid">
@@ -66,14 +89,18 @@ const DateSelector = ({ onDateSelect }) => {
                     const { dayName, dayNumber } = formatDayDisplay(date);
                     const isSelected = selectedDate && 
                         date.toDateString() === selectedDate.toDateString();
+                    const isPast = isPastDate(new Date(date));
 
                     return (
                         <div 
                             key={index}
-                            className={`day-cell ${isSelected ? 'selected' : ''}`}
+                            className={`day-cell ${isSelected ? 'selected' : ''} 
+                                      ${isPast ? 'disabled' : ''}`}
                             onClick={() => {
-                                setSelectedDate(date);
-                                onDateSelect(date);
+                                if (!isPast) {
+                                    setSelectedDate(date);
+                                    onDateSelect(date);
+                                }
                             }}
                         >
                             <div className="day-name">{dayName}</div>
