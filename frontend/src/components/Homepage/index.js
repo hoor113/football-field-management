@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FieldList } from './FieldList';
 import { FieldForm } from './FieldForm';
 import { ServiceForm } from './ServiceForm';
@@ -13,6 +13,33 @@ import MykhayloMudrykImage from './images/mudryk.jpg';
 import { useNavigate } from 'react-router-dom';
 
 const NewsSection = () => {
+    const [displayCount, setDisplayCount] = useState(4); // Default to 4 items
+
+    // Update display count based on window width
+    useEffect(() => {
+        const handleResize = () => {
+            const width = window.innerWidth;
+            if (width > 1200) {
+                setDisplayCount(4);
+            } else if (width > 900) {
+                setDisplayCount(3);
+            } else if (width > 600) {
+                setDisplayCount(2);
+            } else {
+                setDisplayCount(1);
+            }
+        };
+
+        // Initial check
+        handleResize();
+
+        // Add event listener
+        window.addEventListener('resize', handleResize);
+
+        // Cleanup
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
     const newsItems = [
         {
             id: 1,
@@ -48,11 +75,14 @@ const NewsSection = () => {
         }
     ];
 
+    // Only display the number of items based on screen size
+    const displayedNews = newsItems.slice(0, displayCount);
+
     return (
         <div className="news-section">
             <h2 className="news-section-title">Tin Tức Mới Nhất</h2>
             <div className="news-grid">
-                {newsItems.map(news => (
+                {displayedNews.map(news => (
                     <div key={news.id} className="news-card">
                         <div className="news-image">
                             <img src={news.image} alt={news.title} />
