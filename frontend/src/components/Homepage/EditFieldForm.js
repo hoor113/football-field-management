@@ -79,7 +79,7 @@ const EditFieldForm = ({ field, onClose, onSubmit }) => {
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit" className="save-button">Save Changes</button><br />
+                    <button type="submit" className="save-button">Save</button><br />
                     <button type="button" className="cancel-button" onClick={onClose}>Cancel</button>
                 </div>
             </form>

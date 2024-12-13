@@ -5,6 +5,9 @@ const NotificationPageFieldOwner = () => {
     const [notifications, setNotifications] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [selectedBooking, setSelectedBooking] = useState(null);
+    const [showDeclineModal, setShowDeclineModal] = useState(false);
 
     useEffect(() => {
         fetchNotifications();
@@ -91,6 +94,66 @@ const NotificationPageFieldOwner = () => {
         });
     };
 
+    const ConfirmModal = ({ isOpen, onClose, onConfirm }) => {
+        if (!isOpen) return null;
+
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h2>Confirm Booking</h2>
+                    <p>Are you sure you want to accept this booking?</p>
+                    <div className="modal-actions">
+                        <button onClick={onConfirm} className="confirm-btn">Yes, Accept</button>
+                        <button onClick={onClose} className="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const handleAcceptClick = (booking, notificationId) => {
+        setSelectedBooking({ bookingId: booking, notificationId });
+        setShowConfirmModal(true);
+    };
+
+    const handleConfirmAccept = async () => {
+        if (selectedBooking) {
+            await handleAccept(selectedBooking.bookingId, selectedBooking.notificationId);
+            setShowConfirmModal(false);
+            setSelectedBooking(null);
+        }
+    };
+
+    const handleDeclineClick = (booking, notificationId) => {
+        setSelectedBooking({ bookingId: booking, notificationId });
+        setShowDeclineModal(true);
+    };
+
+    const handleConfirmDecline = async () => {
+        if (selectedBooking) {
+            await handleDecline(selectedBooking.bookingId, selectedBooking.notificationId);
+            setShowDeclineModal(false);
+            setSelectedBooking(null);
+        }
+    };
+
+    const DeclineModal = ({ isOpen, onClose, onConfirm }) => {
+        if (!isOpen) return null;
+
+        return (
+            <div className="modal-overlay">
+                <div className="modal-content">
+                    <h2>Confirm Decline</h2>
+                    <p>Are you sure you want to decline this booking?</p>
+                    <div className="modal-actions">
+                        <button onClick={onConfirm} className="confirm-btn">Yes, Decline</button>
+                        <button onClick={onClose} className="cancel-btn">Cancel</button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
     if (loading) return <div className="loading">Loading notifications...</div>;
     if (error) return <div className="error">Error: {error}</div>;
 
@@ -138,13 +201,13 @@ const NotificationPageFieldOwner = () => {
                             {/* Action Buttons */}
                             <div className="notification-actions">
                                 <button 
-                                    onClick={() => handleAccept(notification.bookingDetails._id, notification.id)} 
+                                    onClick={() => handleAcceptClick(notification.bookingDetails._id, notification.id)} 
                                     className="accept-btn"
                                 >
                                     Accept Booking
                                 </button>
                                 <button 
-                                    onClick={() => handleDecline(notification.bookingDetails._id, notification.id)} 
+                                    onClick={() => handleDeclineClick(notification.bookingDetails._id, notification.id)} 
                                     className="decline-btn"
                                 >
                                     Decline Booking
@@ -154,6 +217,18 @@ const NotificationPageFieldOwner = () => {
                     ))
                 )}
             </div>
+            
+            <ConfirmModal 
+                isOpen={showConfirmModal}
+                onClose={() => setShowConfirmModal(false)}
+                onConfirm={handleConfirmAccept}
+            />
+            
+            <DeclineModal 
+                isOpen={showDeclineModal}
+                onClose={() => setShowDeclineModal(false)}
+                onConfirm={handleConfirmDecline}
+            />
         </div>
     );
 };

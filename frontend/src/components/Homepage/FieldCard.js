@@ -3,7 +3,7 @@ import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
-import EditFieldForm from './EditFieldForm';
+import EditFieldForm from './EditFieldForm.js';
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
