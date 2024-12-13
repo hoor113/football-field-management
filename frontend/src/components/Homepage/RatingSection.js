@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './RatingSection.css';
 import { useLocation } from 'react-router-dom';
 
@@ -11,34 +11,35 @@ export const RatingSection = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        try {
-            const response = await fetch('http://localhost:5000/api/customer/rating', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // Include cookies for authentication
-                body: JSON.stringify({
-                    rating,
-                    comment,
-                    field_id: field._id,
-                }),
-            });
-
-            const data = await response.json();
-
-            if (response.ok) {
-                console.log('Rating submitted successfully:', data);
-                // Optionally reset the form
-                setRating(0);
-                setComment('');
-            } else {
-                console.error('Failed to submit rating:', data.message);
+    
+            try {
+                const response = await fetch('http://localhost:5000/api/customer/rating', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'include', // Include cookies for authentication
+                    body: JSON.stringify({
+                        rating,
+                        comment,
+                        field_id: field._id,
+                    }),
+                });
+    
+                const data = await response.json();
+    
+                if (response.ok) {
+                    console.log('Rating submitted successfully:', data);
+                    // Optionally reset the form
+                    setRating(0);
+                    setComment('');
+                } else {
+                    console.error('Failed to submit rating:', data.message);
+                }
+                window.location.reload();
+            } catch (error) {
+                console.error('Error submitting rating:', error);
             }
-        } catch (error) {
-            console.error('Error submitting rating:', error);
-        }
     };
 
     return (
@@ -76,4 +77,4 @@ export const RatingSection = () => {
             </button>
         </div>
     );
-}; 
+};

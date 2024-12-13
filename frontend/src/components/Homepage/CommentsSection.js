@@ -3,6 +3,8 @@ import './CommentsSection.css';
 
 export const CommentsSection = ({ fieldId }) => {
     const [comments, setComments] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const commentsPerPage = 5;
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -37,11 +39,17 @@ export const CommentsSection = ({ fieldId }) => {
         return new Date(dateString).toLocaleDateString('en-GB', options).replace(',', ' at');
     };
 
+    const indexOfLastComment = currentPage * commentsPerPage;
+    const indexOfFirstComment = indexOfLastComment - commentsPerPage;
+    const currentComments = comments.slice(indexOfFirstComment, indexOfLastComment);
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     return (
         <div className="comments-section">
             <h2>Comments</h2>
-            {comments.length > 0 ? (
-                comments.map((comment, index) => (
+            {currentComments.length > 0 ? (
+                currentComments.map((comment, index) => (
                     <div key={index} className="comment">
                         <div className="comment-header">
                             <span className="comment-user">{comment.customer_id.fullname}</span>
@@ -56,6 +64,13 @@ export const CommentsSection = ({ fieldId }) => {
             ) : (
                 <p>No comments yet.</p>
             )}
+            <div className="pagination">
+                {Array.from({ length: Math.ceil(comments.length / commentsPerPage) }, (_, i) => (
+                    <button key={i} onClick={() => paginate(i + 1)} className={currentPage === i + 1 ? 'active' : ''}>
+                        {i + 1}
+                    </button>
+                ))}
+            </div>
         </div>
     );
 }; 
