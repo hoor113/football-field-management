@@ -129,6 +129,8 @@
     border-radius: 5px;
     cursor: pointer;
     text-align: center;
+    font-family: auto;
+    font-size: 18px;
 }
 
 .edit-field-button {

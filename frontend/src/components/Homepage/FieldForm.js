@@ -194,14 +194,14 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
       {/* Form Buttons */}
       <div className="modal-buttons">
-        <button onClick={onCancel} className="cancel-button">
-          Cancel
-        </button>
         <button
           onClick={handleSubmit}
           className="submit-button"
         >
           Add Field
+        </button>
+        <button onClick={onCancel} className="cancel-button">
+          Cancel
         </button>
       </div>
     </div>
