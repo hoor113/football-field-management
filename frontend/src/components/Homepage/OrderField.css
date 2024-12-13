@@ -382,12 +382,19 @@ input[type="date"]:not(:disabled):focus {
 }
 
 .time-slot.occupied {
-  opacity: 0.7;
+  opacity: 0.6;
+  background-color: #f8d7da;
+  border-color: #f5c6cb;
   cursor: not-allowed;
 }
 
 .time-slot.occupied .status-indicator {
   background-color: #dc3545;
+}
+
+.time-slot.occupied:hover {
+  border-color: #f5c6cb;
+  box-shadow: none;
 }
 
 .time-display {

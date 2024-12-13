@@ -5,9 +5,9 @@ const Schema = mongoose.Schema;
 const ServiceSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
-  description: { type: String, default: 'No description available' },
+  description: { type: String, default: 'Không có mô tả' },
   image_url: { type: String, default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzBeng5o2seSmkdywgldLhL4PQd0nAhJWNnQ&s' },
-  unit: { type: String, required: true, default: 'times' },
+  unit: { type: String, required: true, default: 'cái' },
   price: { type: Number, required: true }
 });
 
@@ -53,7 +53,7 @@ const OperatingHoursSchema = new Schema({
 const FieldSchema = new Schema({
   owner_id: { type: Schema.Types.ObjectId, ref: 'FieldOwner', required: true },
   name: { type: String, required: true },
-  description: { type: String, default: 'No description available' },
+  description: { type: String, default: 'Không có mô tả' },
   address: { type: String, required: true },
   base_price: { type: Number, required: true },
   image_url: { type: String },

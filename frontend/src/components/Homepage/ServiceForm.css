@@ -105,4 +105,17 @@
 
 .close-button:hover {
     color: #333;
+}
+
+.price-unit-container {
+    display: flex;
+    gap: 15px;
+}
+
+.price-input {
+    width: 60% !important;
+}
+
+.unit-input {
+    width: 40% !important;
 } 

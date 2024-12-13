@@ -16,9 +16,13 @@ export const OrderField = () => {
   // const [showServicesList, setShowServicesList] = useState(false);
   const [showServiceBoard, setShowServiceBoard] = useState(false);
   const navigate = useNavigate();
+  const [occupiedSlots, setOccupiedSlots] = useState([]);
 
   const handleDateSelect = (date) => {
-    setSelectedDate(date.toISOString().split('T')[0]);
+    const localDate = new Date(date.getTime() - (date.getTimezoneOffset() * 60000))
+      .toISOString()
+      .split('T')[0];
+    setSelectedDate(localDate);
   };
 
   // Reset hours when ground changes
@@ -60,33 +64,23 @@ export const OrderField = () => {
   };
 
   const handlePlaceOrder = async () => {
-    // Check if all required fields are filled
     if (!selectedDate || !selectedGround || !selectedHours.start || !selectedHours.end) {
       alert('Please fill in all required fields.');
       return;
     }
 
-    // Debugging logs to check the values of selectedHours
-    console.log('Selected Start Hour:', selectedHours.start);
-    console.log('Selected End Hour:', selectedHours.end);
-
-    // Total price for the field (base price only)
     const totalGroundPrice = (field.base_price || 0);
-
-    // Total price for services
     const totalServicePrice = Object.entries(serviceQuantities).reduce((total, [serviceId, quantity]) => {
       const service = field.services.find(s => s._id === serviceId);
       return total + (service?.price * quantity || 0);
     }, 0);
 
-    // Total price calculation
     const totalPrice = totalGroundPrice + totalServicePrice;
-    // Prepare booking data
     const bookingData = {
       field_id: field._id,
       ground_id: selectedGround,
-      start_time: new Date(`${selectedDate}T${selectedHours.start}:00`), // Combine date and time
-      end_time: new Date(`${selectedDate}T${selectedHours.end}:00`), // Combine date and time
+      start_time: new Date(`${selectedDate}T${selectedHours.start}:00`),
+      end_time: new Date(`${selectedDate}T${selectedHours.end}:00`),
       services: Object.entries(serviceQuantities).map(([serviceId, quantity]) => {
         const service = field.services.find(s => s._id === serviceId);
         return {
@@ -95,17 +89,13 @@ export const OrderField = () => {
           price: service?.price,
           quantity: quantity
         };
-      }).filter(service => service.quantity > 0), // Filter out services with quantity 0
-      booking_date: selectedDate, // Include the selected date
-      price: totalPrice // Add total price to booking data
+      }).filter(service => service.quantity > 0),
+      booking_date: selectedDate,
+      price: totalPrice
     };
-    // Add total price to booking data
-    bookingData.price = totalPrice; // Add total price to booking data
+    bookingData.price = totalPrice;
 
-    // Proceed to place the order
     try {
-      console.log('Selected Start Hour:', selectedHours.start);
-      console.log('Selected End Hour:', selectedHours.end);
       const response = await fetch("http://localhost:5000/api/customer/book", {
         method: "POST",
         headers: {
@@ -119,7 +109,6 @@ export const OrderField = () => {
       const data = await response.json();
 
       if (response.ok) {
-        // Send notification after successful booking
         await handleSendNotification(data.bookingId);
         navigate(`/order-confirmation`, { state: { message: data.message } });
       } else {
@@ -144,6 +133,43 @@ export const OrderField = () => {
       const newQuantities = { ...prev };
       delete newQuantities[serviceId];
       return newQuantities;
+    });
+  };
+
+  // Update occupied slots when ground or date changes
+  useEffect(() => {
+    if (selectedGround && selectedDate) {
+      const ground = field.grounds.find(g => g._id === selectedGround);
+      if (ground) {
+        // Filter occupied slots for the selected date
+        const dateOccupiedSlots = ground.occupied_slots.filter(slot => {
+          const slotDate = new Date(slot.start_time).toISOString().split('T')[0];
+          // console.log(slotDate, selectedDate);
+          return slotDate === selectedDate;
+        });
+        setOccupiedSlots(dateOccupiedSlots);
+      }
+    } else {
+      setOccupiedSlots([]);
+    }
+  }, [selectedGround, selectedDate, field.grounds]);
+
+  // Helper function to check if a time slot is occupied
+  const isTimeSlotOccupied = (startTime, endTime) => {
+    return occupiedSlots.some(slot => {
+      const slotStart = new Date(slot.start_time).toLocaleTimeString('vi-VN', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      const slotEnd = new Date(slot.end_time).toLocaleTimeString('vi-VN', {
+        hour12: false,
+        hour: '2-digit',
+        minute: '2-digit'
+      });
+      return startTime === slotStart || endTime === slotEnd ||
+        (startTime > slotStart && startTime < slotEnd) ||
+        (endTime > slotStart && endTime < slotEnd);
     });
   };
 
@@ -244,27 +270,31 @@ export const OrderField = () => {
                     {selectedDate && field.service_times
                       .find(schedule => schedule.day_of_week === new Date(selectedDate).getDay())
                       ?.time_slots
-                      .map((slot, index) => (
-                        <div
-                          key={index}
-                          className={`time-slot ${slot.is_available ? 'vacant' : 'occupied'} ${selectedHours.start === slot.start_time ? 'selected' : ''
+                      .map((slot, index) => {
+                        const isOccupied = isTimeSlotOccupied(slot.start_time, slot.end_time);
+                        return (
+                          <div
+                            key={index}
+                            className={`time-slot ${isOccupied ? 'occupied' : 'vacant'} ${
+                              selectedHours.start === slot.start_time ? 'selected' : ''
                             }`}
-                          onClick={() => {
-                            if (slot.is_available) {
-                              setSelectedHours({
-                                start: slot.start_time,
-                                end: slot.end_time
-                              });
-                            }
-                          }}
-                        >
-                          <div className="status-indicator"></div>
-                          <div className="time-display">
-                            <span className="start-time">{slot.start_time}</span>
-                            <span className="end-time">{slot.end_time}</span>
+                            onClick={() => {
+                              if (!isOccupied) {
+                                setSelectedHours({
+                                  start: slot.start_time,
+                                  end: slot.end_time
+                                });
+                              }
+                            }}
+                          >
+                            <div className="status-indicator"></div>
+                            <div className="time-display">
+                              <span className="start-time">{slot.start_time}</span>
+                              <span className="end-time">{slot.end_time}</span>
+                            </div>
                           </div>
-                        </div>
-                      ))
+                        );
+                      })
                     }
                   </div>
                 )}

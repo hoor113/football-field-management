@@ -5,7 +5,9 @@ export const ServiceForm = ({ fieldId, onClose }) => {
     const [service, setService] = useState({
         name: '',
         type: '',
-        price: ''
+        price: '',
+        imageUrl: '',
+        unit: ''
     });
 
     const handleSubmit = async (e) => {
@@ -63,12 +65,31 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                         className="modal-input"
                     />
                     
+                    <div className="price-unit-container">
+                        <input
+                            type="number"
+                            placeholder="Price"
+                            value={service.price}
+                            onChange={(e) => setService({...service, price: e.target.value})}
+                            required
+                            className="modal-input price-input"
+                        />
+                        
+                        <input
+                            type="text"
+                            placeholder="Unit (e.g., per hour, per session)"
+                            value={service.unit}
+                            onChange={(e) => setService({...service, unit: e.target.value})}
+                            required
+                            className="modal-input unit-input"
+                        />
+                    </div>
+                    
                     <input
-                        type="number"
-                        placeholder="Price"
-                        value={service.price}
-                        onChange={(e) => setService({...service, price: e.target.value})}
-                        required
+                        type="url"
+                        placeholder="Image URL"
+                        value={service.imageUrl}
+                        onChange={(e) => setService({...service, imageUrl: e.target.value})}
                         className="modal-input"
                     />
                     
