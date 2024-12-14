@@ -35,7 +35,7 @@ const CustomerLogin = () => {
       {/* Right side - Form */}
       <div className="customer-login-form-container">
         <div className="customer-login-box">
-          <h2 className="customer-login-title">Customer Login</h2>
+          <h2 className="customer-login-title">Khách Hàng Đăng Nhập</h2>
           <form onSubmit={handleSubmit} className="customer-login-form">
             <div className="customer-login-form-group">
               <input
@@ -56,6 +56,9 @@ const CustomerLogin = () => {
               />
             </div>
             <button type="submit" className="customer-login-button">Login</button>
+            <p className="register-link">
+              Bạn chưa có tài khoản? <a href="http://localhost:5000/customer/register">Đăng ký ngay</a>
+            </p>
           </form>
         </div>
       </div>
