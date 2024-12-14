@@ -4,6 +4,8 @@ import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import EditFieldForm from './EditFieldForm.js';
+import RatingDisplay from './RatingDisplay.js';
+
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
@@ -79,6 +81,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             </div>
 
             <img src={field.image_url} alt={field.name} className="field-image" />
+            <RatingDisplay fieldId={field._id} />
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
             <p><strong>Base Price:</strong>  {field.base_price.toLocaleString()} VND</p>
@@ -111,8 +114,10 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                     <div className="services-grid">
                         {field.services.map((service, index) => (
                             <div key={index} className="service-item">
-                                <div className="service-name">{service.name}</div>
-                                <div className="service-type">{service.type}</div>
+                                <div className="service-header">
+                                    <span className="service-name">{service.name}</span>
+                                    <span className="service-type">{service.type}</span>
+                                </div>
                                 <div className="service-price">
                                     {service.price.toLocaleString()} VND 
                                 </div>

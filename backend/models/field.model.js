@@ -132,4 +132,22 @@ FieldSchema.virtual('averageRating', {
   });
 */
 
+FieldSchema.virtual('averageRating').get(async function() {
+  const Rating = mongoose.model('Rating');
+  const result = await Rating.aggregate([
+    { $match: { field_id: this._id }},
+    { 
+      $group: {
+        _id: null,
+        averageStars: { $avg: '$stars' },
+        totalRatings: { $sum: 1 }
+      }
+    }
+  ]);
+  return result[0] ? result[0].averageRating : 0;
+});
+
+// Make sure virtuals are included in toJSON
+FieldSchema.set('toJSON', { virtuals: true });
+
 export const Field =  mongoose.model("Field", FieldSchema)

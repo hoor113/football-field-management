@@ -17,7 +17,11 @@ export const ServiceSelectionBoard = ({ services, onAddService, onClose }) => {
       <div className="service-board">
         <div className="service-board-header">
           <h2>Chọn Dịch Vụ</h2>
-          <button className="close-button" onClick={onClose}>&times;</button>
+          <button className="close-button" onClick={onClose}>
+            <span className="close-icon">
+              <i className="close-icon-x">×</i>
+            </span>
+          </button>
         </div>
         
         <div className="service-tabs">

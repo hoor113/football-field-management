@@ -25,7 +25,7 @@
 
 .field-card h2 {
     color: #333;
-    margin-bottom: 15px;
+    margin: 10px 15px;
 }
 
 .field-card p {
@@ -37,7 +37,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    margin-top: 10px;
+    margin: 10px 5px;
 }
 
 .time-badge {
@@ -76,34 +76,36 @@
 .service-item {
     width: 100%;
     background-color: white;
-    padding: 15px;
+    padding: 12px 15px;
     border-radius: 6px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease;
-    will-change: transform;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.service-item:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+.service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
 }
 
 .service-name {
     font-weight: 600;
     color: #2c3e50;
-    margin-bottom: 5px;
+    font-size: 14px;
 }
 
 .service-type {
     color: #666;
-    font-size: 14px;
-    margin-bottom: 8px;
+    font-size: 13px;
 }
 
 .service-price {
     color: #4CAF50;
     font-weight: 500;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .no-services {

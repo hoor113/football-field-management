@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { register, login, getCustomer, logout, getProfile, updateProfile } from '../controller/authCustomer.js';
 import { authenticateToken } from '../controller/verify.js';
-import { makeBooking, getBookings, submitRating, getFieldRatings } from '../controller/customer.func.js';
+import { makeBooking, getBookings, submitRating, getFieldRatings, getAverageRating } from '../controller/customer.func.js';
 import { getResponseNoti, sendNotification, markAllNotificationsAsRead } from '../controller/customer.func.js';
 // api/customer/
 const router1 = Router();
@@ -18,5 +18,6 @@ router1.post('/send_notification', authenticateToken, sendNotification);
 router1.put('/noti/read_all', authenticateToken, markAllNotificationsAsRead);
 router1.post('/rating', authenticateToken, submitRating);
 router1.get('/rating/:fieldId', authenticateToken, getFieldRatings);
+router1.get('/rating/:fieldId/average', authenticateToken, getAverageRating);
 export default router1;
 
