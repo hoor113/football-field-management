@@ -55,7 +55,7 @@ const CustomerRegister = () => {
       {/* Right side - Form */}
       <div className="customer-register-form-container">
         <div className="customer-register-box">
-          <h2 className="customer-register-title">Customer Register</h2>
+          <h2 className="customer-register-title">Khách Hàng Đăng Ký</h2>
           <form onSubmit={handleSubmit} className="customer-register-form">
             <div className="customer-register-form-group">
               <input

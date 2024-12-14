@@ -35,9 +35,8 @@ export const ServiceSelectionBoard = ({ services, onAddService, onClose }) => {
         <div className="service-cards-container">
           {filteredServices.map(service => (
             <div key={service._id} className="service-card">
-              {/* Ensure that the correct property name is used for imageUrl */}
               <img 
-                src={service.imageUrl}  // Corrected to imageUrl
+                src={service.image_url} 
                 alt={service.name} 
                 className="service-image"
               />

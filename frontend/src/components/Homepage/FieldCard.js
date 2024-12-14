@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import EditFieldForm from './EditFieldForm.js';
 
+
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
@@ -12,7 +13,6 @@ export const FieldCard = ({ field, isLoggedIn }) => {
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);  // Track current image index
     const [autoChangeImage, setAutoChangeImage] = useState(true); // Control auto-change feature
-
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
     };
@@ -74,11 +74,10 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             alert('An unexpected error occurred. Please try again later.');
         }
     };
-
     // Go to the previous image
     const handlePrevImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? field.image_urls.length - 1 : prevIndex - 1
+            prevIndex === 0 ? field.image_url.length - 1 : prevIndex - 1
         );
         resetAutoChangeImage();
     };
@@ -86,27 +85,27 @@ export const FieldCard = ({ field, isLoggedIn }) => {
     // Go to the next image
     const handleNextImage = () => {
         setCurrentImageIndex((prevIndex) =>
-            prevIndex === field.image_urls.length - 1 ? 0 : prevIndex + 1
+            prevIndex === field.image_url.length - 1 ? 0 : prevIndex + 1
         );
         resetAutoChangeImage();
     };
 
     // Change image every 3 seconds automatically if autoChangeImage is true
     useEffect(() => {
-        if (field.image_urls.length <= 1) return;  // Only auto-change if more than 1 image
+        if (field.image_url.length <= 1) return;  // Only auto-change if more than 1 image
         let interval;
 
         if (autoChangeImage) {
             interval = setInterval(() => {
                 setCurrentImageIndex((prevIndex) =>
-                    prevIndex === field.image_urls.length - 1 ? 0 : prevIndex + 1
+                    prevIndex === field.image_url.length - 1 ? 0 : prevIndex + 1
                 );
             }, 3000); // Change image every 3 seconds
         }
 
         // Clean up the interval on component unmount
         return () => clearInterval(interval);
-    }, [autoChangeImage, field.image_urls.length]);
+    }, [autoChangeImage, field.image_url.length]);
 
     // Reset the automatic image change when the user clicks the image
     const resetAutoChangeImage = () => {
@@ -122,8 +121,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 <h2>{field.name}</h2>
             </div>
 
-            {/* Check if there's more than one image */}
-            {field.image_urls && field.image_urls.length > 1 ? (
+           {/* Check if there's more than one image */}
+           {field.image_url && field.image_url.length > 1 ? (
                 <>
                     {/* Image navigation buttons */}
                     <div className="image-navigation">
@@ -131,7 +130,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                             &lt;
                         </button>
                         <img
-                            src={field.image_urls[currentImageIndex]}
+                            src={field.image_url[currentImageIndex]}
                             alt={field.name}
                             className="field-image"
                             onClick={resetAutoChangeImage} // Reset auto change when clicked
@@ -143,7 +142,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 </>
             ) : (
                 <img
-                    src={field.image_urls[0]} // Always show the only image
+                    src={field.image_url[0]} // Always show the only image
                     alt={field.name}
                     className="field-image"
                 />
@@ -249,4 +248,4 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             )}
         </div>
     );
-};
+}; 

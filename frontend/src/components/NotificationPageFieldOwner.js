@@ -92,9 +92,9 @@ const NotificationPageFieldOwner = () => {
         if (price && price.$numberDecimal) {
             price = parseFloat(price.$numberDecimal);
         }
-        return parseFloat(price).toLocaleString('en-US', {
+        return parseFloat(price).toLocaleString('vi-VN', {
             style: 'currency',
-            currency: 'USD'
+            currency: 'VND'
         });
     };
 
@@ -188,7 +188,14 @@ const NotificationPageFieldOwner = () => {
                                         <p><i className="fas fa-bookmark"></i> <strong>Booking ID:</strong> {notification.bookingDetails._id}</p>
                                         <p><i className="fas fa-clock"></i> <strong>Start Time:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
                                         <p><i className="fas fa-clock"></i> <strong>End Time:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
-                                        <p><i className="fas fa-map-marker-alt"></i> <strong>Ground:</strong> {`${notification.bookingDetails.field_id.name}`}</p>
+                                        <p>
+                                            <i className="fas fa-map-marker-alt"></i> 
+                                            <strong>Ground:</strong> 
+                                            {notification.bookingDetails.ground ? 
+                                                `${notification.bookingDetails.field_name} - ${notification.bookingDetails.ground.name} (Sân ${notification.bookingDetails.ground.number})` : 
+                                                `${notification.bookingDetails.field_name} - Unknown Ground`
+                                            }
+                                        </p>
                                         <p><i className="fas fa-money-bill-wave"></i> <strong>Total Price:</strong> {formatPrice(notification.bookingDetails.price)}</p>
                                     </div>
                                 </div>

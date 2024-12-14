@@ -32,7 +32,7 @@ const FieldOwnerLogin = () => {
       {/* Right side - Form */}
       <div className="field-owner-login-form-container">
         <div className="field-owner-login-box">
-          <h2 className="field-owner-login-title">Field Owner Login</h2>
+          <h2 className="field-owner-login-title">Chủ Sân Đăng Nhập</h2>
           <form onSubmit={handleSubmit} className="field-owner-login-form">
             <div className="field-owner-login-form-group">
               <input
@@ -53,6 +53,9 @@ const FieldOwnerLogin = () => {
               />
             </div>
             <button type="submit" className="field-owner-login-button">Login</button>
+            <p className="register-link">
+              Bạn chưa có tài khoản? <a href="http://localhost:5000/field_owner/register">Đăng ký ngay</a>
+            </p>
           </form>
         </div>
       </div>

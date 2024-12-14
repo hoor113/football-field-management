@@ -88,36 +88,3 @@
     background-color: #09f21d;
     border-color: #09f21d;
 } */
-.image-slider {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
-.field-image {
-    max-width: 100%;
-    height: auto;
-}
-
-.prev-button,
-.next-button {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background: rgba(0, 0, 0, 0.5);
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    cursor: pointer;
-}
-
-.prev-button {
-    left: 10px;
-}
-
-.next-button {
-    right: 10px;
-}

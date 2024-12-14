@@ -6,7 +6,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
         name: '',
         type: '',
         price: '',
-        imageUrl: '' // New field for image URL
+        image_url: '' // New field for image URL
     });
 
     const handleSubmit = async (e) => {
@@ -74,8 +74,8 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                     <input
                         type="url"
                         placeholder="Image URL"
-                        value={service.imageUrl}
-                        onChange={(e) => setService({...service, imageUrl: e.target.value})}
+                        value={service.image_url}
+                        onChange={(e) => setService({...service, image_url: e.target.value})}
                         className="modal-input"
                     />
                     

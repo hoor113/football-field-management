@@ -11,8 +11,8 @@ const isTimeSlotAvailable = (ground, startTime) => {
     const startDateTime = new Date(startTime);
     const currentTimestamp = Date.now(); // Get current time in milliseconds
     const startTimestamp = new Date(startTime).getTime(); // Convert start time to milliseconds
-    console.log('Start timestamp:', startTimestamp);
-    console.log('Current timestamp:', currentTimestamp);
+    // console.log('Start timestamp:', startTimestamp);
+    // console.log('Current timestamp:', currentTimestamp);
 
     // Check if the start time is in the past
     if (startTimestamp < currentTimestamp) {
@@ -55,7 +55,6 @@ export const makeBooking = async (req, res) => {
         }
 
         const customer_id = req.user.id;
-
         // Create the booking
         const booking = await Booking.create({
             customer_id,
@@ -72,7 +71,9 @@ export const makeBooking = async (req, res) => {
         res.status(200).json({
             success: true,
             message: 'Booking created successfully',
-            bookingId: booking._id
+            bookingId: booking._id,
+            start_time: start_time,
+            end_time: end_time
         });
     } catch (error) {
         res.status(500).json({

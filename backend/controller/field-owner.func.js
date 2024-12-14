@@ -3,24 +3,20 @@ import { Field } from "../models/field.model.js"
 import { FieldOwner } from "../models/field-owner.model.js";
 import { Booking } from '../models/booking.model.js';
 import { Notification } from '../models/notification.model.js'; // Import the Notification model
-
-
-  
-
 export const UploadField = async (req, res) => {
     const {
         name,
         address,
         base_price,
-        image_urls,
+        image_url,
         total_grounds,
         description,
         operating_hours
     } = req.body;
-    if (!(name && address && base_price && image_urls && total_grounds && operating_hours?.length)) {
+    if (!(name && address && base_price && image_url && total_grounds && operating_hours?.length)) {
         return res.status(400).json({
             success: false,
-            message: "Please provide all required fields including operating hours"
+            message: "Vui lòng cung cấp tất cả các thông tin bắt buộc, bao gồm giờ đá"
         });
     }
 
@@ -43,7 +39,7 @@ export const UploadField = async (req, res) => {
             description,
             address,
             base_price,
-            image_urls,
+            image_url,
             total_grounds,
             grounds,
             operating_hours
@@ -52,17 +48,18 @@ export const UploadField = async (req, res) => {
         const fieldId = await NewField.save()
         await FieldOwner.findByIdAndUpdate(owner_id, { $push: { fields: fieldId._id } })
 
-        return res.status(201).json({ success: true, message: "Field created successfully" });
+        return res.status(201).json({ success: true, message: "Sân đã được tạo thành công" });
     } catch (error) {
-        return res.status(500).json({ success: false, message: "An error occurred", error: error.message });
+        return res.status(500).json({ success: false, message: "Có lỗi xảy ra", error: error.message });
     }
 }
 
+
 export const UploadService = async (req, res) => {
-    const { fieldId, name, type, price, imageUrl } = req.body; // Include imageUrl
+    const { fieldId, name, type, price, image_url } = req.body; // Include imageUrl
 
     // Validate that all required fields are provided
-    if (!(fieldId && name && type && price && imageUrl)) {
+    if (!(fieldId && name && type && price && image_url)) {
         return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
 
@@ -74,7 +71,7 @@ export const UploadService = async (req, res) => {
         }
 
         // Add the new service to the field's services array, including the imageUrl
-        field.services.push({ name, type, price, imageUrl });
+        field.services.push({ name, type, price, image_url });
 
         // Save the updated field
         await field.save();
@@ -87,29 +84,9 @@ export const UploadService = async (req, res) => {
     }
 }
 
-export const uploadServiceType = async (req, res) => {
-    const { serviceType1, serviceType2, serviceType3 } = req.body;
-
-    // Check if all required fields are provided
-    if (!(serviceType1 && serviceType2 && serviceType3)) {
-        return res.status(400).json({ success: false, message: "Please provide all service types" });
-    }
-
-    try {
-        // Create a new document with the provided service types
-        const newServiceType = new ServiceType({ serviceType1, serviceType2, serviceType3 });
-        await newServiceType.save();
-
-        // Return the newly created service type document
-        res.status(201).json(newServiceType);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error: error.message });
-    }
-};
-
 export const UpdateField = async (req, res) => {
     const { field_id } = req.params;
-    const { name, description, address, base_price, image_urls, total_grounds } = req.body;
+    const { name, description, address, base_price, image_url, total_grounds } = req.body;
 
     try {
         // Check if field exists and belongs to the owner
@@ -121,7 +98,7 @@ export const UpdateField = async (req, res) => {
         if (!field) {
             return res.status(404).json({
                 success: false,
-                message: "Field not found or you don't have permission"
+                message: "Sân không tồn tại hoặc bạn không có quyền"
             });
         }
 
@@ -134,7 +111,7 @@ export const UpdateField = async (req, res) => {
                     ...(description && { description }),
                     ...(address && { address }),
                     ...(base_price && { base_price }),
-                    ...(image_urls && { image_urls }),
+                    ...(image_url && { image_url }),
                     ...(total_grounds && { total_grounds })
                 }
             },
@@ -180,14 +157,14 @@ export const UpdateField = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Field updated successfully",
+            message: "Cập nhật sân thành công",
             field: updatedField
         });
 
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "An error occurred",
+            message: "Có lỗi xảy ra",
             error: error.message
         });
     }
@@ -209,7 +186,7 @@ export const GetFields = async (req, res) => {
         if (!fieldOwner) {
             return res.status(404).json({
                 success: false,
-                message: "Field owner not found"
+                message: "Chủ sân không tồn tại"
             });
         }
 
@@ -223,7 +200,7 @@ export const GetFields = async (req, res) => {
         console.error('Get Fields Error:', error);
         return res.status(500).json({
             success: false,
-            message: "Error fetching fields",
+            message: "Lấy thông tin sân thất bại",
             error: error.message
         });
     }
@@ -240,7 +217,7 @@ export const getBookingNoti = async (req, res) => {
         if (!fieldOwner) {
             return res.status(404).json({
                 success: false,
-                message: 'Field owner not found'
+                message: 'Chủ sân không tồn tại'
             });
         }
 
@@ -248,61 +225,53 @@ export const getBookingNoti = async (req, res) => {
 
         const bookings = await Booking.find({
             field_id: { $in: fieldIds }
-        }).sort({ order_time: -1 });
+        })
+        .populate('customer_id', 'fullname email phone_no')
+        .populate('field_id')
+        .sort({ order_time: -1 });
 
         const notifications = await Notification.find({
             ownerId: ownerId,
             bookingId: { $in: bookings.map(booking => booking._id) },
             isRead: false
-        })
-            .populate({
-                path: 'bookingId',
-                populate: [
-                    {
-                        path: 'customer_id',
-                        select: 'fullname email phone_no'
-                    },
-                    {
-                        path: 'field_id',
-                        select: 'name grounds'
-                    }
-                ]
-            })
-            .sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 });
+
+        const notificationsWithDetails = notifications.map(notification => {
+            const booking = bookings.find(b => b._id.toString() === notification.bookingId.toString());
+            if (!booking) return null;
+
+            // Find the specific ground from the field's grounds array
+            const ground = booking.field_id.grounds.find(g => 
+                g._id.toString() === booking.ground_id.toString()
+            );
+
+            return {
+                id: notification._id,
+                message: notification.message,
+                bookingDetails: {
+                    ...booking.toObject(),
+                    ground: ground ? {
+                        id: ground._id,
+                        name: ground.name,
+                        number: ground.ground_number
+                    } : null,
+                    field_name: booking.field_id.name
+                },
+                customerDetails: booking.customer_id,
+                createdAt: notification.createdAt
+            };
+        }).filter(Boolean); // Remove any null values
 
         res.status(200).json({
             success: true,
-            notifications: notifications.map(notification => {
-                const booking = notification.bookingId;
-                // Tìm ground trong danh sách grounds của field
-                const ground = booking.field_id?.grounds?.find(g => 
-                    g._id.toString() === booking.ground_id.toString()
-                );
-                
-                // Tạo tên ground dựa trên thông tin có sẵn
-                const groundInfo = ground ? 
-                    `${ground.name} (Ground ${ground.ground_number})` : 
-                    `Ground ${booking.ground_id}`;
-
-                return {
-                    id: notification._id,
-                    message: notification.message,
-                    bookingDetails: {
-                        ...booking.toObject(),
-                        ground_name: groundInfo,
-                        field_name: booking.field_id?.name || 'Unknown Field'
-                    },
-                    customerDetails: booking.customer_id,
-                    createdAt: notification.createdAt
-                };
-            })
+            notifications: notificationsWithDetails
         });
 
     } catch (error) {
         console.error('Error fetching notifications:', error);
         res.status(500).json({
             success: false,
-            message: 'Error fetching notifications',
+            message: 'Lấy thông báo thất bại',
             error: error.message
         });
     }
@@ -322,13 +291,13 @@ export const markNotificationAsRead = async (req, res) => {
         if (!notification) {
             return res.status(404).json({
                 success: false,
-                message: 'Notification not found'
+                message: 'Thông báo không tồn tại'
             });
         }
 
         res.status(200).json({
             success: true,
-            message: 'Notification marked as read',
+            message: 'Thông báo đã được đánh dấu là đã đọc',
             notification
         });
 
@@ -336,7 +305,7 @@ export const markNotificationAsRead = async (req, res) => {
         console.error('Error marking notification as read:', error);
         res.status(500).json({
             success: false,
-            message: 'Error marking notification as read',
+            message: 'Có lỗi xảy ra khi đánh dấu thông báo là đã đọc',
             error: error.message
         });
     }
@@ -349,7 +318,7 @@ export const acceptBooking = async (req, res) => {
         // Find booking and verify it exists
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ success: false, message: 'Booking not found' });
+            return res.status(404).json({ success: false, message: 'Yêu cầu đặt sân không tồn tại' });
         }
 
         // Update booking status to accepted
@@ -358,7 +327,7 @@ export const acceptBooking = async (req, res) => {
         // Find field and populate grounds
         const field = await Field.findById(booking.field_id);
         if (!field) {
-            return res.status(404).json({ success: false, message: 'Field not found' });
+            return res.status(404).json({ success: false, message: 'Sân không tồn tại' });
         }
 
         // Find the specific ground
@@ -369,7 +338,7 @@ export const acceptBooking = async (req, res) => {
         if (!ground) {
             return res.status(404).json({ 
                 success: false, 
-                message: 'Ground not found in this field' 
+                message: 'Không tồn tại sân này trong hệ thống sân này' 
             });
         }
 
@@ -382,24 +351,52 @@ export const acceptBooking = async (req, res) => {
             customer_id: booking.customer_id,
         });
 
-        // Save both booking and field
+        // Update accepted booking status and save changes
+        booking.status = 'confirmed';
         await Promise.all([
             booking.save(),
             field.save()
         ]);
 
-        // Create notification for customer
+        // Create success notification for the accepted booking
         await Notification.create({
             customerId: booking.customer_id,
             bookingId: booking._id,
-            message: 'Your booking has been accepted.',
+            message: 'Yêu cầu đặt sân của bạn đã được chấp nhận.',
             isRead: false,
             type: 'success'
         });
+        overlappingBookings.forEach(overlappingBooking => {
+            console.log(overlappingBooking.customer_id)
+        })
+        // Handle overlapping bookings
+        const rejectPromises = overlappingBookings.map(async (overlappingBooking) => {
+            
+            // Skip if it's the same customer
+            if (overlappingBooking.customer_id.toString() === booking.customer_id.toString()) {
+                return;
+            }
+            console.log(overlappingBooking.customer_id)
+            // Update booking status to cancelled
+            overlappingBooking.status = 'cancelled';
+            await overlappingBooking.save();
+
+            // Create rejection notification
+            await Notification.create({
+                customerId: overlappingBooking.customer_id,
+                bookingId: overlappingBooking._id,
+                message: 'Yêu cầu đặt sân của bạn đã bị từ chối do bị trùng thời gian.',
+                isRead: false,
+                type: 'failed'
+            });
+        });
+
+        // Wait for all rejection operations to complete
+        await Promise.all(rejectPromises);
 
         res.status(200).json({ 
             success: true, 
-            message: 'Booking accepted', 
+            message: 'Yêu cầu đặt sân đã được chấp nhận', 
             booking 
         });
 
@@ -407,7 +404,7 @@ export const acceptBooking = async (req, res) => {
         console.error('Error accepting booking:', error);
         res.status(500).json({ 
             success: false, 
-            message: 'Server error', 
+            message: 'Có lỗi xảy ra', 
             error: error.message 
         });
     }
@@ -419,7 +416,7 @@ export const cancelBooking = async (req, res) => {
     try {
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ success: false, message: 'Booking not found' });
+            return res.status(404).json({ success: false, message: 'Yêu cầu đặt sân không tồn tại' });
         }
 
         // Update booking status to canceled
@@ -430,7 +427,7 @@ export const cancelBooking = async (req, res) => {
         await Notification.create({
             customerId: booking.customer_id,
             bookingId: booking._id,
-            message: 'Your booking has been declined.',
+            message: 'Yêu cầu đặt sân của bạn đã bị từ chối.',
             isRead: false,
             type: 'failed'
         });
@@ -462,7 +459,7 @@ export const deleteField = async (req, res) => {
     const ownerId = req.user.id;
     try {
         if (!mongoose.Types.ObjectId.isValid(fieldId)) {
-            return res.status(400).json({ message: "Invalid field ID" });
+            return res.status(400).json({ message: "ID sân không hợp lệ" });
         }
         // Find the field to ensure it belongs to the owner
         const field = await Field.findOne({ _id: fieldId, owner_id: ownerId });
@@ -471,7 +468,7 @@ export const deleteField = async (req, res) => {
             console.log('Field not found or unauthorized');
             return res.status(404).json({
                 success: false,
-                message: "Field not found or you don't have permission to delete it"
+                message: "Sân không tồn tại hoặc bạn không có quyền xóa sân"
             });
         }
 
@@ -483,12 +480,12 @@ export const deleteField = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Field deleted successfully"
+            message: "Sân đã được xóa thành công"
         });
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "An error occurred while deleting the field",
+            message: "Có lỗi xảy ra khi xóa sân",
             error: error.message
         });
     }
@@ -496,7 +493,7 @@ export const deleteField = async (req, res) => {
 
 export const editFieldAttributes = async (req, res) => {
     const { fieldId } = req.params;
-    const { name, description, address, base_price, image_urls, total_grounds, operating_hours } = req.body;
+    const { name, description, address, base_price, image_url, total_grounds, operating_hours } = req.body;
     const ownerId = req.user.id;
 
     try {
@@ -506,7 +503,7 @@ export const editFieldAttributes = async (req, res) => {
         if (!field) {
             return res.status(404).json({
                 success: false,
-                message: "Field not found or you don't have permission to edit it"
+                message: "Sân không tồn tại hoặc bạn không có quyền sửa đổi sân"
             });
         }
 
@@ -519,7 +516,7 @@ export const editFieldAttributes = async (req, res) => {
                     ...(description && { description }),
                     ...(address && { address }),
                     ...(base_price && { base_price }),
-                    ...(image_urls && { image_urls }),
+                    ...(image_url && { image_url }),
                     ...(total_grounds && { total_grounds }),
                     ...(operating_hours && { operating_hours })
                 }
@@ -529,14 +526,14 @@ export const editFieldAttributes = async (req, res) => {
 
         return res.status(200).json({
             success: true,
-            message: "Field attributes updated successfully",
+            message: "Thông tin sân đã được cập nhật thành công",
             field: updatedField
         });
 
     } catch (error) {
         return res.status(500).json({
             success: false,
-            message: "An error occurred while updating field attributes",
+            message: "Có lỗi xảy ra khi cập nhật thông tin sân",
             error: error.message
         });
     }

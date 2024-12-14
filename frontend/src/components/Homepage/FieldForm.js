@@ -12,7 +12,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
     description: '',
     address: '',
     base_price: '',
-    image_urls: [''], // To store multiple image URLs
+    image_url: [''], // To store multiple image URLs
     total_grounds: '',
     operating_hours: [],
   });
@@ -75,13 +75,13 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
   };
 
   const handleImageUrlChange = (index, value) => {
-    const newImageUrls = [...newField.image_urls];
-    newImageUrls[index] = value;
-    setNewField({ ...newField, image_urls: newImageUrls });
+    const newImageUrl = [...newField.image_url];
+    newImageUrl[index] = value;
+    setNewField({ ...newField, image_url: newImageUrl });
   };
 
   const handleAddImageUrl = () => {
-    const lastUrl = newField.image_urls[newField.image_urls.length - 1];
+    const lastUrl = newField.image_url[newField.image_url.length - 1];
 
     // Check if the URL is valid
     if (!isValidUrl(lastUrl)) {
@@ -91,7 +91,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
     setNewField((prev) => ({
       ...prev,
-      image_urls: [...prev.image_urls, ''], // Add new blank input field for URL
+      image_url: [...prev.image_url, ''], // Add new blank input field for URL
     }));
   };
 
@@ -130,9 +130,9 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       />
 
       {/* Multiple Image URLs */}
-      <div className="image-urls-section">
-        <h3>Image URLs</h3>
-        {newField.image_urls.map((url, index) => (
+      <div className="image-url-section">
+        <h3>Image URL</h3>
+        {newField.image_url.map((url, index) => (
           <div key={index} className="image-url-input">
             <input
               type="text"
@@ -141,7 +141,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
               onChange={(e) => handleImageUrlChange(index, e.target.value)}
               className="modal-input"
             />
-            {index === newField.image_urls.length - 1 && (
+            {index === newField.image_url.length - 1 && (
               <button
                 type="button"
                 onClick={handleAddImageUrl}
