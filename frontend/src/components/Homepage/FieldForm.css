@@ -92,6 +92,8 @@
     border: none;
     cursor: pointer;
     font-weight: 500;
+    background-color: #ff0c0c;
+    color: white;
 }
 
 .submit-button {
@@ -99,7 +101,7 @@
     color: white;
 }
 
-.cancel-button {
-    background-color: #f44336;
-    color: white;
+.cancel-button:hover {
+    background-color: #ff8077;
+    color: rgb(255, 255, 255);
 } 
