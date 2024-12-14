@@ -97,30 +97,30 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                 </div>
 
                 {(userType === 'field_owner' || userType === 'customer') && (
-                    <div className="notification-dropdown">
-                        <div className="notification-icon">
-                            <img src={notiBell} alt="notifications" className="bell-icon" />
-                            {unreadCount > 0 && (
-                                <span className="notification-badge">{unreadCount}</span>
-                            )}
-                        </div>
-                        <div className="dropdown-content">
-                            {notifications && notifications.length > 0 ? (
-                                notifications.slice(0, 5).map(notification => (
-                                    <div key={notification.id} className="notification-item">
-                                        <p>{notification.message}</p>
-                                        <small>{new Date(notification.createdAt).toLocaleString()}</small>
-                                    </div>
-                                ))
-                            ) : (
-                                <div className="notification-item">
-                                    <p>No notifications</p>
-                                </div>
-                            )}
-                            <button onClick={handleSeeMore} className="see-more">See more...</button>
-                        </div>
+                <div className="notification-dropdown">
+                    <div className="notification-icon">
+                        <img src={notiBell} alt="notifications" className="bell-icon" />
+                        {unreadCount > 0 && (
+                            <span className="notification-badge">{unreadCount}</span>
+                        )}
                     </div>
-                )}
+                    <div className="dropdown-content">
+                        {notifications && notifications.length > 0 ? (
+                            notifications.slice(0, 5).map(notification => (
+                                <div key={notification.id} className="notification-item">
+                                    <p>{notification.message}</p>
+                                    <small>{new Date(notification.createdAt).toLocaleString()}</small>
+                                </div>
+                            ))
+                        ) : (
+                            <div className="notification-item">
+                                <p>No notifications</p>
+                            </div>
+                        )}
+                        <button onClick={handleSeeMore} className="see-more">See more...</button>
+                    </div>
+                </div>
+            )}
 
                 {!isLoggedIn ? (
                     <div className="auth-buttons">
