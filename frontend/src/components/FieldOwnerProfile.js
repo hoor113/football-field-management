@@ -2,6 +2,23 @@ import React, { useState, useEffect } from 'react';
 import "../styles/FieldOwnerProfile.css";
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import {
+  Container,
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  Grid,
+  Avatar,
+  IconButton,
+  Divider,
+  CircularProgress
+} from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Cancel';
+import PersonIcon from '@mui/icons-material/Person';
 
 const Profile = () => {
     const navigate = useNavigate();
@@ -114,7 +131,13 @@ const Profile = () => {
 					});
 	
 					if (!response.ok) throw new Error('Update failed');
-	
+
+					console.log("Thông tin đã cập nhật thành công:", {
+						fullname: userInfo.fullname,
+						email: userInfo.email,
+						phone: userInfo.phone
+					});
+
 					toast.success('Cập nhật thông tin thành công');
 					setIsEditing(false);
 					// Reset password fields
@@ -135,151 +158,169 @@ const Profile = () => {
 	};
 
     return (
-        <div className="profile-container">
-            <h2>Hồ Sơ Cá Nhân</h2>
-            
-            <div className="profile-content">
-                {/* <div className="profile-avatar">
-                    <img
-                        src={userInfo.avatar || '/default-avatar.png'}
-                        alt="Avatar"
-                    />
-                    {isEditing && (
-                        <input
-                            type="file"
-                            accept="image/*"
-                            className="avatar-input"
-                        />
-                    )}
-                </div> */}
+        <Container maxWidth="md" sx={{ py: 4 }}>
+          <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
+            <Box display="flex" alignItems="center" mb={4}>
+              <Avatar
+                sx={{ 
+                  width: 100, 
+                  height: 100, 
+                  bgcolor: 'primary.main',
+                  mr: 2 
+                }}
+              >
+                <PersonIcon sx={{ fontSize: 60 }} />
+              </Avatar>
+              <Typography variant="h4" component="h1">
+                Hồ Sơ Cá Nhân
+              </Typography>
+            </Box>
 
-                <form onSubmit={handleSubmit} className="profile-form">
-                    <div className="form-group">
-                        <label>Tên đăng nhập:</label>
-                        <input
-                            type="text"
-                            name="username"
-                            value={userInfo.username}
-                            disabled={true}
-                            className="disabled-input"
-                        />
-                    </div>
+            <Divider sx={{ mb: 4 }} />
 
-                    <div className="form-group">
-                        <label>Họ và tên:</label>
-                        <input
-                            type="text"
-                            name="fullname"
-                            value={userInfo.fullname}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className={errors.fullname ? 'error' : ''}
-                        />
-                        {errors.fullname && <span className="error-message">{errors.fullname}</span>}
-                    </div>
+            <form onSubmit={handleSubmit}>
+              <Grid container spacing={3}>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Tên đăng nhập"
+                    name="username"
+                    value={userInfo.username}
+                    disabled
+                    variant="outlined"
+                  />
+                </Grid>
 
-                    <div className="form-group">
-                        <label>Email:</label>
-                        <input
-                            type="email"
-                            name="email"
-                            value={userInfo.email}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className={errors.email ? 'error' : ''}
-                        />
-                        {errors.email && <span className="error-message">{errors.email}</span>}
-                    </div>
+                <Grid item xs={12}>
+                  <TextField
+                    fullWidth
+                    label="Họ và tên"
+                    name="fullname"
+                    value={userInfo.fullname}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    error={!!errors.fullname}
+                    helperText={errors.fullname}
+                    variant="outlined"
+                  />
+                </Grid>
 
-                    <div className="form-group">
-                        <label>Số điện thoại:</label>
-                        <input
-                            type="tel"
-                            name="phone"
-                            value={userInfo.phone}
-                            onChange={handleInputChange}
-                            disabled={!isEditing}
-                            className={errors.phone ? 'error' : ''}
-                        />
-                        {errors.phone && <span className="error-message">{errors.phone}</span>}
-                    </div>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={userInfo.email}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    error={!!errors.email}
+                    helperText={errors.email}
+                    variant="outlined"
+                  />
+                </Grid>
 
-                    {isEditing && (
-                        <>
-                            <div className="form-group">
-                                <label>Mật khẩu hiện tại:</label>
-                                <input
-                                    type="password"
-                                    name="currentPassword"
-                                    value={userInfo.currentPassword}
-                                    onChange={handleInputChange}
-                                    className={errors.currentPassword ? 'error' : ''}
-                                />
-                                {errors.currentPassword && <span className="error-message">{errors.currentPassword}</span>}
-                            </div>
+                <Grid item xs={12} md={6}>
+                  <TextField
+                    fullWidth
+                    label="Số điện thoại"
+                    name="phone"
+                    value={userInfo.phone}
+                    onChange={handleInputChange}
+                    disabled={!isEditing}
+                    error={!!errors.phone}
+                    helperText={errors.phone}
+                    variant="outlined"
+                  />
+                </Grid>
 
-                            <div className="form-group">
-                                <label>Mật khẩu mới:</label>
-                                <input
-                                    type="password"
-                                    name="newPassword"
-                                    value={userInfo.newPassword}
-                                    onChange={handleInputChange}
-                                    className={errors.newPassword ? 'error' : ''}
-                                />
-                                {errors.newPassword && <span className="error-message">{errors.newPassword}</span>}
-                            </div>
+                {isEditing && (
+                  <>
+                    <Grid item xs={12}>
+                      <TextField
+                        fullWidth
+                        label="Mật khẩu hiện tại"
+                        name="currentPassword"
+                        type="password"
+                        value={userInfo.currentPassword}
+                        onChange={handleInputChange}
+                        error={!!errors.currentPassword}
+                        helperText={errors.currentPassword}
+                        variant="outlined"
+                      />
+                    </Grid>
 
-                            <div className="form-group">
-                                <label>Xác nhận mật khẩu mới:</label>
-                                <input
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={userInfo.confirmPassword}
-                                    onChange={handleInputChange}
-                                    className={errors.confirmPassword ? 'error' : ''}
-                                />
-                                {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
-                            </div>
-                        </>
-                    )}
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Mật khẩu mới"
+                        name="newPassword"
+                        type="password"
+                        value={userInfo.newPassword}
+                        onChange={handleInputChange}
+                        error={!!errors.newPassword}
+                        helperText={errors.newPassword}
+                        variant="outlined"
+                      />
+                    </Grid>
 
-                    {isEditing && (
-                        <div className="profile-actions">
-                            <button 
-                                type="submit" 
-                                className="save-btn"
-                                disabled={isLoading}
-                            >
-                                {isLoading ? 'Đang lưu...' : 'Xác nhận'}
-                            </button>
-                            <button 
-                                type="button" 
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setErrors({});
-                                }}
-                                className="cancel-btn"
-                            >
-                                Hủy
-                            </button>
-                        </div>
-                    )}
-                </form>
-
-                {!isEditing && (
-                    <div className="profile-actions">
-                        <button 
-                            type="button" 
-                            onClick={handleEditClick}
-                            className="edit-btn"
-                        >
-                            Chỉnh sửa
-                        </button>
-                    </div>
+                    <Grid item xs={12} md={6}>
+                      <TextField
+                        fullWidth
+                        label="Xác nhận mật khẩu mới"
+                        name="confirmPassword"
+                        type="password"
+                        value={userInfo.confirmPassword}
+                        onChange={handleInputChange}
+                        error={!!errors.confirmPassword}
+                        helperText={errors.confirmPassword}
+                        variant="outlined"
+                      />
+                    </Grid>
+                  </>
                 )}
-            </div>
-        </div>
+
+                <Grid item xs={12}>
+                  <Box display="flex" justifyContent="flex-end" gap={2}>
+                    {!isEditing ? (
+                      <Button
+                        variant="contained"
+                        startIcon={<EditIcon />}
+                        onClick={handleEditClick}
+                        color="primary"
+                      >
+                        Chỉnh sửa
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          variant="outlined"
+                          startIcon={<CancelIcon />}
+                          onClick={() => {
+                            setIsEditing(false);
+                            setErrors({});
+                          }}
+                          color="error"
+                        >
+                          Hủy
+                        </Button>
+                        <Button
+                          variant="contained"
+                          startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <SaveIcon />}
+                          type="submit"
+                          disabled={isLoading}
+                          color="primary"
+                        >
+                          {isLoading ? 'Đang lưu...' : 'Xác nhận'}
+                        </Button>
+                      </>
+                    )}
+                  </Box>
+                </Grid>
+              </Grid>
+            </form>
+          </Paper>
+        </Container>
     );
 };
 
