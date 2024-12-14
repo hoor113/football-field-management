@@ -26,6 +26,7 @@
     border-radius: 4px;
     cursor: pointer;
     transition: background-color 0.2s;
+    margin-top: 80px;
 }
 
 .pagination-button:disabled {
@@ -36,4 +37,5 @@
 .page-info {
     color: #666;
     font-size: 14px;
+    margin-top: 80px;
 } 

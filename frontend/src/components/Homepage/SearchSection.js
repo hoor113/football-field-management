@@ -72,7 +72,12 @@ export const SearchSection = () => {
                 </div>
             ) : (
                 <div className="recommended-fields">
-                    <h2>Recommended Fields</h2>
+                    <h2 style={{ 
+                        textAlign: 'center',
+                        width: '100%',
+                        margin: '0 auto'
+                    }}>Các Sân Bóng Được Đề Xuất</h2>
+                    <br></br>
                     <div className="fields-grid">
                         {recommendedFields.map(field => (
                             <FieldCard key={field._id} field={field} isLoggedIn={2} />
