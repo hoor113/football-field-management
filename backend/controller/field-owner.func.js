@@ -215,54 +215,46 @@ export const getBookingNoti = async (req, res) => {
 
         const bookings = await Booking.find({
             field_id: { $in: fieldIds }
-        }).sort({ order_time: -1 });
+        })
+        .populate('customer_id', 'fullname email phone_no')
+        .populate('field_id')
+        .sort({ order_time: -1 });
 
         const notifications = await Notification.find({
             ownerId: ownerId,
             bookingId: { $in: bookings.map(booking => booking._id) },
             isRead: false
-        })
-            .populate({
-                path: 'bookingId',
-                populate: [
-                    {
-                        path: 'customer_id',
-                        select: 'fullname email phone_no'
-                    },
-                    {
-                        path: 'field_id',
-                        select: 'name grounds'
-                    }
-                ]
-            })
-            .sort({ createdAt: -1 });
+        }).sort({ createdAt: -1 });
+
+        const notificationsWithDetails = notifications.map(notification => {
+            const booking = bookings.find(b => b._id.toString() === notification.bookingId.toString());
+            if (!booking) return null;
+
+            // Find the specific ground from the field's grounds array
+            const ground = booking.field_id.grounds.find(g => 
+                g._id.toString() === booking.ground_id.toString()
+            );
+
+            return {
+                id: notification._id,
+                message: notification.message,
+                bookingDetails: {
+                    ...booking.toObject(),
+                    ground: ground ? {
+                        id: ground._id,
+                        name: ground.name,
+                        number: ground.ground_number
+                    } : null,
+                    field_name: booking.field_id.name
+                },
+                customerDetails: booking.customer_id,
+                createdAt: notification.createdAt
+            };
+        }).filter(Boolean); // Remove any null values
 
         res.status(200).json({
             success: true,
-            notifications: notifications.map(notification => {
-                const booking = notification.bookingId;
-                // Tìm ground trong danh sách grounds của field
-                const ground = booking.field_id?.grounds?.find(g => 
-                    g._id.toString() === booking.ground_id.toString()
-                );
-                
-                // Tạo tên ground dựa trên thông tin có sẵn
-                const groundInfo = ground ? 
-                    `${ground.name} (Sân ${ground.ground_number})` : 
-                    `Sân ${booking.ground_id}`;
-
-                return {
-                    id: notification._id,
-                    message: notification.message,
-                    bookingDetails: {
-                        ...booking.toObject(),
-                        ground_name: groundInfo,
-                        field_name: booking.field_id?.name || 'Sân không tồn tại'
-                    },
-                    customerDetails: booking.customer_id,
-                    createdAt: notification.createdAt
-                };
-            })
+            notifications: notificationsWithDetails
         });
 
     } catch (error) {
@@ -319,19 +311,8 @@ export const acceptBooking = async (req, res) => {
             return res.status(404).json({ success: false, message: 'Yêu cầu đặt sân không tồn tại' });
         }
 
-        // Find overlapping bookings
-        const overlappingBookings = await Booking.find({
-            field_id: booking.field_id,
-            ground_id: booking.ground_id,
-            _id: { $ne: booking._id }, // Exclude the current booking
-            status: 'pending', // Only consider pending bookings
-            $or: [
-                {
-                    start_time: { $eq: booking.start_time },
-                    end_time: { $eq: booking.end_time }
-                }
-            ]
-        });
+        // Update booking status to accepted
+        booking.status = 'confirmed';
 
         // Find field and populate grounds
         const field = await Field.findById(booking.field_id);
