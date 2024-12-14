@@ -632,8 +632,15 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
                         onClose={() => setShowFieldForm(false)}
                         maxWidth="md"
                         fullWidth
+                        sx={{
+                            '& .MuiDialog-paper': {
+                                width: '500px',  // Set a fixed width
+                                maxWidth: '90%', // Ensure responsiveness
+                                height: 'auto',  // Let height adjust to content
+                                overflowY: 'auto' // Enable scrolling if needed
+                            }
+                        }}
                     >
-                        
                         <DialogContent>
                             <FieldForm
                                 onSubmit={(fieldData) => handleAddField(fieldData, setShowFieldForm, setFields)}
