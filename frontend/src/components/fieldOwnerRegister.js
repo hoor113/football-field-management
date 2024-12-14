@@ -52,7 +52,7 @@ const FieldOwnerRegister = () => {
       {/* Right side - Form */}
       <div className="field-owner-register-form-container">
         <div className="field-owner-register-box">
-          <h2 className="field-owner-register-title">Field Owner Register</h2>
+          <h2 className="field-owner-register-title">Chủ Sân Đăng Ký</h2>
           <form onSubmit={handleSubmit} className="field-owner-register-form">
             <div className="field-owner-register-form-group">
               <input
