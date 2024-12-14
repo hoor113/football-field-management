@@ -14,7 +14,7 @@ export const FieldList = ({ fields, currentPage, fieldsPerPage, onPageChange }) 
                 {currentFields.map(field => (
                     <FieldCard key={field._id} field={field} isLoggedIn={1} />
                 ))}
-            </div>
+            </div>      
             
             <div className="pagination-controls">
                 <button 
