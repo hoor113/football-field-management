@@ -143,11 +143,9 @@ export const OrderField = () => {
       if (ground) {
         // Filter occupied slots for the selected date
         const dateOccupiedSlots = ground.occupied_slots.filter(slot => {
-          // Convert slot date to Vietnamese time
-          console.log(slot.date, selectedDate);
-          const slotDate = new Date(slot.date).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }).split(',')[0];
-          const formattedSelectedDate = new Date(selectedDate).toLocaleString('vi-VN', { timeZone: 'Asia/Ho_Chi_Minh' }).split(',')[0];
-          return slotDate === formattedSelectedDate;
+          const slotDate = new Date(slot.start_time).toISOString().split('T')[0];
+          // console.log(slotDate, selectedDate);
+          return slotDate === selectedDate;
         });
         setOccupiedSlots(dateOccupiedSlots);
       }

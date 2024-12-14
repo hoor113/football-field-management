@@ -92,9 +92,9 @@ const NotificationPageFieldOwner = () => {
         if (price && price.$numberDecimal) {
             price = parseFloat(price.$numberDecimal);
         }
-        return parseFloat(price).toLocaleString('en-US', {
+        return parseFloat(price).toLocaleString('vi-VN', {
             style: 'currency',
-            currency: 'USD'
+            currency: 'VND'
         });
     };
 
