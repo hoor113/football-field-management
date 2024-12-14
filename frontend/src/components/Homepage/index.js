@@ -27,8 +27,13 @@ import {
   Rating,
   Divider,
   useTheme,
-  useMediaQuery
+  useMediaQuery,
+  Fab,
+  Dialog,
+  DialogTitle,
+  DialogContent
 } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import StarIcon from '@mui/icons-material/Star';
@@ -36,6 +41,9 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import SecurityIcon from '@mui/icons-material/Security';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import VerifiedIcon from '@mui/icons-material/Verified';
+import Field1Image from "./images/san-bong-da-phui-ha-noi.jpg";
+import Field2Image from "./images/san-bong-da-phui-hcm.jpg";
+import Field3Image from "./images/san-bong-da-phui-thanh-hoa.jpg";
 
 const NewsSection = () => {
     const [displayCount, setDisplayCount] = useState(4);
@@ -220,9 +228,27 @@ const NewsSection = () => {
 
 const FeaturedFields = () => {
     const featuredFields = [
-        { id: 1, name: "Sân A", location: "Hà Nội", rating: 4.5 },
-        { id: 2, name: "Sân B", location: "TP. Hồ Chí Minh", rating: 4.7 },
-        { id: 3, name: "Sân C", location: "Đà Nẵng", rating: 4.6 },
+        { 
+            id: 1, 
+            name: "Sân A", 
+            location: "Hà Nội", 
+            rating: 4.5,
+            image: Field1Image
+        },
+        { 
+            id: 2, 
+            name: "Sân B", 
+            location: "TP. Hồ Chí Minh", 
+            rating: 4.7,
+            image: Field2Image
+        },
+        { 
+            id: 3, 
+            name: "Sân C", 
+            location: "Thanh Hóa", 
+            rating: 4.6,
+            image: Field3Image
+        },
     ];
 
     return (
@@ -234,12 +260,28 @@ const FeaturedFields = () => {
                 <Grid container spacing={4}>
                     {featuredFields.map(field => (
                         <Grid item xs={12} sm={6} md={4} key={field.id}>
-                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                            <Card sx={{ 
+                                height: '100%', 
+                                display: 'flex', 
+                                flexDirection: 'column',
+                                '&:hover': {
+                                    transform: 'translateY(-4px)',
+                                    boxShadow: (theme) => theme.shadows[8],
+                                    transition: 'all 0.3s ease-in-out',
+                                }
+                            }}>
                                 <CardMedia
                                     component="img"
                                     height="200"
-                                    image="/images/field-placeholder.jpg"
+                                    image={field.image}
                                     alt={field.name}
+                                    sx={{
+                                        objectFit: 'cover',
+                                        transition: 'transform 0.3s ease-in-out',
+                                        '&:hover': {
+                                            transform: 'scale(1.05)',
+                                        }
+                                    }}
                                 />
                                 <CardContent>
                                     <Typography gutterBottom variant="h5" component="h3">
@@ -299,9 +341,9 @@ const Statistics = () => (
 
 const Testimonials = () => {
     const testimonials = [
-        { id: 1, name: "Nguyễn Văn A", feedback: "Dịch vụ tuyệt vời!" },
-        { id: 2, name: "Trần Thị B", feedback: "Rất hài lòng với chất lượng sân." },
-        { id: 3, name: "Lê Văn C", feedback: "Sẽ giới thiệu cho bạn bè." },
+        { id: 1, name: "Nguyễn Văn Nguyên", feedback: "Dịch vụ tuyệt vời!" },
+        { id: 2, name: "Trần Thị Nguyên", feedback: "Rất hài lòng với chất lượng sân." },
+        { id: 3, name: "Lê Văn Nguyên", feedback: "Sẽ giới thiệu cho bạn bè." },
     ];
 
     return (
@@ -510,76 +552,366 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
 
     if (isLoggedIn === 1) {
         return (
-            <div className="container">
-                <h1 className="welcome-header">Welcome Field Owner {fullname}!</h1>
-
-                <FieldList
-                    fields={fields}
-                    currentPage={currentPage}
-                    fieldsPerPage={fieldsPerPage}
-                    onPageChange={setCurrentPage}
-                />
-
-                <button
-                    className="floating-add-button"
-                    onClick={() => setShowFieldForm(true)}
-                    title="Nhấn vào để thêm sân"
+            <Box sx={{ 
+                minHeight: '100vh', 
+                bgcolor: 'background.default', 
+                py: 4,
+                display: 'flex',
+                justifyContent: 'center',  // Căn giữa theo chiều ngang
+                alignItems: 'center',      // Căn giữa theo chiều dọc
+                flexDirection: 'column'    // Xếp các phần tử theo chiều dọc
+            }}>
+                {/* Welcome Banner */}
+                <Container 
+                    maxWidth={false}       // Cho phép container rộng hơn
+                    sx={{
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: 4,
+                        width: '100%',
+                        maxWidth: '1250px'  // Giới hạn chiều rộng tối đa
+                    }}
                 >
-                    +
-                </button>
+                    <Typography 
+                        variant="h4" 
+                        component="h1"
+                        sx={{
+                            fontWeight: 'bold',
+                            textAlign: 'center',
+                            textTransform: 'uppercase',
+                            letterSpacing: 1,
+                            width: '100%'
+                        }}
+                    >
+                        Chào mừng, {fullname}!
+                    </Typography>
 
-                {showFieldForm && (
-                    <FieldForm
-                        onSubmit={(fieldData) => handleAddField(fieldData, setShowFieldForm, setFields)}
-                        onCancel={() => setShowFieldForm(false)}
-                    />
-                )}
+                    {/* Field List Section */}
+                    <Paper 
+                        elevation={3}
+                        sx={{
+                            p: 4,
+                            borderRadius: 2,
+                            bgcolor: 'background.paper',
+                            position: 'relative',
+                            width: '1250px',
+                            margin: '0 auto'  // Căn giữa Paper
+                        }}
+                    >
+                        <FieldList
+                            fields={fields}
+                            currentPage={currentPage}
+                            fieldsPerPage={fieldsPerPage}
+                            onPageChange={setCurrentPage}
+                        />
 
-                {showServiceForm && (
-                    <ServiceForm
-                        fieldId={selectedField}
-                        onSubmit={handleServiceSubmit}
-                        onCancel={() => setShowServiceForm(false)}
-                    />
-                )}
-            </div>
+                        {/* Floating Add Button */}
+                        <Fab 
+                            bgcolor="green"
+                            color="primary"
+                            aria-label="add"
+                            onClick={() => setShowFieldForm(true)}
+                            sx={{
+                                position: 'fixed',
+                                bottom: 32,
+                                right: 32,
+                                '&:hover': {
+                                    transform: 'scale(1.1)',
+                                    transition: 'transform 0.2s'
+                                }
+                            }}
+                        >
+                            <AddIcon />
+                        </Fab>
+                    </Paper>
+
+                    {/* Forms Dialog */}
+                    <Dialog 
+                        open={showFieldForm} 
+                        onClose={() => setShowFieldForm(false)}
+                        maxWidth="md"
+                        fullWidth
+                    >
+                        
+                        <DialogContent>
+                            <FieldForm
+                                onSubmit={(fieldData) => handleAddField(fieldData, setShowFieldForm, setFields)}
+                                onCancel={() => setShowFieldForm(false)}
+                            />
+                        </DialogContent>
+                    </Dialog>
+
+                    <Dialog 
+                        open={showServiceForm} 
+                        onClose={() => setShowServiceForm(false)}
+                        maxWidth="md"
+                        fullWidth
+                    >
+                        <DialogTitle>Thêm Dịch Vụ</DialogTitle>
+                        <DialogContent>
+                            <ServiceForm
+                                fieldId={selectedField}
+                                onSubmit={handleServiceSubmit}
+                                onCancel={() => setShowServiceForm(false)}
+                            />
+                        </DialogContent>
+                    </Dialog>
+                </Container>
+            </Box>
         );
     }
 
     // Customer Homepage
     else if (isLoggedIn === 2) {
         return (
-            <div className="container">
-                <h1 className="welcome-header">
-                    {`Welcome Customer ${fullname}!`}
-                </h1>
-                <SearchSection />
-            </div>
+            <Box sx={{ 
+                minHeight: '100vh', 
+                bgcolor: 'background.default',
+                display: 'flex',  // Thêm display flex
+                justifyContent: 'center',  // Căn giữa theo chiều ngang
+                alignItems: 'center',  // Căn giữa theo chiều dọc
+                flexDirection: 'column'  // Xếp các phần tử theo chiều dọc
+            }}>
+                {/* Welcome Banner */}
+                <Box 
+                    sx={{ 
+                        bgcolor: '#ffffff', 
+                        color: 'white',
+                        py: 4,
+                        mb: 4,
+                        width: '100%'  // Đảm bảo banner full width
+                    }}
+                >
+                    <Container 
+                        maxWidth="lg"
+                        sx={{
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center'
+                        }}
+                    >
+                        <Typography 
+                            variant="h4" 
+                            component="h1"
+                            sx={{
+                                fontWeight: 'bold',
+                                textAlign: 'center',
+                                textTransform: 'uppercase',
+                                letterSpacing: 1,
+                                fontSize: '2.5rem'
+                            }}
+                        >
+                            {`Chào mừng, ${fullname}!`}
+                        </Typography>
+                        <Typography 
+                            variant="subtitle1" 
+                            sx={{ 
+                                color: '#121272',
+                                textAlign: 'center',
+                                mt: 1,
+                                opacity: 0.9,
+                                fontSize: '1.5rem'
+                            }}
+                        >
+                            Hãy tìm sân bóng phù hợp với bạn
+                        </Typography>
+                    </Container>
+                </Box>
+
+                {/* Main Content */}
+                <Container 
+                    maxWidth="lg"
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'center',  // Căn giữa nội dung
+                        width: '100%'
+                    }}
+                >
+                    <Grid container spacing={4} justifyContent="center">  {/* Thêm justifyContent */}
+                        <Grid item xs={12}>
+                            <Paper 
+                                elevation={3} 
+                                sx={{ 
+                                    p: 3,
+                                    borderRadius: 2,
+                                    bgcolor: 'background.paper',
+                                    width: '1250px',
+                                    margin: '0 auto'  // Căn giữa Paper
+                                }}
+                            >
+                                <SearchSection />
+                            </Paper>
+                        </Grid>
+                    </Grid>
+
+                    {/* Quick Stats */}
+                    {/* <Grid container spacing={3} sx={{ mt: 4, mb: 6 }}>
+                        {[
+                            { title: 'Sân đã đặt', value: '15', icon: <SportsSoccerIcon /> },
+                            { title: 'Sân yêu thích', value: '5', icon: <FavoriteIcon /> },
+                            { title: 'Đánh giá', value: '8', icon: <StarIcon /> }
+                        ].map((stat, index) => (
+                            <Grid item xs={12} sm={4} key={index}>
+                                <Paper
+                                    elevation={2}
+                                    sx={{
+                                        p: 3,
+                                        textAlign: 'center',
+                                        borderRadius: 2,
+                                        transition: 'transform 0.2s',
+                                        '&:hover': {
+                                            transform: 'translateY(-4px)',
+                                            boxShadow: 4
+                                        }
+                                    }}
+                                >
+                                    <Box sx={{ color: 'primary.main', mb: 1 }}>
+                                        {stat.icon}
+                                    </Box>
+                                    <Typography variant="h4" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                        {stat.value}
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="text.secondary">
+                                        {stat.title}
+                                    </Typography>
+                                </Paper>
+                            </Grid>
+                        ))}
+                    </Grid> */}
+
+                    {/* Recent Activities */}
+                    {/* <Paper 
+                        elevation={3} 
+                        sx={{ 
+                            p: 3,
+                            borderRadius: 2,
+                            mb: 4
+                        }}
+                    >
+                        <Typography 
+                            variant="h6" 
+                            sx={{ 
+                                mb: 3,
+                                fontWeight: 'bold',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: 1
+                            }}
+                        >
+                            <HistoryIcon color="primary" />
+                            Hoạt động gần đây
+                        </Typography>
+                        <List>
+                            {[
+                                'Đặt sân tại SVĐ ABC - 2 giờ trước',
+                                'Đánh giá sân XYZ - 1 ngày trước',
+                                'Thêm sân DEF vào yêu thích - 2 ngày trước'
+                            ].map((activity, index) => (
+                                <React.Fragment key={index}>
+                                    <ListItem>
+                                        <ListItemIcon>
+                                            <FiberManualRecordIcon 
+                                                sx={{ 
+                                                    fontSize: 12, 
+                                                    color: 'primary.main' 
+                                                }} 
+                                            />
+                                        </ListItemIcon>
+                                        <ListItemText primary={activity} />
+                                    </ListItem>
+                                    {index < 2 && <Divider />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </Paper> */}
+                </Container>
+            </Box>
         );
     }
     return (
         <>
-            <div className="banner">
-                <div className="banner-content">
-                    <h1 style={{ color: '#ffffff' }}>TRANG CHỦ HỖ TRỢ TÌM KIẾM SÂN BÃI NHANH</h1>
-                    <p>Dữ liệu được cập nhật thường xuyên giúp cho người dùng tìm được sân một cách nhanh nhất</p>
-                    <div className="search-bar">
-                        <input
-                            type="text"
+            <Box 
+                className="banner"
+                sx={{
+                    position: 'relative',
+                    backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${banner})`,
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                }}
+            >
+                <Container className="banner-content" maxWidth="lg">
+                    <Typography 
+                        variant="h2" 
+                        component="h1" 
+                        sx={{ 
+                            color: '#ffffff',
+                            fontWeight: 'bold',
+                            mb: 2,
+                            textShadow: '2px 2px 4px rgba(0,0,0,0.5)'
+                        }}
+                    >
+                        TRANG CHỦ HỖ TRỢ TÌM KIẾM SÂN BÃI NHANH
+                    </Typography>
+                    <Typography 
+                        variant="h6" 
+                        sx={{ 
+                            color: '#ffffff',
+                            mb: 4,
+                            textShadow: '1px 1px 2px rgba(0,0,0,0.5)'
+                        }}
+                    >
+                        Dữ liệu được cập nhật thường xuyên giúp cho người dùng tìm được sân một cách nhanh nhất
+                    </Typography>
+                    <Paper 
+                        className="search-bar"
+                        elevation={3}
+                        sx={{
+                            p: 2,
+                            maxWidth: 800,
+                            mx: 'auto',
+                            display: 'flex',
+                            flexDirection: { xs: 'column', md: 'row' },
+                            gap: 2
+                        }}
+                    >
+                        <TextField
+                            fullWidth
                             placeholder="Nhập tên sân"
+                            variant="outlined"
                             value={searchName}
                             onChange={(e) => setSearchName(e.target.value)}
+                            InputProps={{
+                                startAdornment: (
+                                    <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />
+                                ),
+                            }}
                         />
-                        <input
-                            type="text"
+                        <TextField
+                            fullWidth
                             placeholder="Nhập địa chỉ"
+                            variant="outlined"
                             value={searchAddress}
                             onChange={(e) => setSearchAddress(e.target.value)}
+                            InputProps={{
+                                startAdornment: (
+                                    <LocationOnIcon sx={{ color: 'text.secondary', mr: 1 }} />
+                                ),
+                            }}
                         />
-                        <button className="search-button" onClick={handleSearch}>Tìm kiếm</button>
-                    </div>
-                </div>
-            </div>
+                        <Button
+                            variant="contained"
+                            onClick={handleSearch}
+                            sx={{
+                                minWidth: { xs: '100%', md: '150px' },
+                                height: '45px'
+                            }}
+                        >
+                            Tìm kiếm
+                        </Button>
+                    </Paper>
+                </Container>
+            </Box>
             {/* <div className="search-results">
                 {filteredFields.length > 0 ? (
                     filteredFields.map(field => (
