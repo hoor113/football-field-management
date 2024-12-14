@@ -11,11 +11,35 @@ import AntonyImage from './images/antony.jpg';
 import NicholasJacksonImage from './images/jackson.jpg';
 import MykhayloMudrykImage from './images/mudryk.jpg';
 import { useNavigate } from 'react-router-dom';
+import banner from './images/banner.jpg';
+import {
+  Container,
+  Typography,
+  Grid,
+  Card,
+  CardContent,
+  CardMedia,
+  Button,
+  Box,
+  Paper,
+  TextField,
+  IconButton,
+  Rating,
+  Divider,
+  useTheme,
+  useMediaQuery
+} from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+import StarIcon from '@mui/icons-material/Star';
+import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
+import SecurityIcon from '@mui/icons-material/Security';
+import SupportAgentIcon from '@mui/icons-material/SupportAgent';
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 const NewsSection = () => {
-    const [displayCount, setDisplayCount] = useState(4); // Default to 4 items
+    const [displayCount, setDisplayCount] = useState(4);
 
-    // Update display count based on window width
     useEffect(() => {
         const handleResize = () => {
             const width = window.innerWidth;
@@ -30,13 +54,8 @@ const NewsSection = () => {
             }
         };
 
-        // Initial check
         handleResize();
-
-        // Add event listener
         window.addEventListener('resize', handleResize);
-
-        // Cleanup
         return () => window.removeEventListener('resize', handleResize);
     }, []);
 
@@ -75,30 +94,127 @@ const NewsSection = () => {
         }
     ];
 
-    // Only display the number of items based on screen size
     const displayedNews = newsItems.slice(0, displayCount);
 
     return (
-        <div className="news-section">
-            <h2 className="news-section-title">Tin Tức Mới Nhất</h2>
-            <div className="news-grid">
-                {displayedNews.map(news => (
-                    <div key={news.id} className="news-card">
-                        <div className="news-image">
-                            <img src={news.image} alt={news.title} />
-                        </div>
-                        <div className="news-content">
-                            <h3>{news.title}</h3>
-                            <p className="news-date">{news.date}</p>
-                            <p className="news-summary">{news.summary}</p>
-                            <a href={news.link} target="_blank" rel="noopener noreferrer" className="read-more-btn">
-                                Đọc thêm
-                            </a>
-                        </div>
-                    </div>
-                ))}
-            </div>
-        </div>
+        <Box sx={{ py: 8, bgcolor: 'background.default' }}>
+            <Container maxWidth="lg">
+                <Typography 
+                    variant="h4" 
+                    component="h2" 
+                    align="center" 
+                    gutterBottom 
+                    sx={{ 
+                        mb: 6,
+                        fontWeight: 'bold',
+                        position: 'relative',
+                        '&:after': {
+                            content: '""',
+                            position: 'absolute',
+                            bottom: -16,
+                            left: '50%',
+                            transform: 'translateX(-50%)',
+                            width: 60,
+                            height: 4,
+                            bgcolor: 'primary.main',
+                            borderRadius: 2
+                        }
+                    }}
+                >
+                    Tin Tức Mới Nhất
+                </Typography>
+                <Grid container spacing={3}>
+                    {displayedNews.map(news => (
+                        <Grid item xs={12} sm={6} md={3} key={news.id}>
+                            <Card 
+                                sx={{ 
+                                    height: '100%',
+                                    display: 'flex',
+                                    flexDirection: 'column',
+                                    transition: 'all 0.3s ease-in-out',
+                                    overflow: 'hidden',
+                                    '&:hover': {
+                                        transform: 'translateY(-4px)',
+                                        boxShadow: (theme) => theme.shadows[8],
+                                    }
+                                }}
+                            >
+                                <CardMedia
+                                    component="img"
+                                    height="240"
+                                    image={news.image}
+                                    alt={news.title}
+                                    sx={{
+                                        objectFit: 'cover',
+                                        objectPosition: 'top',
+                                        transition: 'transform 0.3s ease-in-out',
+                                        '&:hover': {
+                                            transform: 'scale(1.05)',
+                                        }
+                                    }}
+                                />
+                                <CardContent sx={{ flexGrow: 1, p: 2.5 }}>
+                                    <Typography 
+                                        variant="subtitle2" 
+                                        color="text.secondary"
+                                        sx={{ mb: 1 }}
+                                    >
+                                        {news.date}
+                                    </Typography>
+                                    <Typography 
+                                        variant="h6" 
+                                        component="h3" 
+                                        gutterBottom
+                                        sx={{
+                                            fontSize: '1.1rem',
+                                            fontWeight: 'bold',
+                                            lineHeight: 1.4,
+                                            minHeight: '4.2em',
+                                            overflow: 'visible',
+                                            display: 'block',
+                                            mb: 2
+                                        }}
+                                    >
+                                        {news.title}
+                                    </Typography>
+                                    <Typography 
+                                        variant="body2" 
+                                        color="text.secondary"
+                                        sx={{
+                                            mb: 2,
+                                            minHeight: '3.6em',
+                                            overflow: 'visible',
+                                            display: 'block',
+                                        }}
+                                    >
+                                        {news.summary}
+                                    </Typography>
+                                    <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        href={news.link}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        size="small"
+                                        sx={{
+                                            mt: 'auto',
+                                            textTransform: 'none',
+                                            borderRadius: 2,
+                                            '&:hover': {
+                                                backgroundColor: 'primary.main',
+                                                color: 'white'
+                                            }
+                                        }}
+                                    >
+                                        Đọc thêm
+                                    </Button>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </Box>
     );
 };
 
@@ -110,36 +226,75 @@ const FeaturedFields = () => {
     ];
 
     return (
-        <div className="featured-fields">
-            <h2>Sân Bóng Nổi Bật</h2>
-            <div className="fields-grid">
-                {featuredFields.map(field => (
-                    <div key={field.id} className="field-card">
-                        <h3>{field.name}</h3>
-                        <p>{field.location}</p>
-                        <p>Rating: {field.rating}</p>
-                    </div>
-                ))}
-            </div>
-        </div>
+        <Box sx={{ py: 6, bgcolor: 'background.paper' }}>
+            <Container maxWidth="lg">
+                <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ mb: 4 }}>
+                    Sân Bóng Nổi Bật
+                </Typography>
+                <Grid container spacing={4}>
+                    {featuredFields.map(field => (
+                        <Grid item xs={12} sm={6} md={4} key={field.id}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                                <CardMedia
+                                    component="img"
+                                    height="200"
+                                    image="/images/field-placeholder.jpg"
+                                    alt={field.name}
+                                />
+                                <CardContent>
+                                    <Typography gutterBottom variant="h5" component="h3">
+                                        {field.name}
+                                    </Typography>
+                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                        <LocationOnIcon sx={{ mr: 1, color: 'text.secondary' }} />
+                                        <Typography variant="body2" color="text.secondary">
+                                            {field.location}
+                                        </Typography>
+                                    </Box>
+                                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                                        <Rating
+                                            value={field.rating}
+                                            precision={0.5}
+                                            readOnly
+                                            size="small"
+                                        />
+                                        <Typography variant="body2" color="text.secondary" sx={{ ml: 1 }}>
+                                            ({field.rating})
+                                        </Typography>
+                                    </Box>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </Box>
     );
 };
 
 const Statistics = () => (
-    <div className="statistics-section">
-        <div className="stat-item">
-            <h3>500+</h3>
-            <p>Sân Bóng</p>
-        </div>
-        <div className="stat-item">
-            <h3>10,000+</h3>
-            <p>Người Dùng</p>
-        </div>
-        <div className="stat-item">
-            <h3>50,000+</h3>
-            <p>Lượt Đặt Sân</p>
-        </div>
-    </div>
+    <Box sx={{ py: 6, bgcolor: 'primary.main', color: 'white' }}>
+        <Container maxWidth="lg">
+            <Grid container spacing={4} justifyContent="center">
+                {[
+                    { number: '500+', label: 'Sân Bóng' },
+                    { number: '10,000+', label: 'Người Dùng' },
+                    { number: '50,000+', label: 'Lượt Đặt Sân' }
+                ].map((stat, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                        <Box sx={{ textAlign: 'center' }}>
+                            <Typography variant="h3" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
+                                {stat.number}
+                            </Typography>
+                            <Typography variant="h6">
+                                {stat.label}
+                            </Typography>
+                        </Box>
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+    </Box>
 );
 
 const Testimonials = () => {
@@ -150,86 +305,156 @@ const Testimonials = () => {
     ];
 
     return (
-        <div className="testimonials-section">
-            <h2>Khách Hàng Nói Gì Về Chúng Tôi</h2>
-            <div className="testimonials-slider">
-                {testimonials.map(testimonial => (
-                    <div key={testimonial.id} className="testimonial-card">
-                        <p>"{testimonial.feedback}"</p>
-                        <h4>- {testimonial.name}</h4>
-                    </div>
-                ))}
-            </div>
-        </div>
+        <Box sx={{ py: 6, bgcolor: 'background.paper' }}>
+            <Container maxWidth="lg">
+                <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ mb: 4 }}>
+                    Khách Hàng Nói Gì Về Chúng Tôi
+                </Typography>
+                <Grid container spacing={4}>
+                    {testimonials.map(testimonial => (
+                        <Grid item xs={12} sm={4} key={testimonial.id}>
+                            <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', p: 3 }}>
+                                <CardContent>
+                                    <Typography variant="body1" sx={{ mb: 2, fontStyle: 'italic' }}>
+                                        "{testimonial.feedback}"
+                                    </Typography>
+                                    <Typography variant="subtitle1" color="primary" sx={{ fontWeight: 'bold' }}>
+                                        - {testimonial.name}
+                                    </Typography>
+                                </CardContent>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+            </Container>
+        </Box>
     );
 };
 
 const HowItWorks = () => (
-    <div className="how-it-works">
-        <h2>Cách Thức Hoạt Động</h2>
-        <div className="steps">
-            <div className="step">
-                <div className="step-number">1</div>
-                <h3>Tìm Sân</h3>
-                <p>Tìm sân phù hợp theo khu vực</p>
-            </div>
-            <div className="step">
-                <div className="step-number">2</div>
-                <h3>Đặt Sân</h3>
-                <p>Chọn thời gian và đặt sân</p>
-            </div>
-            <div className="step">
-                <div className="step-number">3</div>
-                <h3>Thanh Toán</h3>
-                <p>Thanh toán an toàn</p>
-            </div>
-        </div>
-    </div>
+    <Box sx={{ py: 6, bgcolor: 'background.default' }}>
+        <Container maxWidth="lg">
+            <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ mb: 4 }}>
+                Cách Thức Hoạt Động
+            </Typography>
+            <Grid container spacing={4}>
+                {[
+                    { number: 1, title: 'Tìm Sân', desc: 'Tìm sân phù hợp theo khu vực' },
+                    { number: 2, title: 'Đặt Sân', desc: 'Chọn thời gian và đặt sân' },
+                    { number: 3, title: 'Thanh Toán', desc: 'Thanh toán an toàn' }
+                ].map((step, index) => (
+                    <Grid item xs={12} sm={4} key={index}>
+                        <Paper elevation={3} sx={{ p: 3, height: '100%', textAlign: 'center' }}>
+                            <Box
+                                sx={{
+                                    width: 50,
+                                    height: 50,
+                                    borderRadius: '50%',
+                                    bgcolor: 'primary.main',
+                                    color: 'white',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    margin: '0 auto',
+                                    mb: 2,
+                                    fontSize: '1.5rem',
+                                    fontWeight: 'bold'
+                                }}
+                            >
+                                {step.number}
+                            </Box>
+                            <Typography variant="h6" gutterBottom>
+                                {step.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {step.desc}
+                            </Typography>
+                        </Paper>
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+    </Box>
 );
 
 const Features = () => (
-    <div className="features-section">
-        <h2>Tại Sao Chọn Chúng Tôi</h2>
-        <div className="features-grid">
-            <div className="feature">
-                <i className="icon-fast"></i>
-                <h3>Đặt Sân Nhanh Chóng</h3>
-                <p>Chỉ với vài thao tác đơn giản</p>
-            </div>
-            <div className="feature">
-                <i className="icon-secure"></i>
-                <h3>Thanh Toán An Toàn</h3>
-                <p>Bảo mật thông tin thanh toán</p>
-            </div>
-            <div className="feature">
-                <i className="icon-support"></i>
-                <h3>Hỗ Trợ 24/7</h3>
-                <p>Đội ngũ hỗ trợ luôn sẵn sàng</p>
-            </div>
-            <div className="feature">
-                <i className="icon-quality"></i>
-                <h3>Chất Lượng Đảm Bảo</h3>
-                <p>Cam kết chất lượng dịch vụ</p>
-            </div>
-        </div>
-    </div>
+    <Box sx={{ py: 6, bgcolor: 'background.default' }}>
+        <Container maxWidth="lg">
+            <Typography variant="h4" component="h2" align="center" gutterBottom sx={{ mb: 4 }}>
+                Tại Sao Chọn Chúng Tôi
+            </Typography>
+            <Grid container spacing={4}>
+                {[
+                    { icon: <PhoneAndroidIcon sx={{ fontSize: 40 }} />, title: 'Đặt Sân Nhanh Chóng', desc: 'Chỉ với vài thao tác đơn giản' },
+                    { icon: <SecurityIcon sx={{ fontSize: 40 }} />, title: 'Thanh Toán An Toàn', desc: 'Bảo mật thông tin thanh toán' },
+                    { icon: <SupportAgentIcon sx={{ fontSize: 40 }} />, title: 'Hỗ Trợ 24/7', desc: 'Đội ngũ hỗ trợ luôn sẵn sàng' },
+                    { icon: <VerifiedIcon sx={{ fontSize: 40 }} />, title: 'Chất Lượng Đảm Bảo', desc: 'Cam kết chất lượng dịch vụ' }
+                ].map((feature, index) => (
+                    <Grid item xs={12} sm={6} md={3} key={index}>
+                        <Card sx={{ height: '100%', textAlign: 'center', p: 3 }}>
+                            <Box sx={{ mb: 2, color: 'primary.main' }}>
+                                {feature.icon}
+                            </Box>
+                            <Typography variant="h6" gutterBottom>
+                                {feature.title}
+                            </Typography>
+                            <Typography variant="body2" color="text.secondary">
+                                {feature.desc}
+                            </Typography>
+                        </Card>
+                    </Grid>
+                ))}
+            </Grid>
+        </Container>
+    </Box>
 );
 
-const AppDownload = () => (
-    <div className="app-download">
-        <div className="app-content">
-            <h2>Tải Ứng Dụng Ngay</h2>
-            <p>Đặt sân dễ dàng hơn với ứng dụng di động</p>
-            <div className="download-buttons">
-                <button className="app-store">App Store</button>
-                <button className="play-store">Google Play</button>
-            </div>
-        </div>
-        <div className="app-image">
-            <img src="/images/app-preview.png" alt="App Preview" />
-        </div>
-    </div>
-);
+// const AppDownload = () => (
+//     <Box sx={{ py: 6, bgcolor: 'background.default' }}>
+//         <Container maxWidth="lg">
+//             <Grid container spacing={4} alignItems="center">
+//                 <Grid item xs={12} md={6}>
+//                     <Typography variant="h4" component="h2" gutterBottom>
+//                         Tải Ứng Dụng Ngay
+//                     </Typography>
+//                     <Typography variant="body1" paragraph>
+//                         Đặt sân dễ dàng hơn với ứng dụng di động
+//                     </Typography>
+//                     <Box sx={{ display: 'flex', gap: 2 }}>
+//                         <Button
+//                             variant="contained"
+//                             startIcon={<img src="/images/apple-logo.png" alt="Apple" width="20" />}
+//                             sx={{ borderRadius: 2 }}
+//                         >
+//                             App Store
+//                         </Button>
+//                         <Button
+//                             variant="contained"
+//                             startIcon={<img src="/images/google-play-logo.png" alt="Google Play" width="20" />}
+//                             sx={{ borderRadius: 2 }}
+//                         >
+//                             Google Play
+//                         </Button>
+//                     </Box>
+//                 </Grid>
+//                 <Grid item xs={12} md={6}>
+//                     <Box
+//                         component="img"
+//                         src="/images/app-preview.png"
+//                         alt="App Preview"
+//                         sx={{
+//                             width: '100%',
+//                             maxWidth: 400,
+//                             height: 'auto',
+//                             display: 'block',
+//                             margin: '0 auto'
+//                         }}
+//                     />
+//                 </Grid>
+//             </Grid>
+//         </Container>
+//     </Box>
+// );
 
 export const HomePage = ({ isLoggedIn, fullname }) => {
     const navigate = useNavigate();
@@ -373,7 +598,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
             <Statistics />
             <Features />
             <Testimonials />
-            <AppDownload />
+            {/* <AppDownload /> */}
             <NewsSection />
         </>
     );
