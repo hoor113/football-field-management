@@ -16,7 +16,7 @@ const SearchResults = () => {
             {fields.length > 0 ? (
                 fields.map(field => (
                     <div key={field.id} className="field-card">
-                        <img src={field.image_url} alt={field.name} className="field-image" />
+                        <img src={field.image_urls[0]} alt={field.name} className="field-image" />
                         <h3>{field.name}</h3>
                         <p>Description: {field.description}</p>
                         <p>Address: {field.address}</p>

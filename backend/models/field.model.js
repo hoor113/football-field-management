@@ -6,7 +6,7 @@ const ServiceSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   description: { type: String, default: 'No description available' },
-  image_url: { type: String, default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzBeng5o2seSmkdywgldLhL4PQd0nAhJWNnQ&s' },
+  imageUrl: { type: String, required: true},
   unit: { type: String, required: true, default: 'times' },
   price: { type: Number, required: true }
 });
@@ -56,7 +56,16 @@ const FieldSchema = new Schema({
   description: { type: String, default: 'No description available' },
   address: { type: String, required: true },
   base_price: { type: Number, required: true },
-  image_url: { type: String },
+  image_urls: {
+    type: [String],
+    validate: {
+      validator: function(v) {
+        return v.length <= 100;  // Giới hạn số lượng URL tối đa là 100
+      },
+      message: 'A field can only have up to 100 images.'
+    },
+    default: []
+  },
   status: { type: Boolean, default: true },
   total_grounds: { type: Number, required: true },
   grounds: [GroundSchema],

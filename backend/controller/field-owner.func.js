@@ -3,17 +3,21 @@ import { Field } from "../models/field.model.js"
 import { FieldOwner } from "../models/field-owner.model.js";
 import { Booking } from '../models/booking.model.js';
 import { Notification } from '../models/notification.model.js'; // Import the Notification model
+
+
+  
+
 export const UploadField = async (req, res) => {
     const {
         name,
         address,
         base_price,
-        image_url,
+        image_urls,
         total_grounds,
         description,
         operating_hours
     } = req.body;
-    if (!(name && address && base_price && image_url && total_grounds && operating_hours?.length)) {
+    if (!(name && address && base_price && image_urls && total_grounds && operating_hours?.length)) {
         return res.status(400).json({
             success: false,
             message: "Please provide all required fields including operating hours"
@@ -39,7 +43,7 @@ export const UploadField = async (req, res) => {
             description,
             address,
             base_price,
-            image_url,
+            image_urls,
             total_grounds,
             grounds,
             operating_hours
@@ -54,29 +58,58 @@ export const UploadField = async (req, res) => {
     }
 }
 
-
 export const UploadService = async (req, res) => {
-    const { fieldId, name, type, price } = req.body;
-    if (!(fieldId || name || type || price)) {
+    const { fieldId, name, type, price, imageUrl } = req.body; // Include imageUrl
+
+    // Validate that all required fields are provided
+    if (!(fieldId && name && type && price && imageUrl)) {
         return res.status(400).json({ success: false, message: "Please provide all fields" });
     }
 
     try {
-        const field = await Field.findById(fieldId)
+        // Find the field by ID
+        const field = await Field.findById(fieldId);
         if (!field) {
             return res.status(404).json({ message: 'Field not found' });
         }
-        field.services.push({ name, type, price })
-        await field.save()
+
+        // Add the new service to the field's services array, including the imageUrl
+        field.services.push({ name, type, price, imageUrl });
+
+        // Save the updated field
+        await field.save();
+
+        // Respond with a success message
         res.status(200).json({ message: 'Service added successfully', field });
     } catch (error) {
+        // Handle server errors
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 }
 
+export const uploadServiceType = async (req, res) => {
+    const { serviceType1, serviceType2, serviceType3 } = req.body;
+
+    // Check if all required fields are provided
+    if (!(serviceType1 && serviceType2 && serviceType3)) {
+        return res.status(400).json({ success: false, message: "Please provide all service types" });
+    }
+
+    try {
+        // Create a new document with the provided service types
+        const newServiceType = new ServiceType({ serviceType1, serviceType2, serviceType3 });
+        await newServiceType.save();
+
+        // Return the newly created service type document
+        res.status(201).json(newServiceType);
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
+};
+
 export const UpdateField = async (req, res) => {
     const { field_id } = req.params;
-    const { name, description, address, base_price, image_url, total_grounds } = req.body;
+    const { name, description, address, base_price, image_urls, total_grounds } = req.body;
 
     try {
         // Check if field exists and belongs to the owner
@@ -101,7 +134,7 @@ export const UpdateField = async (req, res) => {
                     ...(description && { description }),
                     ...(address && { address }),
                     ...(base_price && { base_price }),
-                    ...(image_url && { image_url }),
+                    ...(image_urls && { image_urls }),
                     ...(total_grounds && { total_grounds })
                 }
             },
@@ -198,10 +231,8 @@ export const GetFields = async (req, res) => {
 
 export const getBookingNoti = async (req, res) => {
     try {
-        // 1. Get the field owner's ID from the authenticated request
         const ownerId = req.user.id;
 
-        // 2. Find the field owner and populate their fields
         const fieldOwner = await FieldOwner.findById(ownerId)
             .select('fields')
             .populate('fields');
@@ -213,15 +244,12 @@ export const getBookingNoti = async (req, res) => {
             });
         }
 
-        // 3. Extract field IDs
         const fieldIds = fieldOwner.fields.map(field => field._id);
 
-        // 4. Find all bookings related to these fields
         const bookings = await Booking.find({
             field_id: { $in: fieldIds }
-        }).sort({ order_time: -1 }); // Sort by newest first
+        }).sort({ order_time: -1 });
 
-        // 5. Get notifications for these bookings
         const notifications = await Notification.find({
             ownerId: ownerId,
             bookingId: { $in: bookings.map(booking => booking._id) },
@@ -229,22 +257,45 @@ export const getBookingNoti = async (req, res) => {
         })
             .populate({
                 path: 'bookingId',
-                populate: {
-                    path: 'customer_id',
-                    select: 'fullname email phone_no' // Select the fields you want to include
-                }
+                populate: [
+                    {
+                        path: 'customer_id',
+                        select: 'fullname email phone_no'
+                    },
+                    {
+                        path: 'field_id',
+                        select: 'name grounds'
+                    }
+                ]
             })
-            .sort({ createdAt: -1 }); // Sort by newest first
+            .sort({ createdAt: -1 });
 
         res.status(200).json({
             success: true,
-            notifications: notifications.map(notification => ({
-                id: notification._id,
-                message: notification.message,
-                bookingDetails: notification.bookingId,
-                customerDetails: notification.bookingId.customer_id,
-                createdAt: notification.createdAt
-            }))
+            notifications: notifications.map(notification => {
+                const booking = notification.bookingId;
+                // Tìm ground trong danh sách grounds của field
+                const ground = booking.field_id?.grounds?.find(g => 
+                    g._id.toString() === booking.ground_id.toString()
+                );
+                
+                // Tạo tên ground dựa trên thông tin có sẵn
+                const groundInfo = ground ? 
+                    `${ground.name} (Ground ${ground.ground_number})` : 
+                    `Ground ${booking.ground_id}`;
+
+                return {
+                    id: notification._id,
+                    message: notification.message,
+                    bookingDetails: {
+                        ...booking.toObject(),
+                        ground_name: groundInfo,
+                        field_name: booking.field_id?.name || 'Unknown Field'
+                    },
+                    customerDetails: booking.customer_id,
+                    createdAt: notification.createdAt
+                };
+            })
         });
 
     } catch (error) {
@@ -445,7 +496,7 @@ export const deleteField = async (req, res) => {
 
 export const editFieldAttributes = async (req, res) => {
     const { fieldId } = req.params;
-    const { name, description, address, base_price, image_url, total_grounds, operating_hours } = req.body;
+    const { name, description, address, base_price, image_urls, total_grounds, operating_hours } = req.body;
     const ownerId = req.user.id;
 
     try {
@@ -468,7 +519,7 @@ export const editFieldAttributes = async (req, res) => {
                     ...(description && { description }),
                     ...(address && { address }),
                     ...(base_price && { base_price }),
-                    ...(image_url && { image_url }),
+                    ...(image_urls && { image_urls }),
                     ...(total_grounds && { total_grounds }),
                     ...(operating_hours && { operating_hours })
                 }

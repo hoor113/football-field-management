@@ -5,7 +5,8 @@ export const ServiceForm = ({ fieldId, onClose }) => {
     const [service, setService] = useState({
         name: '',
         type: '',
-        price: ''
+        price: '',
+        imageUrl: '' // New field for image URL
     });
 
     const handleSubmit = async (e) => {
@@ -38,8 +39,6 @@ export const ServiceForm = ({ fieldId, onClose }) => {
     return (
         <div className="modal-overlay">
             <div className="service-form-modal">
-                {/* <button className="close-button" onClick={onClose}>×</button> */}
-                
                 <div className="modal-header">
                     <h2>Add New Service</h2>
                 </div>
@@ -72,6 +71,14 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                         className="modal-input"
                     />
                     
+                    <input
+                        type="url"
+                        placeholder="Image URL"
+                        value={service.imageUrl}
+                        onChange={(e) => setService({...service, imageUrl: e.target.value})}
+                        className="modal-input"
+                    />
+                    
                     <div className="form-buttons">
                         <button type="submit" className="submit-button">
                             Add Service
@@ -84,4 +91,4 @@ export const ServiceForm = ({ fieldId, onClose }) => {
             </div>
         </div>
     );
-}; 
+};

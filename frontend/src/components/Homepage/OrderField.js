@@ -4,6 +4,7 @@ import './OrderField.css';
 import { RatingSection } from './RatingSection';
 import { CommentsSection } from './CommentsSection';
 import DateSelector from './DateSelector';
+import { ServiceSelectionBoard } from './ServiceSelectionBoard';
 
 export const OrderField = () => {
   const location = useLocation();
@@ -11,38 +12,13 @@ export const OrderField = () => {
   const [selectedDate, setSelectedDate] = useState('');
   const [selectedGround, setSelectedGround] = useState('');
   const [selectedHours, setSelectedHours] = useState({ start: '', end: '' });
-  
+  const [serviceQuantities, setServiceQuantities] = useState({});
+  // const [showServicesList, setShowServicesList] = useState(false);
+  const [showServiceBoard, setShowServiceBoard] = useState(false);
   const navigate = useNavigate();
-  const [selectedServiceType, setSelectedServiceType] = useState(null); // State cho loại dịch vụ được chọn
-  const [serviceQuantities, setServiceQuantities] = useState({}); // Lưu trữ số lượng dịch vụ được chọn
 
-  // Hàm để thay đổi số lượng dịch vụ
-  const handleQuantityChange = (serviceId, change) => {
-    setServiceQuantities((prev) => ({
-      ...prev,
-      [serviceId]: Math.max(0, (prev[serviceId] || 0) + change),
-    }));
-  };
-
-  // Phân loại các dịch vụ theo loại (service type)
-  const groupedServices = field.services.reduce((acc, service) => {
-    if (!acc[service.type]) {
-      acc[service.type] = [];
-    }
-    acc[service.type].push(service);
-    return acc;
-  }, {});
   const handleDateSelect = (date) => {
     setSelectedDate(date.toISOString().split('T')[0]);
-  };
-
-  const handleTypeClick = (type) => {
-    // Nếu loại dịch vụ đã được chọn trước đó thì tắt đi (setSelectedServiceType null)
-    if (selectedServiceType === type) {
-      setSelectedServiceType(null);
-    } else {
-      setSelectedServiceType(type);
-    }
   };
 
   // Reset hours when ground changes
@@ -50,7 +26,12 @@ export const OrderField = () => {
     setSelectedHours({ start: '', end: '' });
   }, [selectedGround]);
 
- 
+  const handleQuantityChange = (serviceId, change) => {
+    setServiceQuantities(prev => ({
+      ...prev,
+      [serviceId]: Math.max(0, (prev[serviceId] || 0) + change)
+    }));
+  };
 
   const handleSendNotification = async (bookingId) => {
     try {
@@ -150,6 +131,22 @@ export const OrderField = () => {
     }
   };
 
+  const handleAddService = (service) => {
+    setServiceQuantities(prev => ({
+      ...prev,
+      [service._id]: (prev[service._id] || 0) + 1
+    }));
+    setShowServiceBoard(false);
+  };
+
+  const handleRemoveService = (serviceId) => {
+    setServiceQuantities(prev => {
+      const newQuantities = { ...prev };
+      delete newQuantities[serviceId];
+      return newQuantities;
+    });
+  };
+
   if (!field) return <div>Loading...</div>;
 
   return (
@@ -191,8 +188,8 @@ export const OrderField = () => {
           </div>
         </div>
         <div className="field-image-container">
-          {field.image_url ? (
-            <img src={field.image_url} alt={field.name} />
+          {field.image_urls ? (
+            <img src={field.image_urls[0]} alt={field.name} />
           ) : (
             <div className="placeholder-image"></div>
           )}
@@ -275,51 +272,68 @@ export const OrderField = () => {
             </div>
           </div>
 
+          {/* Services Selection */}
           <div className="services-section">
-  <h2>Additional Services</h2>
+            <h2>Additional Services</h2>
+            
+            {/* Selected Services List */}
+            {Object.keys(serviceQuantities).length > 0 && (
+              <div className="selected-services-list">
+                {field.services
+                  .filter(service => serviceQuantities[service._id] > 0)
+                  .map(service => (
+                    <div key={service._id} className="selected-service-item">
+                      <div className="service-info">
+                        <div className="service-header">
+                          <h3>{service.name}</h3>
+                          <button 
+                            className="remove-service-btn"
+                            onClick={() => handleRemoveService(service._id)}
+                          >
+                            ×
+                          </button>
+                        </div>
+                        <p className="service-price">{service.price} VNĐ</p>
+                      </div>
+                      <div className="quantity-controls">
+                        <button
+                          onClick={() => handleQuantityChange(service._id, -1)}
+                          className="quantity-btn"
+                        >
+                          -
+                        </button>
+                        <span className="quantity-display">
+                          {serviceQuantities[service._id] || 0}
+                        </span>
+                        <button
+                          onClick={() => handleQuantityChange(service._id, 1)}
+                          className="quantity-btn"
+                        >
+                          +
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            )}
 
-  {/* Hiển thị các loại dịch vụ */}
-  <div className="service-types">
-    {Object.keys(groupedServices).map((type) => (
-      <button
-        key={type}
-        onClick={() => handleTypeClick(type)} // Sử dụng handleTypeClick để kiểm tra nếu đã chọn loại
-        className={`service-type-btn ${selectedServiceType === type ? 'active' : ''}`}
-      >
-        {type}
-      </button>
-    ))}
-  </div>
+            {/* Add Service Button - Always visible */}
+            <button 
+              className="add-service-btn"
+              onClick={() => setShowServiceBoard(true)}
+            >
+              + Thêm dịch vụ
+            </button>
 
-  {/* Hiển thị dịch vụ của loại đã chọn */}
-  <div className="services-list">
-    {selectedServiceType && groupedServices[selectedServiceType]?.map((service) => (
-      <div key={service._id} className="service-item">
-        <div className="service-info">
-          <h3>{service.name}</h3>
-          <p className="service-price">{service.price} VNĐ</p>
-        </div>
-        <div className="quantity-controls">
-          <button
-            onClick={() => handleQuantityChange(service._id, -1)}
-            className="quantity-btn"
-          >
-            -
-          </button>
-          <span className="quantity-display">{serviceQuantities[service._id] || 0}</span>
-          <button
-            onClick={() => handleQuantityChange(service._id, 1)}
-            className="quantity-btn"
-          >
-            +
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
-
-
-
+            {/* Service Selection Board */}
+            {showServiceBoard && (
+              <ServiceSelectionBoard
+                services={field.services}
+                onAddService={handleAddService}
+                onClose={() => setShowServiceBoard(false)}
+              />
+            )}
+          </div>
 
           {/* New Order Summary Box */}
           <div className="order-summary-box">
@@ -340,7 +354,6 @@ export const OrderField = () => {
                 </div>
               </div>
             )}
-</div>
 
             {/* Services Summary */}
             {Object.entries(serviceQuantities).map(([serviceId, quantity]) => {
