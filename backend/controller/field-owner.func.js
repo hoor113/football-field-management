@@ -315,24 +315,37 @@ export const acceptBooking = async (req, res) => {
     const { bookingId } = req.params;
 
     try {
-        // Find booking and verify it exists
+        // Find booking and verify its existence
         const booking = await Booking.findById(bookingId);
         if (!booking) {
-            return res.status(404).json({ success: false, message: 'Yêu cầu đặt sân không tồn tại' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Yêu cầu đặt sân không tồn tại' 
+            });
         }
 
-        // Update booking status to accepted
-        booking.status = 'confirmed';
+        // Find overlapping bookings (same start time)
+        const overlappingBookings = await Booking.find({
+            field_id: booking.field_id,
+            ground_id: booking.ground_id,
+            start_time: booking.start_time,
+            _id: { $ne: bookingId }, // Exclude the current booking
+            status: 'pending' // Only consider pending bookings
+        });
 
+        console.log(overlappingBookings)
         // Find field and populate grounds
         const field = await Field.findById(booking.field_id);
         if (!field) {
-            return res.status(404).json({ success: false, message: 'Sân không tồn tại' });
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Sân không tồn tại' 
+            });
         }
 
         // Find the specific ground
-        const ground = field.grounds.find(ground => 
-            ground._id.toString() === booking.ground_id.toString()
+        const ground = field.grounds.find(g => 
+            g._id.toString() === booking.ground_id.toString()
         );
         
         if (!ground) {
@@ -366,29 +379,31 @@ export const acceptBooking = async (req, res) => {
             isRead: false,
             type: 'success'
         });
-        overlappingBookings.forEach(overlappingBooking => {
-            console.log(overlappingBooking.customer_id)
-        })
+
         // Handle overlapping bookings
         const rejectPromises = overlappingBookings.map(async (overlappingBooking) => {
-            
             // Skip if it's the same customer
             if (overlappingBooking.customer_id.toString() === booking.customer_id.toString()) {
                 return;
             }
-            console.log(overlappingBooking.customer_id)
-            // Update booking status to cancelled
-            overlappingBooking.status = 'cancelled';
-            await overlappingBooking.save();
 
-            // Create rejection notification
-            await Notification.create({
-                customerId: overlappingBooking.customer_id,
-                bookingId: overlappingBooking._id,
-                message: 'Yêu cầu đặt sân của bạn đã bị từ chối do bị trùng thời gian.',
-                isRead: false,
-                type: 'failed'
-            });
+            try {
+                // Update booking status to cancelled
+                overlappingBooking.status = 'cancelled';
+                await overlappingBooking.save();
+
+                // Create rejection notification
+                await Notification.create({
+                    customerId: overlappingBooking.customer_id,
+                    bookingId: overlappingBooking._id,
+                    message: 'Yêu cầu đặt sân của bạn đã bị từ chối do bị trùng thời gian.',
+                    isRead: false,
+                    type: 'failed'
+                });
+            } catch (error) {
+                console.error('Error rejecting overlapping booking:', error);
+                throw error; // Re-throw to be caught by the main try-catch
+            }
         });
 
         // Wait for all rejection operations to complete

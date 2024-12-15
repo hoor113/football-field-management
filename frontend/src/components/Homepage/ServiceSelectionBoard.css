@@ -21,11 +21,15 @@
   overflow-y: auto;
 }
 
+
+
 .service-board-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+  position: relative;
+  padding-right: 40px;
 }
 
 .service-board-header h2 {
@@ -35,13 +39,45 @@
 }
 
 .close-button {
-  background: none;
+  background-color: #ff4444;
   border: none;
-  font-size: 24px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
-  color: #666;
+  position: absolute;
+  right: 10px;
+  top: -3px;
+  transition: background-color 0.2s;
+  padding: 0;
 }
 
+.close-button:hover {
+  background-color: #ff0000;
+}
+
+.close-icon {
+  color: white;
+  font-size: 24px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  height: 100%;
+  margin-bottom: 2px;
+}
+
+.close-icon-x {
+  font-weight: bold;
+  height: 75%;
+  margin-right: 1px;
+  margin-bottom: 2px;
+  top: 1px
+}
 .service-tabs {
   display: flex;
   gap: 10px;

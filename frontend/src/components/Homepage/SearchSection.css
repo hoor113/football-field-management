@@ -5,6 +5,13 @@
     padding: 0 20px;
 }
 
+.search-results-title {
+    text-align: center;
+    width: 100%;
+    color: rgb(20, 20, 20);
+    margin: 5px auto;
+}
+
 .search-form {
     display: flex;
     justify-content: center;

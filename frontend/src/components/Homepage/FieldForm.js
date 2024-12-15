@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import './FieldForm.css';
 
-const isValidUrl = (url) => {
-  const regex = /^(https?:\/\/)?([\w\d\-_]+\.)+[\w\d\-_]+(\/[\w\d\-_#\?&%=]*)?/;
-  return regex.test(url);
-};
-
 export const FieldForm = ({ onSubmit, onCancel }) => {
   const [newField, setNewField] = useState({
     name: '',
@@ -19,32 +14,32 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
   const [currentOperatingHours, setCurrentOperatingHours] = useState({
     start_hour: 7,
-    end_hour: 23,
+    end_hour: 23
   });
 
   const addOperatingHours = () => {
     const { start_hour, end_hour } = currentOperatingHours;
 
     if (start_hour >= end_hour) {
-      alert('End time must be after start time');
+      alert("End time must be after start time");
       return;
     }
 
-    const hasOverlap = newField.operating_hours.some(
-      (hours) => start_hour < hours.end_hour && end_hour > hours.start_hour
+    const hasOverlap = newField.operating_hours.some(hours =>
+      (start_hour < hours.end_hour && end_hour > hours.start_hour)
     );
 
     if (hasOverlap) {
-      alert('Operating hours cannot overlap');
+      alert("Operating hours cannot overlap");
       return;
     }
 
-    setNewField((prev) => ({
+    setNewField(prev => ({
       ...prev,
       operating_hours: [
         ...prev.operating_hours,
-        { start_hour: Number(start_hour), end_hour: Number(end_hour) },
-      ].sort((a, b) => a.start_hour - b.start_hour),
+        { start_hour: Number(start_hour), end_hour: Number(end_hour) }
+      ].sort((a, b) => a.start_hour - b.start_hour)
     }));
 
     setCurrentOperatingHours({ start_hour: 7, end_hour: 23 });
@@ -52,12 +47,12 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
   const handleSubmit = () => {
     if (!newField.name || !newField.address || !newField.base_price || !newField.total_grounds) {
-      alert('Please fill in all required fields');
+      alert("Please fill in all required fields");
       return;
     }
 
     if (newField.operating_hours.length === 0) {
-      alert('Please add at least one operating hours range');
+      alert("Please add at least one operating hours range");
       return;
     }
 
@@ -84,10 +79,6 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
     const lastUrl = newField.image_url[newField.image_url.length - 1];
 
     // Check if the URL is valid
-    if (!isValidUrl(lastUrl)) {
-      alert('Please enter a valid image URL');
-      return;
-    }
 
     setNewField((prev) => ({
       ...prev,
@@ -177,9 +168,9 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
                 </span>
                 <button
                   onClick={() => {
-                    setNewField((prev) => ({
+                    setNewField(prev => ({
                       ...prev,
-                      operating_hours: prev.operating_hours.filter((_, i) => i !== index),
+                      operating_hours: prev.operating_hours.filter((_, i) => i !== index)
                     }));
                   }}
                   className="remove-hours-button"
@@ -201,12 +192,10 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
               max="23"
               placeholder="Start Hour (0-23)"
               value={currentOperatingHours.start_hour}
-              onChange={(e) =>
-                setCurrentOperatingHours((prev) => ({
-                  ...prev,
-                  start_hour: parseInt(e.target.value),
-                }))
-              }
+              onChange={(e) => setCurrentOperatingHours(prev => ({
+                ...prev,
+                start_hour: parseInt(e.target.value)
+              }))}
               className="modal-input"
             />
             <input
@@ -215,12 +204,10 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
               max="24"
               placeholder="End Hour (1-24)"
               value={currentOperatingHours.end_hour}
-              onChange={(e) =>
-                setCurrentOperatingHours((prev) => ({
-                  ...prev,
-                  end_hour: parseInt(e.target.value),
-                }))
-              }
+              onChange={(e) => setCurrentOperatingHours(prev => ({
+                ...prev,
+                end_hour: parseInt(e.target.value)
+              }))}
               className="modal-input"
             />
             <button
@@ -241,7 +228,10 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
       {/* Form Buttons */}
       <div className="modal-buttons">
-        <button onClick={handleSubmit} className="submit-button">
+        <button
+          onClick={handleSubmit}
+          className="submit-button"
+        >
           Add Field
         </button>
         <button onClick={onCancel} className="cancel-button">
@@ -250,4 +240,4 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       </div>
     </div>
   );
-};
+}; 

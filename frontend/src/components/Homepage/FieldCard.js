@@ -4,7 +4,7 @@ import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import EditFieldForm from './EditFieldForm.js';
-
+import RatingDisplay from './RatingDisplay.js';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
@@ -216,8 +216,10 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                     <div className="services-grid">
                         {field.services.map((service, index) => (
                             <div key={index} className="service-item">
-                                <div className="service-name">{service.name}</div>
-                                <div className="service-type">{service.type}</div>
+                                <div className="service-header">
+                                    <span className="service-name">{service.name}</span>
+                                    <span className="service-type">{service.type}</span>
+                                </div>
                                 <div className="service-price">
                                     {service.price.toLocaleString()} VND 
                                 </div>

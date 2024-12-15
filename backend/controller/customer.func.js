@@ -254,3 +254,18 @@ export const getFieldRatings = async (req, res) => {
     }
 };
 
+export const getAverageRating = async (req, res) => {
+    try {
+        const { fieldId } = req.params;
+        const ratings = await Rating.find({ field_id: fieldId });
+        
+        if (ratings.length === 0) {
+            return res.json({ averageRating: 0 });
+        }
+
+        const averageRating = ratings.reduce((acc, curr) => acc + curr.stars, 0) / ratings.length;
+        res.json({ averageRating });
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching average rating', error: error.message });
+    }
+};
