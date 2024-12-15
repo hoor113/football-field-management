@@ -41,65 +41,70 @@ export const ServiceForm = ({ fieldId, onClose }) => {
         <div className="modal-overlay">
             <div className="service-form-modal">
                 {/* <button className="close-button" onClick={onClose}>×</button> */}
-                
+
                 <div className="modal-header">
                     <h2>Add New Service</h2>
                 </div>
-                
+
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
                         placeholder="Service Name"
                         value={service.name}
-                        onChange={(e) => setService({...service, name: e.target.value})}
+                        onChange={(e) => setService({ ...service, name: e.target.value })}
                         required
                         className="modal-input"
                     />
-                    
+
                     <input
                         type="text"
                         placeholder="Service Type"
                         value={service.type}
-                        onChange={(e) => setService({...service, type: e.target.value})}
+                        onChange={(e) => setService({ ...service, type: e.target.value })}
                         required
                         className="modal-input"
                     />
-                    
+
                     <div className="price-unit-container">
                         <input
                             type="number"
                             placeholder="Price"
                             value={service.price}
-                            onChange={(e) => setService({...service, price: e.target.value})}
+                            onChange={(e) => {
+                                const value = Number(e.target.value);
+                                if (value >= 0) {
+                                    setService({ ...service, price: value });
+                                }
+                            }}
                             required
                             className="modal-input price-input"
                         />
-                        
+
                         <input
                             type="text"
                             placeholder="Unit (e.g., per hour, per session)"
                             value={service.unit}
-                            onChange={(e) => setService({...service, unit: e.target.value})}
+                            onChange={(e) => setService({ ...service, unit: e.target.value })}
                             required
                             className="modal-input unit-input"
                         />
                     </div>
-                    
+
                     <input
                         type="url"
                         placeholder="Image URL"
                         value={service.imageUrl}
-                        onChange={(e) => setService({...service, imageUrl: e.target.value})}
+                        onChange={(e) => setService({ ...service, imageUrl: e.target.value })}
                         className="modal-input"
                     />
-                    
+
                     <div className="form-buttons">
                         <button type="submit" className="submit-button">
                             Add Service
                         </button>
                         <button type="button" onClick={onClose} className="cancel-button">
                             Cancel
-                        </button>                      
+                        </button>
                     </div>
                 </form>
             </div>

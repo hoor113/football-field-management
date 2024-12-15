@@ -115,9 +115,15 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       />
       <input
         type="number"
+        min="0"
         placeholder="Base Price"
         value={newField.base_price}
-        onChange={(e) => setNewField({ ...newField, base_price: Number(e.target.value) })}
+        onChange={(e) => {
+          const value = Number(e.target.value);
+          if (value >= 0) {
+            setNewField({ ...newField, base_price: value });
+          }
+        }}
         className="modal-input"
       />
       <input
@@ -129,9 +135,15 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       />
       <input
         type="number"
+        min="0"
         placeholder="Total Grounds"
         value={newField.total_grounds}
-        onChange={(e) => setNewField({ ...newField, total_grounds: Number(e.target.value) })}
+        onChange={(e) => {
+          const value = Number(e.target.value);
+          if (value >= 0) {
+            setNewField({ ...newField, total_grounds: value });
+          }
+        }}
         className="modal-input"
       />
 

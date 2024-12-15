@@ -6,6 +6,10 @@ import Modal from './Modal';
 import EditFieldForm from './EditFieldForm.js';
 import RatingDisplay from './RatingDisplay.js';
 import { ServiceTypeForm } from './SerViceTypeForm.js';
+import RecommendedServicesForm from './RecommendedServicesForm';
+import { Button } from '@mui/material';
+import RoomServiceIcon from '@mui/icons-material/RoomService';
+import StadiumIcon from '@mui/icons-material/Stadium';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
@@ -13,6 +17,11 @@ export const FieldCard = ({ field, isLoggedIn }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
     const [showServiceTypeForm, setShowServiceTypeForm] = useState(false);
+    const [showAllServices, setShowAllServices] = useState(false);
+    const [showRecommendedServicesForm, setShowRecommendedServicesForm] = useState(false);
+    const [showServiceDropdown, setShowServiceDropdown] = useState(false);
+    const [showFieldDropdown, setShowFieldDropdown] = useState(false);
+
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
     };
@@ -75,6 +84,21 @@ export const FieldCard = ({ field, isLoggedIn }) => {
         }
     };
 
+    const handleRecommendedServicesUpdate = (updatedServices) => {
+        field.recommended_services = updatedServices;
+        // If you need to refresh the whole component or update the parent
+        // window.location.reload();
+    };
+
+    // Group services by type
+    const groupedServices = field.services.reduce((acc, service) => {
+        if (!acc[service.type]) {
+            acc[service.type] = [];
+        }
+        acc[service.type].push(service);
+        return acc;
+    }, {});
+
     return (
         <div className="field-card">
             <div className="field-header">
@@ -109,33 +133,83 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 )}
             </div>
 
-            <div className="services-section">
+            {/* <div className="services-section">
                 <h3>Services</h3>
-                <div className="service-types-grid">
-                    {/* {field.service_types && (
-                        <>
-                            {field.service_types.sv1 && (
-                                <div className="service-type-item">
-                                    <span className="service-type-label">Type 1:</span>
-                                    <span className="service-type-value">{field.service_types.sv1}</span>
+                <div className="services-grid">
+                        {field.services.map((service, index) => (
+                            <div key={index} className="service-item">
+                                <div className="service-header">
+                                    <span className="service-name">{service.name}</span>
+                                    <span className="service-type">{service.type}</span>
                                 </div>
-                            )}
-                            {field.service_types.sv2 && (
-                                <div className="service-type-item">
-                                    <span className="service-type-label">Type 2:</span>
-                                    <span className="service-type-value">{field.service_types.sv2}</span>
+                                <div className="service-price">
+                                    {service.price.toLocaleString()} VND 
                                 </div>
-                            )}
-                            {field.service_types.sv3 && (
-                                <div className="service-type-item">
-                                    <span className="service-type-label">Type 3:</span>
-                                    <span className="service-type-value">{field.service_types.sv3}</span>
-                                </div>
-                            )}
-                        </>
-                    )} */}
+                            </div>
+                        ))}
                 </div>
+                
+            </div> */}
+
+            <div className="recommended-services">
+                <h3>Dịch vụ nổi bật</h3>
+                <div className="recommended-services-grid">
+                    {[0, 1, 2].map((index) => (
+                        <div key={index} className="recommended-service-slot">
+                            {field.recommended_services && field.recommended_services[index] ? (
+                                <div key={index} className="service-item">
+                                    <div className="service-header">
+                                        <span className="service-name">{field.recommended_services[index].name}</span>
+                                        <span className="service-type">{field.recommended_services[index].type}</span>
+                                    </div>
+                                    <div className="service-price">
+                                        {field.recommended_services[index].price.toLocaleString()} VND
+                                    </div>
+                                </div>
+                            ) : (
+                                <span className="empty-service">Không có dịch vụ ở đây</span>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <button
+                    className="view-all-services-btn"
+                    onClick={() => setShowAllServices(true)}
+                >
+                    Xem các dịch vụ
+                </button>
             </div>
+
+            {showAllServices && (
+                <div className="modal-overlay">
+                    <div className="all-services-modal">
+                        <h3>Tất cả dịch vụ</h3>
+                        {Object.entries(groupedServices).map(([type, services]) => (
+                            <div key={type}>
+                                <h4>{type}</h4>
+                                <div className="services-grid">
+                                    {services.map((service, index) => (
+                                        <div key={index} className="service-item">
+                                            <div className="service-header">
+                                                <span className="service-name">{service.name}</span>
+                                            </div>
+                                            <div className="service-price">
+                                                {service.price.toLocaleString()} VND
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                        <button
+                            className="view-all-services-btn"
+                            onClick={() => setShowAllServices(false)}
+                        >
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            )}
 
             {showServiceForm && (
                 <ServiceForm
@@ -151,32 +225,75 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             />
 
             {isLoggedIn === 1 ? (
-                <>
-                    <button
-                        className="add-service-button"
-                        onClick={() => setShowServiceForm(true)}
-                    >
-                        Add Services
-                    </button>
-                    <button
-                        className="edit-field-button"
-                        onClick={() => setIsEditModalOpen(true)}
-                    >
-                        Edit Field
-                    </button>
-                    <button
-                        className="delete-field-button"
-                        onClick={handleDeleteField}
-                    >
-                        Delete Field
-                    </button>
-                    <button
-                        className="add-service-type-button"
-                        onClick={() => setShowServiceTypeForm(true)}
-                    >
-                        Add Service Types
-                    </button>
-                </>
+                <div className="field-action-buttons">
+                    <div className="field-dropdown">
+                        <Button 
+                            className="field-dropdown-button"
+                            variant="outlined"
+                            startIcon={<RoomServiceIcon />}
+                            onClick={() => {
+                                setShowServiceDropdown(!showServiceDropdown);
+                                setShowFieldDropdown(false);
+                            }}
+                            sx={{
+                                color: '#1976d2',
+                                borderColor: '#1976d2',
+                                backgroundColor: 'white',
+                                width: '100%',
+                                '&:hover': {
+                                    borderColor: '#1976d2',
+                                    backgroundColor: 'rgba(25, 118, 210, 0.04)'
+                                }
+                            }}
+                        >
+                            DỊCH VỤ
+                        </Button>
+                        {showServiceDropdown && (
+                            <div className="field-dropdown-content">
+                                <button onClick={() => setShowServiceForm(true)}>
+                                    Thêm dịch vụ
+                                </button>
+                                <button onClick={() => setShowRecommendedServicesForm(true)}>
+                                    Chọn dịch vụ nổi bật
+                                </button>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="field-dropdown">
+                        <Button 
+                            className="field-dropdown-button"
+                            variant="outlined"
+                            startIcon={<StadiumIcon />}
+                            onClick={() => {
+                                setShowFieldDropdown(!showFieldDropdown);
+                                setShowServiceDropdown(false);
+                            }}
+                            sx={{
+                                color: '#2e7d32',
+                                borderColor: '#2e7d32',
+                                backgroundColor: 'white',
+                                width: '100%',
+                                '&:hover': {
+                                    borderColor: '#2e7d32',
+                                    backgroundColor: 'rgba(46, 125, 50, 0.04)'
+                                }
+                            }}
+                        >
+                            SÂN
+                        </Button>
+                        {showFieldDropdown && (
+                            <div className="field-dropdown-content">
+                                <button onClick={() => setIsEditModalOpen(true)}>
+                                    Chỉnh sửa sân
+                                </button>
+                                <button onClick={handleDeleteField}>
+                                    Xóa sân
+                                </button>
+                            </div>
+                        )}
+                    </div>
+                </div>
             ) : null}
             {isLoggedIn === 2 ? <button
                 className="add-service-button"
@@ -198,6 +315,17 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                             field={field}
                             onClose={() => setIsEditModalOpen(false)}
                             onSubmit={handleEditField}
+                        />
+                    </div>
+                </div>
+            )}
+            {showRecommendedServicesForm && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <RecommendedServicesForm
+                            field={field}
+                            onClose={() => setShowRecommendedServicesForm(false)}
+                            onUpdate={handleRecommendedServicesUpdate}
                         />
                     </div>
                 </div>

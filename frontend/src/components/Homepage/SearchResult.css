@@ -62,8 +62,6 @@
 
 .field-image {
     border-radius: 4px;
-    height: 100%;
-    margin-bottom: 10px;
     object-fit: cover;
     display: block;
     margin-left: auto;

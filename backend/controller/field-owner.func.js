@@ -104,7 +104,7 @@ export const UploadService = async (req, res) => {
         }
         field.services.push({ name, type, price })
         await field.save()
-        res.status(200).json({ message: 'Thêm dịch v�� thành công', field });
+        res.status(200).json({ message: 'Thêm dịch vụ thành công', field });
     } catch (error) {
         res.status(500).json({ message: 'Có lỗi xảy ra', error: error.message });
     }
@@ -575,6 +575,85 @@ export const editFieldAttributes = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: "Có lỗi xảy ra khi cập nhật thông tin sân",
+            error: error.message
+        });
+    }
+};
+
+export const updateRecommendedServices = async (req, res) => {
+    try {
+        const { fieldId } = req.params;
+        const { serviceIds } = req.body; // Array of service IDs [id1, id2, id3]
+        
+        // Validate input
+        if (!Array.isArray(serviceIds)) {
+            return res.status(400).json({
+                success: false,
+                message: 'serviceIds must be an array'
+            });
+        }
+
+        if (serviceIds.length > 3) {
+            return res.status(400).json({
+                success: false,
+                message: 'Maximum 3 recommended services allowed'
+            });
+        }
+
+        // Find the field
+        const field = await Field.findById(fieldId);
+        if (!field) {
+            return res.status(404).json({
+                success: false,
+                message: 'Field not found'
+            });
+        }
+
+        // Verify field owner
+        if (field.owner_id.toString() !== req.user.id) {
+            return res.status(403).json({
+                success: false,
+                message: 'Not authorized to modify this field'
+            });
+        }
+
+        // Verify that all serviceIds exist in the field's services
+        const validServiceIds = serviceIds.every(serviceId => 
+            field.services.some(service => service._id.toString() === serviceId)
+        );
+
+        if (!validServiceIds) {
+            return res.status(400).json({
+                success: false,
+                message: 'One or more service IDs are invalid'
+            });
+        }
+
+        // Create recommended services array from the selected services
+        const recommendedServices = serviceIds.map(serviceId => {
+            const service = field.services.find(s => s._id.toString() === serviceId);
+            return {
+                name: service.name,
+                price: service.price,
+                type: service.type
+            };
+        });
+
+        // Update the field
+        field.recommended_services = recommendedServices;
+        await field.save();
+
+        res.status(200).json({
+            success: true,
+            message: 'Recommended services updated successfully',
+            recommended_services: field.recommended_services
+        });
+
+    } catch (error) {
+        console.error('Error updating recommended services:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Error updating recommended services',
             error: error.message
         });
     }

@@ -64,17 +64,12 @@ const FieldSchema = new Schema({
       },
       message: 'A field can only have up to 10 images.'
     },
-    default: []
+    default: ['https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzBeng5o2seSmkdywgldLhL4PQd0nAhJWNnQ&s']
   },
   status: { type: Boolean, default: true },
   total_grounds: { type: Number, required: true },
   grounds: [GroundSchema],
   services: [ServiceSchema],
-  service_types: {
-    sv1: { type: String, default: '' },
-    sv2: { type: String, default: '' },
-    sv3: { type: String, default: '' }
-  },
   operating_hours: {
     type: [OperatingHoursSchema],
     required: true,
@@ -110,7 +105,12 @@ const FieldSchema = new Schema({
             time_slots: generateTimeSlots(hours.start_hour, hours.end_hour)
         }));
     }
-  }
+  },
+  recommended_services: [{
+    name: { type: String, required: true },
+    price: { type: Number, required: true },
+    type: { type: String, required: true }
+  }]
 });
 
 // Calculate average ratings - Not sure how it works

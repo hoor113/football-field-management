@@ -92,7 +92,7 @@
 }
 
 .service-name {
-    font-weight: 600;
+    font-weight: 700;
     color: #2c3e50;
     font-size: 14px;
 }
@@ -275,4 +275,128 @@
     .field-card img {
         height: 150px;
     }
+}
+
+.recommended-services {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.recommended-services-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.recommended-service-slot {
+    background-color: white;
+    padding: 12px 15px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.empty-service {
+    color: #666;
+    font-style: italic;
+    text-align: center;
+}
+
+.view-all-services-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #1976d2;  /* MUI primary blue */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 0.2s;
+}
+
+.view-all-services-btn:hover {
+    background-color: #1565c0;  /* Slightly darker blue on hover */
+}
+
+.all-services-modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 80%;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.edit-recommended-services-button {
+    display: block;
+    width: 100%;
+    margin: 5px 0;
+    padding: 10px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+    font-family: auto;
+    font-size: 18px;
+}
+
+.edit-recommended-services-button:hover {
+    background-color: #f57c00;
+}
+
+.field-action-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    width: 100%;
+}
+
+.field-dropdown {
+    position: relative;
+    flex: 1;
+}
+
+.field-dropdown-content {
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    z-index: 1000;
+    margin-bottom: 8px;
+}
+
+.field-dropdown-content button {
+    width: 100%;
+    padding: 8px 16px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.field-dropdown-content button:hover {
+    background-color: rgba(0, 0, 0, 0.04);
 }
