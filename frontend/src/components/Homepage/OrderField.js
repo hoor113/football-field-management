@@ -173,6 +173,15 @@ export const OrderField = () => {
     });
   };
 
+  const isTimeSlotPast = (slotTime) => {
+    const [hours, minutes] = slotTime.split(':');
+    const slotDate = new Date(selectedDate);
+    slotDate.setHours(parseInt(hours), parseInt(minutes), 0);
+    
+    const now = new Date();
+    return slotDate < now;
+  };
+
   if (!field) return <div>Loading...</div>;
 
   return (
@@ -215,7 +224,7 @@ export const OrderField = () => {
         </div>
         <div className="field-image-container">
           {field.image_url ? (
-            <img src={field.image_url[0]} alt={field.name} />
+            <img src={field.image_url} alt={field.name} />
           ) : (
             <div className="placeholder-image"></div>
           )}
@@ -272,14 +281,17 @@ export const OrderField = () => {
                       ?.time_slots
                       .map((slot, index) => {
                         const isOccupied = isTimeSlotOccupied(slot.start_time, slot.end_time);
+                        const isPast = isTimeSlotPast(slot.start_time);
+                        
                         return (
                           <div
                             key={index}
-                            className={`time-slot ${isOccupied ? 'occupied' : 'vacant'} ${
-                              selectedHours.start === slot.start_time ? 'selected' : ''
-                            }`}
+                            className={`time-slot 
+                              ${isOccupied ? 'occupied' : 'vacant'} 
+                              ${selectedHours.start === slot.start_time ? 'selected' : ''}
+                              ${isPast ? 'past' : ''}`}
                             onClick={() => {
-                              if (!isOccupied) {
+                              if (!isOccupied && !isPast) {
                                 setSelectedHours({
                                   start: slot.start_time,
                                   end: slot.end_time
@@ -316,12 +328,6 @@ export const OrderField = () => {
                       <div className="service-info">
                         <div className="service-header">
                           <h3>{service.name}</h3>
-                          <button 
-                            className="remove-service-btn"
-                            onClick={() => handleRemoveService(service._id)}
-                          >
-                            ×
-                          </button>
                         </div>
                         <p className="service-price">{service.price} VNĐ</p>
                       </div>
@@ -340,6 +346,12 @@ export const OrderField = () => {
                           className="quantity-btn"
                         >
                           +
+                        </button>
+                        <button 
+                          className="remove-service-btn"
+                          onClick={() => handleRemoveService(service._id)}
+                        >
+                          Bỏ
                         </button>
                       </div>
                     </div>

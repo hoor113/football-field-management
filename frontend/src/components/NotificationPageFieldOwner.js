@@ -39,17 +39,33 @@ const NotificationPageFieldOwner = () => {
             });
             const data = await response.json();
             if (data.success) {
-                // Update isRead status using the correct endpoint
+                // Update isRead status for the accepted notification
                 await fetch(`/api/field_owner/notification/read/${notificationId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
                     }
                 });
-                // Remove the notification from the list after accepting
-                setNotifications(prevNotifications => 
-                    prevNotifications.filter(notif => notif.bookingDetails._id !== bookingId)
-                );
+
+                // Remove all notifications for the same time slot (both accepted and rejected)
+                setNotifications(prevNotifications => {
+                    const acceptedBooking = prevNotifications.find(
+                        notif => notif.bookingDetails._id === bookingId
+                    );
+                    
+                    if (!acceptedBooking) return prevNotifications;
+
+                    return prevNotifications.filter(notif => 
+                        // Keep notifications that don't match the time slot
+                        notif.bookingDetails.start_time !== acceptedBooking.bookingDetails.start_time ||
+                        // Or are for a different ground
+                        notif.bookingDetails.ground_id !== acceptedBooking.bookingDetails.ground_id
+                    );
+                });
+
+                // Optionally refresh all notifications to ensure consistency
+                fetchNotifications();
+                window.location.reload();
             }
         } catch (error) {
             console.error('Error accepting booking:', error);
@@ -77,6 +93,7 @@ const NotificationPageFieldOwner = () => {
                 setNotifications(prevNotifications => 
                     prevNotifications.filter(notif => notif.bookingDetails._id !== bookingId)
                 );
+                window.location.reload();
             }
         } catch (error) {
             console.error('Error declining booking:', error);

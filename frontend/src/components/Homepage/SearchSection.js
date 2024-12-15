@@ -63,7 +63,7 @@ export const SearchSection = () => {
 
             {searchResults ? (
                 <div className="search-results">
-                    <h2>Search Results</h2>
+                    <h2 className="search-results-title">Search Results</h2>
                     <div className="fields-grid">
                         {searchResults.map(field => (
                             <FieldCard key={field._id} field={field} isLoggedIn={2} />

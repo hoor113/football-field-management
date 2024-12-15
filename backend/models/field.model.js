@@ -6,7 +6,7 @@ const ServiceSchema = new Schema({
   name: { type: String, required: true },
   type: { type: String, required: true },
   description: { type: String, default: 'Không có mô tả' },
-  image_url: { type: String,required: true },
+  image_url: { type: String, default: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRzBeng5o2seSmkdywgldLhL4PQd0nAhJWNnQ&s' },
   unit: { type: String, required: true, default: 'cái' },
   price: { type: Number, required: true }
 });
@@ -56,20 +56,16 @@ const FieldSchema = new Schema({
   description: { type: String, default: 'Không có mô tả' },
   address: { type: String, required: true },
   base_price: { type: Number, required: true },
-  image_url: {
-    type: [String],
-    validate: {
-      validator: function(v) {
-        return v.length <= 100;  // Giới hạn số lượng URL tối đa là 100
-      },
-      message: 'A field can only have up to 100 images.'
-    },
-    default: []
-  },
+  image_url: { type: String },
   status: { type: Boolean, default: true },
   total_grounds: { type: Number, required: true },
   grounds: [GroundSchema],
   services: [ServiceSchema],
+  service_types: {
+    sv1: { type: String, default: '' },
+    sv2: { type: String, default: '' },
+    sv3: { type: String, default: '' }
+  },
   operating_hours: {
     type: [OperatingHoursSchema],
     required: true,
@@ -140,5 +136,23 @@ FieldSchema.virtual('averageRating', {
     ]
   });
 */
+
+FieldSchema.virtual('averageRating').get(async function() {
+  const Rating = mongoose.model('Rating');
+  const result = await Rating.aggregate([
+    { $match: { field_id: this._id }},
+    { 
+      $group: {
+        _id: null,
+        averageStars: { $avg: '$stars' },
+        totalRatings: { $sum: 1 }
+      }
+    }
+  ]);
+  return result[0] ? result[0].averageRating : 0;
+});
+
+// Make sure virtuals are included in toJSON
+FieldSchema.set('toJSON', { virtuals: true });
 
 export const Field =  mongoose.model("Field", FieldSchema)
