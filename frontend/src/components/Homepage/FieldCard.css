@@ -62,10 +62,9 @@
     border-radius: 8px;
 }
 
-.services-section h3 {
-    margin: 0 0 15px 0;
-    color: #333;
-    font-size: 18px;
+.field-card h3 {
+    color: #2d3748;
+    margin: 10px 0;
 }
 
 .services-grid {
@@ -121,7 +120,8 @@
 
 .add-service-button,
 .edit-field-button,
-.delete-field-button {
+.delete-field-button,
+.add-service-type-button {
     display: block;
     width: 100%;
     margin: 5px 0;
@@ -142,6 +142,10 @@
 
 .delete-field-button {
     background-color: #dc3545; /* Red color for delete button */
+}
+
+.add-service-type-button {
+    background-color: #e4ec0c;
 }
 
 .modal-overlay {

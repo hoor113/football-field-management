@@ -112,7 +112,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             <div className="services-section">
                 <h3>Services</h3>
                 <div className="service-types-grid">
-                    {field.service_types && (
+                    {/* {field.service_types && (
                         <>
                             {field.service_types.sv1 && (
                                 <div className="service-type-item">
@@ -133,7 +133,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                                 </div>
                             )}
                         </>
-                    )}
+                    )} */}
                 </div>
             </div>
 
