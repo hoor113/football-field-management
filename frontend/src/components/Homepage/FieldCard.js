@@ -74,22 +74,45 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             alert('An unexpected error occurred. Please try again later.');
         }
     };
-    // Go to the previous image
-    const handlePrevImage = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === 0 ? field.image_url.length - 1 : prevIndex - 1
-        );
-        resetAutoChangeImage();
-    };
-
-    // Go to the next image
     const handleNextImage = () => {
-        setCurrentImageIndex((prevIndex) =>
-            prevIndex === field.image_url.length - 1 ? 0 : prevIndex + 1
-        );
+        setCurrentImageIndex((currentIndex) => {
+            // Calculate the next image index
+            const nextIndex = currentIndex === field.image_url.length - 1 ? 0 : currentIndex + 1;
+            
+            // Find the image element within this specific card and apply transition effect
+            const img = document.getElementById(`field-image-${field._id}`);
+            if (img) {
+                img.style.animation = 'none';  // Reset current animation
+                void img.offsetWidth;  // Trigger reflow to enable animation
+                img.style.animation = 'fadeIn 0.3s ease-in-out';  // Apply new fade-in animation
+            }
+            
+            return nextIndex;  // Return the new index
+        });
+        
+        // Reset auto-change timer
         resetAutoChangeImage();
     };
-
+    
+    const handlePrevImage = () => {
+        setCurrentImageIndex((currentIndex) => {
+            // Calculate the previous image index
+            const prevIndex = currentIndex === 0 ? field.image_url.length - 1 : currentIndex - 1;
+            
+            // Find the image element within this specific card and apply transition effect
+            const img = document.getElementById(`field-image-${field._id}`);
+            if (img) {
+                img.style.animation = 'none';  // Reset current animation
+                void img.offsetWidth;  // Trigger reflow to enable animation
+                img.style.animation = 'fadeIn 0.3s ease-in-out';  // Apply new fade-in animation
+            }
+            
+            return prevIndex;  // Return the new index
+        });
+        
+        // Reset auto-change timer
+        resetAutoChangeImage();
+    };
     // Change image every 3 seconds automatically if autoChangeImage is true
     useEffect(() => {
         if (field.image_url.length <= 1) return;  // Only auto-change if more than 1 image
@@ -100,7 +123,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 setCurrentImageIndex((prevIndex) =>
                     prevIndex === field.image_url.length - 1 ? 0 : prevIndex + 1
                 );
-            }, 3000); // Change image every 3 seconds
+            }, 10000); // Change image every 10 seconds
         }
 
         // Clean up the interval on component unmount
@@ -112,7 +135,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
         setAutoChangeImage(false);
         setTimeout(() => {
             setAutoChangeImage(true);
-        }, 3000); // Restart auto-change after 3 seconds
+        }, 10000); // Restart auto-change after 3 seconds
     };
 
     return (
@@ -126,27 +149,40 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 <>
                     {/* Image navigation buttons */}
                     <div className="image-navigation">
-                        <button onClick={handlePrevImage} className="prev-button">
-                            &lt;
-                        </button>
-                        <img
-                            src={field.image_url[currentImageIndex]}
-                            alt={field.name}
-                            className="field-image"
-                            onClick={resetAutoChangeImage} // Reset auto change when clicked
-                        />
-                        <button onClick={handleNextImage} className="next-button">
-                            &gt;
-                        </button>
-                    </div>
-                </>
-            ) : (
-                <img
-                    src={field.image_url[0]} // Always show the only image
-                    alt={field.name}
-                    className="field-image"
+    <button onClick={handlePrevImage} className="prev-button">
+        ‹
+    </button>
+    <img
+        src={field.image_url[currentImageIndex]}
+        alt={field.name}
+        className="field-image"
+        onClick={resetAutoChangeImage}
+    />
+    <button onClick={handleNextImage} className="next-button">
+        ›
+    </button>
+    <div className="dots-navigation">
+        {field.image_url.map((_, index) => (
+            <span
+                key={index}
+                className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                onClick={() => {
+                    setCurrentImageIndex(index);
+                    resetAutoChangeImage();
+                }}
                 />
-            )}
+            ))}
+        </div>
+    </div>
+    </>
+           ) : (
+            // If there's only one image or no images
+            <img
+                src={field.image_url?.[0]}
+                alt={field.name}
+                className="field-image"
+            />
+        )}
 
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
