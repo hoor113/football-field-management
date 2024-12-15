@@ -144,45 +144,41 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 <h2>{field.name}</h2>
             </div>
 
-           {/* Check if there's more than one image */}
-           {field.image_url && field.image_url.length > 1 ? (
-                <>
-                    {/* Image navigation buttons */}
-                    <div className="image-navigation">
-    <button onClick={handlePrevImage} className="prev-button">
-        ‹
-    </button>
-    <img
-        src={field.image_url[currentImageIndex]}
-        alt={field.name}
-        className="field-image"
-        onClick={resetAutoChangeImage}
-    />
-    <button onClick={handleNextImage} className="next-button">
-        ›
-    </button>
-    <div className="dots-navigation">
-        {field.image_url.map((_, index) => (
-            <span
-                key={index}
-                className={`dot ${index === currentImageIndex ? 'active' : ''}`}
-                onClick={() => {
-                    setCurrentImageIndex(index);
-                    resetAutoChangeImage();
-                }}
-                />
-            ))}
-        </div>
-    </div>
-    </>
-           ) : (
-            // If there's only one image or no images
-            <img
-                src={field.image_url?.[0]}
-                alt={field.name}
-                className="field-image"
-            />
-        )}
+            <div className="image-navigation">
+                {field.image_url && field.image_url.length > 1 ? (
+                    <>
+                        <button onClick={handlePrevImage} className="prev-button">‹</button>
+                        <img
+                            id={`field-image-${field._id}`}
+                            src={field.image_url[currentImageIndex]}
+                            alt={field.name}
+                            className="field-image"
+                            onClick={resetAutoChangeImage}
+                        />
+                        <button onClick={handleNextImage} className="next-button">›</button>
+                        <div className="dots-navigation">
+                            {field.image_url.map((_, index) => (
+                                <span
+                                    key={index}
+                                    className={`dot ${index === currentImageIndex ? 'active' : ''}`}
+                                    onClick={() => {
+                                        setCurrentImageIndex(index);
+                                        resetAutoChangeImage();
+                                    }}
+                                />
+                            ))}
+                        </div>
+                    </>
+                ) : (
+                    // Xử lý trường hợp chỉ có 1 ảnh
+                    <img
+                        id={`field-image-${field._id}`}
+                        src={field.image_url?.[0]}
+                        alt={field.name}
+                        className="field-image"
+                    />
+                )}
+            </div>
 
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
