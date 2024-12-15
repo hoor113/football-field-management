@@ -230,22 +230,22 @@ const FeaturedFields = () => {
     const featuredFields = [
         { 
             id: 1, 
-            name: "Sân A", 
-            location: "Hà Nội", 
+            name: "Sân ĐH Thủy Lợi", 
+            location: "TP. Hà Nội", 
             rating: 4.5,
             image: Field1Image
         },
         { 
             id: 2, 
-            name: "Sân B", 
+            name: "Sân Bóng Đá Mini Chảo Lửa", 
             location: "TP. Hồ Chí Minh", 
             rating: 4.7,
             image: Field2Image
         },
         { 
             id: 3, 
-            name: "Sân C", 
-            location: "Thanh Hóa", 
+            name: "Sân bóng Phú Sơn", 
+            location: "TP.Thanh Hóa", 
             rating: 4.6,
             image: Field3Image
         },
