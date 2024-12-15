@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './FieldCard.css';
 import { ServiceForm } from './ServiceForm';
 import { useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import EditFieldForm from './EditFieldForm.js';
 import RatingDisplay from './RatingDisplay.js';
+import { ServiceTypeForm } from './SerViceTypeForm.js';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
     const [showServiceForm, setShowServiceForm] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);  // Track current image index
-    const [autoChangeImage, setAutoChangeImage] = useState(true); // Control auto-change feature
+    const [showServiceTypeForm, setShowServiceTypeForm] = useState(false);
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
     };
@@ -74,69 +74,6 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             alert('An unexpected error occurred. Please try again later.');
         }
     };
-    const handleNextImage = () => {
-        setCurrentImageIndex((currentIndex) => {
-            // Calculate the next image index
-            const nextIndex = currentIndex === field.image_url.length - 1 ? 0 : currentIndex + 1;
-            
-            // Find the image element within this specific card and apply transition effect
-            const img = document.getElementById(`field-image-${field._id}`);
-            if (img) {
-                img.style.animation = 'none';  // Reset current animation
-                void img.offsetWidth;  // Trigger reflow to enable animation
-                img.style.animation = 'fadeIn 0.3s ease-in-out';  // Apply new fade-in animation
-            }
-            
-            return nextIndex;  // Return the new index
-        });
-        
-        // Reset auto-change timer
-        resetAutoChangeImage();
-    };
-    
-    const handlePrevImage = () => {
-        setCurrentImageIndex((currentIndex) => {
-            // Calculate the previous image index
-            const prevIndex = currentIndex === 0 ? field.image_url.length - 1 : currentIndex - 1;
-            
-            // Find the image element within this specific card and apply transition effect
-            const img = document.getElementById(`field-image-${field._id}`);
-            if (img) {
-                img.style.animation = 'none';  // Reset current animation
-                void img.offsetWidth;  // Trigger reflow to enable animation
-                img.style.animation = 'fadeIn 0.3s ease-in-out';  // Apply new fade-in animation
-            }
-            
-            return prevIndex;  // Return the new index
-        });
-        
-        // Reset auto-change timer
-        resetAutoChangeImage();
-    };
-    // Change image every 3 seconds automatically if autoChangeImage is true
-    useEffect(() => {
-        if (field.image_url.length <= 1) return;  // Only auto-change if more than 1 image
-        let interval;
-
-        if (autoChangeImage) {
-            interval = setInterval(() => {
-                setCurrentImageIndex((prevIndex) =>
-                    prevIndex === field.image_url.length - 1 ? 0 : prevIndex + 1
-                );
-            }, 10000); // Change image every 10 seconds
-        }
-
-        // Clean up the interval on component unmount
-        return () => clearInterval(interval);
-    }, [autoChangeImage, field.image_url.length]);
-
-    // Reset the automatic image change when the user clicks the image
-    const resetAutoChangeImage = () => {
-        setAutoChangeImage(false);
-        setTimeout(() => {
-            setAutoChangeImage(true);
-        }, 10000); // Restart auto-change after 3 seconds
-    };
 
     return (
         <div className="field-card">
@@ -144,42 +81,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                 <h2>{field.name}</h2>
             </div>
 
-            <div className="image-navigation">
-                {field.image_url && field.image_url.length > 1 ? (
-                    <>
-                        <button onClick={handlePrevImage} className="prev-button">‹</button>
-                        <img
-                            id={`field-image-${field._id}`}
-                            src={field.image_url[currentImageIndex]}
-                            alt={field.name}
-                            className="field-image"
-                            onClick={resetAutoChangeImage}
-                        />
-                        <button onClick={handleNextImage} className="next-button">›</button>
-                        <div className="dots-navigation">
-                            {field.image_url.map((_, index) => (
-                                <span
-                                    key={index}
-                                    className={`dot ${index === currentImageIndex ? 'active' : ''}`}
-                                    onClick={() => {
-                                        setCurrentImageIndex(index);
-                                        resetAutoChangeImage();
-                                    }}
-                                />
-                            ))}
-                        </div>
-                    </>
-                ) : (
-                    // Xử lý trường hợp chỉ có 1 ảnh
-                    <img
-                        id={`field-image-${field._id}`}
-                        src={field.image_url?.[0]}
-                        alt={field.name}
-                        className="field-image"
-                    />
-                )}
-            </div>
-
+            <img src={field.image_url} alt={field.name} className="field-image" />
+            <RatingDisplay fieldId={field._id} />
             <p><strong>Description:</strong> {field.description}</p>
             <p><strong>Address:</strong> {field.address}</p>
             <p><strong>Base Price:</strong>  {field.base_price.toLocaleString()} VND</p>
@@ -208,23 +111,30 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             <div className="services-section">
                 <h3>Services</h3>
-                {field.services && field.services.length > 0 ? (
-                    <div className="services-grid">
-                        {field.services.map((service, index) => (
-                            <div key={index} className="service-item">
-                                <div className="service-header">
-                                    <span className="service-name">{service.name}</span>
-                                    <span className="service-type">{service.type}</span>
+                <div className="service-types-grid">
+                    {field.service_types && (
+                        <>
+                            {field.service_types.sv1 && (
+                                <div className="service-type-item">
+                                    <span className="service-type-label">Type 1:</span>
+                                    <span className="service-type-value">{field.service_types.sv1}</span>
                                 </div>
-                                <div className="service-price">
-                                    {service.price.toLocaleString()} VND 
+                            )}
+                            {field.service_types.sv2 && (
+                                <div className="service-type-item">
+                                    <span className="service-type-label">Type 2:</span>
+                                    <span className="service-type-value">{field.service_types.sv2}</span>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p className="no-services">No services available</p>
-                )}
+                            )}
+                            {field.service_types.sv3 && (
+                                <div className="service-type-item">
+                                    <span className="service-type-label">Type 3:</span>
+                                    <span className="service-type-value">{field.service_types.sv3}</span>
+                                </div>
+                            )}
+                        </>
+                    )}
+                </div>
             </div>
 
             {showServiceForm && (
@@ -260,6 +170,12 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                     >
                         Delete Field
                     </button>
+                    <button
+                        className="add-service-type-button"
+                        onClick={() => setShowServiceTypeForm(true)}
+                    >
+                        Add Service Types
+                    </button>
                 </>
             ) : null}
             {isLoggedIn === 2 ? <button
@@ -268,7 +184,13 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             >
                 Order Now
             </button> : null}
+            {showServiceTypeForm && (
 
+                <ServiceTypeForm
+                    fieldId={field._id}
+                    onClose={() => setShowServiceTypeForm(false)}
+                />
+            )}
             {isEditModalOpen && (
                 <div className="modal-overlay">
                     <div className="modal-content">

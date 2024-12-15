@@ -3,6 +3,42 @@ import { Field } from "../models/field.model.js"
 import { FieldOwner } from "../models/field-owner.model.js";
 import { Booking } from '../models/booking.model.js';
 import { Notification } from '../models/notification.model.js'; // Import the Notification model
+
+export const UploadServiceType = async (req, res) => {
+    const { fieldId, sv1, sv2, sv3 } = req.body;
+    if (!(fieldId && sv1 && sv2 && sv3)) {
+        return res.status(400).json({ 
+            success: false, 
+            message: "Vui lòng cung cấp đầy đủ thông tin loại dịch vụ" 
+        });
+    }
+
+    try {
+        const field = await Field.findById(fieldId);
+        if (!field) {
+            return res.status(404).json({ 
+                success: false, 
+                message: 'Sân không tồn tại' 
+            });
+        }
+
+        field.service_types = { sv1, sv2, sv3 };
+        await field.save();
+
+        res.status(200).json({ 
+            success: true, 
+            message: 'Cập nhật loại dịch vụ thành công', 
+            field 
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false, 
+            message: 'Có lỗi xảy ra', 
+            error: error.message 
+        });
+    }
+};
+
 export const UploadField = async (req, res) => {
     const {
         name,
@@ -56,31 +92,21 @@ export const UploadField = async (req, res) => {
 
 
 export const UploadService = async (req, res) => {
-    const { fieldId, name, type, price, image_url } = req.body; // Include imageUrl
-
-    // Validate that all required fields are provided
-    if (!(fieldId && name && type && price && image_url)) {
-        return res.status(400).json({ success: false, message: "Please provide all fields" });
+    const { fieldId, name, type, price } = req.body;
+    if (!(fieldId || name || type || price)) {
+        return res.status(400).json({ success: false, message: "Vui lòng cung cấp đầy đủ thông tin đặt sân" });
     }
 
     try {
-        // Find the field by ID
-        const field = await Field.findById(fieldId);
+        const field = await Field.findById(fieldId)
         if (!field) {
-            return res.status(404).json({ message: 'Field not found' });
+            return res.status(404).json({ message: 'Sân không tồn tại' });
         }
-
-        // Add the new service to the field's services array, including the imageUrl
-        field.services.push({ name, type, price, image_url });
-
-        // Save the updated field
-        await field.save();
-
-        // Respond with a success message
-        res.status(200).json({ message: 'Service added successfully', field });
+        field.services.push({ name, type, price })
+        await field.save()
+        res.status(200).json({ message: 'Thêm dịch v�� thành công', field });
     } catch (error) {
-        // Handle server errors
-        res.status(500).json({ message: 'Server error', error: error.message });
+        res.status(500).json({ message: 'Có lỗi xảy ra', error: error.message });
     }
 }
 

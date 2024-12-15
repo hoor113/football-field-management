@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { handleAddOperatingHours } from './functions/fieldOperations';
 import './FieldForm.css';
 
 export const FieldForm = ({ onSubmit, onCancel }) => {
@@ -7,9 +8,9 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
     description: '',
     address: '',
     base_price: '',
-    image_url: [''], // To store multiple image URLs
+    image_url: '',
     total_grounds: '',
-    operating_hours: [],
+    operating_hours: []
   });
 
   const [currentOperatingHours, setCurrentOperatingHours] = useState({
@@ -60,10 +61,10 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       ...newField,
       base_price: Number(newField.base_price),
       total_grounds: Number(newField.total_grounds),
-      operating_hours: newField.operating_hours.map((hours) => ({
+      operating_hours: newField.operating_hours.map(hours => ({
         start_hour: Number(hours.start_hour),
-        end_hour: Number(hours.end_hour),
-      })),
+        end_hour: Number(hours.end_hour)
+      }))
     };
 
     onSubmit(formattedField);
@@ -119,32 +120,13 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
         onChange={(e) => setNewField({ ...newField, base_price: Number(e.target.value) })}
         className="modal-input"
       />
-
-      {/* Multiple Image URLs */}
-      <div className="image-url-section">
-        <h3>Image URL</h3>
-        {newField.image_url.map((url, index) => (
-          <div key={index} className="image-url-input">
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={url}
-              onChange={(e) => handleImageUrlChange(index, e.target.value)}
-              className="modal-input"
-            />
-            {index === newField.image_url.length - 1 && (
-              <button
-                type="button"
-                onClick={handleAddImageUrl}
-                className="add-image-url-button"
-              >
-                +
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-
+      <input
+        type="text"
+        placeholder="Image URL"
+        value={newField.image_url}
+        onChange={(e) => setNewField({ ...newField, image_url: e.target.value })}
+        className="modal-input"
+      />
       <input
         type="number"
         placeholder="Total Grounds"

@@ -70,6 +70,11 @@ const FieldSchema = new Schema({
   total_grounds: { type: Number, required: true },
   grounds: [GroundSchema],
   services: [ServiceSchema],
+  service_types: {
+    sv1: { type: String, default: '' },
+    sv2: { type: String, default: '' },
+    sv3: { type: String, default: '' }
+  },
   operating_hours: {
     type: [OperatingHoursSchema],
     required: true,
