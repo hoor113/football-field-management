@@ -2,88 +2,117 @@ import React, { useState } from 'react';
 import './EditFieldForm.css';
 
 const EditFieldForm = ({ field, onClose, onSubmit }) => {
-    const [editData, setEditData] = useState({
+    const [formData, setFormData] = useState({
         name: field.name,
         description: field.description,
         address: field.address,
         base_price: field.base_price,
         total_grounds: field.total_grounds,
+        image_url: field.image_url || '',
+        operating_hours: field.operating_hours || []
     });
 
-    const handleInputChange = (e) => {
+    const handleChange = (e) => {
         const { name, value } = e.target;
-        setEditData({ ...editData, [name]: value });
+        if (name === 'base_price' || name === 'total_grounds') {
+            setFormData(prev => ({
+                ...prev,
+                [name]: Number(value)
+            }));
+        } else {
+            setFormData(prev => ({
+                ...prev,
+                [name]: value
+            }));
+        }
     };
 
-    const handleFormSubmit = (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(editData);
+        onSubmit(formData);
     };
 
     return (
-        <div>
-            <h2>Chỉnh sửa sân</h2>
-            <form className="edit-field-form" onSubmit={handleFormSubmit}>
-                <div className="form-group">
-                    <label htmlFor="name">Tên sân</label>
-                    <input
-                        type="text"
-                        id="name"
-                        name="name"
-                        value={editData.name}
-                        onChange={handleInputChange}
-                        placeholder="Nhập tên sân mới"
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="description">Mô tả</label>
-                    <textarea
-                        id="description"
-                        name="description"
-                        value={editData.description}
-                        onChange={handleInputChange}
-                        placeholder="Nhập mô tả sân"
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="address">Địa chỉ</label>
-                    <input
-                        type="text"
-                        id="address"
-                        name="address"
-                        value={editData.address}
-                        onChange={handleInputChange}
-                        placeholder="Nhập địa chỉ sân"
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="base_price">Giá cơ bản</label>
-                    <input
-                        type="number"
-                        id="base_price"
-                        name="base_price"
-                        value={editData.base_price}
-                        onChange={handleInputChange}
-                        placeholder="Nhập giá cơ bản"
-                    />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="total_grounds">Tổng số sân</label>
-                    <input
-                        type="number"
-                        id="total_grounds"
-                        name="total_grounds"
-                        value={editData.total_grounds}
-                        onChange={handleInputChange}
-                        placeholder="Nhập tổng số sân"
-                    />
-                </div>
-                <div className="button-group">
-                    <button type="submit" className="save-button">Lưu</button><br />
-                    <button type="button" className="cancel-button" onClick={onClose}>Hủy</button>
-                </div>
-            </form>
-        </div>
+        <form onSubmit={handleSubmit} className="edit-field-form">
+            <h2>Chỉnh sửa thông tin sân</h2>
+            
+            <div className="form-group">
+                <label>Tên sân:</label>
+                <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Mô tả:</label>
+                <textarea
+                    name="description"
+                    value={formData.description}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Địa chỉ:</label>
+                <input
+                    type="text"
+                    name="address"
+                    value={formData.address}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>URL Hình ảnh:</label>
+                <input
+                    type="url"
+                    name="image_url"
+                    value={formData.image_url}
+                    onChange={handleChange}
+                    placeholder="https://example.com/image.jpg"
+                    required
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Giá cơ bản:</label>
+                <input
+                    type="number"
+                    name="base_price"
+                    value={formData.base_price}
+                    onChange={handleChange}
+                    required
+                    min="0"
+                />
+            </div>
+
+            <div className="form-group">
+                <label>Tổng số sân:</label>
+                <input
+                    type="number"
+                    name="total_grounds"
+                    value={formData.total_grounds}
+                    onChange={handleChange}
+                    required
+                    min="1"
+                />
+            </div>
+
+            <div className="form-actions">
+                <button type="submit" className="submit-btn">
+                    Cập nhật
+                </button>
+                <button type="button" onClick={onClose} className="cancel-btn">
+                    Hủy
+                </button>
+            </div>
+        </form>
     );
 };
 

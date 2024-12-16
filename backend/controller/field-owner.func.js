@@ -445,7 +445,7 @@ export const acceptBooking = async (req, res) => {
         console.error('Error accepting booking:', error);
         res.status(500).json({ 
             success: false, 
-            message: 'Có lỗi xảy ra', 
+            message: 'Có lỗi x��y ra', 
             error: error.message 
         });
     }
@@ -700,7 +700,7 @@ export const deleteService = async (req, res) => {
 
 export const editService = async (req, res) => {
     const { fieldId, serviceId } = req.params;
-    const { name, type, price } = req.body;
+    const { name, type, price, image_url } = req.body;
     const ownerId = req.user.id;
 
     try {
@@ -729,7 +729,8 @@ export const editService = async (req, res) => {
             ...field.services[serviceIndex],
             name: name || field.services[serviceIndex].name,
             type: type || field.services[serviceIndex].type,
-            price: price || field.services[serviceIndex].price
+            price: price || field.services[serviceIndex].price,
+            image_url: image_url || field.services[serviceIndex].image_url // Preserve existing image_url if not updated
         };
 
         await field.save();
