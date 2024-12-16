@@ -407,3 +407,173 @@
 .field-dropdown-content button:hover {
     background-color: rgba(0, 0, 0, 0.04);
 }
+
+.close-btn {
+    width: 100%;
+    padding: 10px;
+    margin-top: 15px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+}
+
+.close-btn:hover {
+    background-color: #1565c0;
+}
+
+/* Service Management Modal Styles */
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 500px;
+}
+
+.modal-content h3 {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 1.5rem;
+}
+
+.services-management-list {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 20px 0;
+    padding: 0 10px;
+}
+
+.service-management-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease;
+}
+
+.service-management-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.service-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.service-info span:first-child {
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 16px;
+}
+
+.service-info span:nth-child(2) {
+    color: #666;
+    font-size: 14px;
+}
+
+.service-info span:last-child {
+    color: #2e7d32;
+    font-weight: 500;
+    font-size: 14px;
+}
+
+.service-actions {
+    display: flex;
+    gap: 8px;
+}
+
+.service-actions button {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.service-actions button:first-child {
+    background-color: #1976d2;
+    color: white;
+}
+
+.service-actions button:first-child:hover {
+    background-color: #1565c0;
+}
+
+.service-actions button:last-child {
+    background-color: #dc3545;
+    color: white;
+}
+
+.service-actions button:last-child:hover {
+    background-color: #c82333;
+}
+
+/* Modal header style */
+.modal-content h3 {
+    color: #1976d2;
+    font-size: 20px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #e0e0e0;
+    text-align: center;
+}
+
+/* Scrollbar styling */
+.services-management-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.services-management-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.services-management-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.services-management-list::-webkit-scrollbar-thumb:hover {
+    background: #666;
+}
+
+/* Close button styling */
+.close-btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    background-color: #1976d2;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    transition: background-color 0.2s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.close-btn:hover {
+    background-color: #1565c0;
+}
+
+/* Modal content padding */
+.modal-content {
+    padding: 24px;
+}

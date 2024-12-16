@@ -11,6 +11,7 @@ import { Button } from '@mui/material';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import StadiumIcon from '@mui/icons-material/Stadium';
 import TouchAppIcon from '@mui/icons-material/TouchApp';
+import EditServiceForm from './EditServiceForm';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
@@ -22,6 +23,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
     const [showRecommendedServicesForm, setShowRecommendedServicesForm] = useState(false);
     const [showServiceDropdown, setShowServiceDropdown] = useState(false);
     const [showFieldDropdown, setShowFieldDropdown] = useState(false);
+    const [showServiceManagement, setShowServiceManagement] = useState(false);
+    const [editingService, setEditingService] = useState(null);
 
     const handleOrderClick = () => {
         navigate(`/order/${field._id}`, { state: { field } });
@@ -99,6 +102,61 @@ export const FieldCard = ({ field, isLoggedIn }) => {
         acc[service.type].push(service);
         return acc;
     }, {});
+
+    const handleDeleteService = async (serviceId) => {
+        try {
+            const response = await fetch(
+                `http://localhost:5000/api/field_owner/fields/${field._id}/services/${serviceId}`,
+                {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to delete service');
+            }
+
+            alert('Xóa dịch vụ thành công');
+            window.location.reload();
+        } catch (error) {
+            console.error('Error deleting service:', error);
+            alert('Có lỗi xảy ra khi xóa dịch vụ');
+        }
+    };
+
+    const handleEditService = async (service) => {
+        setEditingService(service);
+    };
+
+    const handleUpdateService = async (updatedData) => {
+        try {
+            const response = await fetch(
+                `http://localhost:5000/api/field_owner/fields/${field._id}/services/${editingService._id}`,
+                {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    },
+                    body: JSON.stringify(updatedData),
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error('Failed to update service');
+            }
+
+            alert('Cập nhật dịch vụ thành công');
+            setEditingService(null);
+            window.location.reload();
+        } catch (error) {
+            console.error('Error updating service:', error);
+            alert('Có lỗi xảy ra khi cập nhật dịch vụ');
+        }
+    };
 
     return (
         <div className="field-card">
@@ -254,6 +312,9 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                                 <button onClick={() => setShowServiceForm(true)}>
                                     Thêm dịch vụ
                                 </button>
+                                <button onClick={() => setShowServiceManagement(true)}>
+                                    Quản lý dịch vụ
+                                </button>
                                 <button onClick={() => setShowRecommendedServicesForm(true)}>
                                     Chọn dịch vụ nổi bật
                                 </button>
@@ -341,6 +402,54 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                             field={field}
                             onClose={() => setShowRecommendedServicesForm(false)}
                             onUpdate={handleRecommendedServicesUpdate}
+                        />
+                    </div>
+                </div>
+            )}
+            {showServiceManagement && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <h3>Quản lý dịch vụ</h3>
+                        <div className="services-management-list">
+                            {field.services.map((service) => (
+                                <div key={service._id} className="service-management-item">
+                                    <div className="service-info">
+                                        <span>{service.name}</span>
+                                        <span>{service.type}</span>
+                                        <span>{service.price.toLocaleString()} VND</span>
+                                    </div>
+                                    <div className="service-actions">
+                                        <button 
+                                            onClick={() => {
+                                                setEditingService(service);
+                                                setShowServiceManagement(false);
+                                            }}
+                                        >
+                                            Sửa
+                                        </button>
+                                        <button onClick={() => handleDeleteService(service._id)}>
+                                            Xóa
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <button 
+                            className="close-btn"
+                            onClick={() => setShowServiceManagement(false)}
+                        >
+                            Đóng
+                        </button>
+                    </div>
+                </div>
+            )}
+            {editingService && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <EditServiceForm
+                            service={editingService}
+                            onClose={() => setEditingService(null)}
+                            onSubmit={handleUpdateService}
                         />
                     </div>
                 </div>

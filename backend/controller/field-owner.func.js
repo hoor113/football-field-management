@@ -659,3 +659,92 @@ export const updateRecommendedServices = async (req, res) => {
     }
 };
 
+export const deleteService = async (req, res) => {
+    const { fieldId, serviceId } = req.params;
+    const ownerId = req.user.id;
+
+    try {
+        const field = await Field.findOne({ _id: fieldId, owner_id: ownerId });
+
+        if (!field) {
+            return res.status(404).json({
+                success: false,
+                message: "Sân không tồn tại hoặc bạn không có quyền"
+            });
+        }
+
+        // Remove the service
+        field.services = field.services.filter(
+            service => service._id.toString() !== serviceId
+        );
+
+        // Also remove from recommended services if present
+        field.recommended_services = field.recommended_services.filter(
+            service => service._id.toString() !== serviceId
+        );
+
+        await field.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Dịch vụ đã được xóa thành công"
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Có lỗi xảy ra khi xóa dịch vụ",
+            error: error.message
+        });
+    }
+};
+
+export const editService = async (req, res) => {
+    const { fieldId, serviceId } = req.params;
+    const { name, type, price } = req.body;
+    const ownerId = req.user.id;
+
+    try {
+        const field = await Field.findOne({ _id: fieldId, owner_id: ownerId });
+
+        if (!field) {
+            return res.status(404).json({
+                success: false,
+                message: "Sân không tồn tại hoặc bạn không có quyền"
+            });
+        }
+
+        const serviceIndex = field.services.findIndex(
+            service => service._id.toString() === serviceId
+        );
+
+        if (serviceIndex === -1) {
+            return res.status(404).json({
+                success: false,
+                message: "Dịch vụ không tồn tại"
+            });
+        }
+
+        // Update service
+        field.services[serviceIndex] = {
+            ...field.services[serviceIndex],
+            name: name || field.services[serviceIndex].name,
+            type: type || field.services[serviceIndex].type,
+            price: price || field.services[serviceIndex].price
+        };
+
+        await field.save();
+
+        return res.status(200).json({
+            success: true,
+            message: "Dịch vụ đã được cập nhật thành công",
+            service: field.services[serviceIndex]
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: "Có lỗi xảy ra khi cập nhật dịch vụ",
+            error: error.message
+        });
+    }
+};
+
