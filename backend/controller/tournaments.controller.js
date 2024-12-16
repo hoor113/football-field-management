@@ -276,11 +276,11 @@ export const deleteTournament = async (req, res) => {
  *             type: object
  *             required:
  *               - tournament_id
- *               - team_name
+ *               - team_id
  *             properties:
  *               tournament_id:
  *                 type: string
- *               team_name:
+ *               team_id:
  *                 type: string
  *     responses:
  *       200:
@@ -290,7 +290,7 @@ export const deleteTournament = async (req, res) => {
  */
 export const approveTeam = async (req, res) => {
   try {
-    const { tournament_id, team_name } = req.body;
+    const { tournament_id, team_id } = req.body;
 
     // Kiểm tra giải đấu tồn tại
     const tournament = await Tournament.findById(tournament_id);
@@ -298,10 +298,15 @@ export const approveTeam = async (req, res) => {
       return res.status(404).json({ message: "Giải đấu không tồn tại" });
     }
 
-    // Tìm đội bóng trong bảng Team
-    const team = await Team.findOne({ tournament_id, name: team_name });
+    // Tìm đội bóng trong bảng Team bằng ID
+    const team = await Team.findById(team_id);
     if (!team) {
       return res.status(404).json({ message: "Đội không tồn tại trong giải đấu" });
+    }
+
+    // Kiểm tra xem team có thuộc tournament này không
+    if (team.tournament_id.toString() !== tournament_id) {
+      return res.status(400).json({ message: "Đội không thuộc giải đấu này" });
     }
 
     // Cập nhật trạng thái đội bóng

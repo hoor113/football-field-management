@@ -22,6 +22,7 @@ const ManageTournaments = () => {
     const tournamentsPerPage = 6;
     const [selectedTeam, setSelectedTeam] = useState(null);
     const [showApproveModal, setShowApproveModal] = useState(false);
+    const [showTeamDetailsModal, setShowTeamDetailsModal] = useState(false);
 
     // Fetch tất cả giải đấu khi component mount
     useEffect(() => {
@@ -47,12 +48,28 @@ const ManageTournaments = () => {
                 tournamentsArray.map(async (tournament) => {
                     try {
                         const teamsResponse = await fetch(`/api/tournaments/${tournament._id}/pending-teams`, {
-                            credentials: 'include'
+                            credentials: 'include',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
                         });
+
+                        // Kiểm tra status code
+                        if (!teamsResponse.ok) {
+                            console.error(`Error ${teamsResponse.status}: ${teamsResponse.statusText}`);
+                            return {
+                                ...tournament,
+                                pendingTeams: []
+                            };
+                        }
+
                         const teamsData = await teamsResponse.json();
+                        console.log('Teams data for tournament', tournament._id, ':', teamsData);
+                        
                         return {
                             ...tournament,
-                            pendingTeams: teamsData.success ? teamsData.pendingTeams : []
+                            pendingTeams: teamsData.success ? teamsData.pendingTeams : [] 
                         };
                     } catch (error) {
                         console.error(`Error fetching teams for tournament ${tournament._id}:`, error);
@@ -211,6 +228,7 @@ const ManageTournaments = () => {
 
     const handleViewTeamDetails = (team) => {
         setSelectedTeam(team);
+        setShowTeamDetailsModal(true);
     };
 
     const handleApproveTeam = async (tournamentId, teamId) => {
@@ -568,6 +586,53 @@ const ManageTournaments = () => {
                             ) : (
                                 <p className="no-pending-teams">Không có đội nào đang chờ phê duyệt</p>
                             )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal xem chi tiết đội */}
+            {selectedTeam && showTeamDetailsModal && (
+                <div className="modal-overlay">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h2>Chi Tiết Đội - {selectedTeam.name}</h2>
+                            <button 
+                                className="close-modal"
+                                onClick={() => {
+                                    setShowTeamDetailsModal(false);
+                                    setSelectedTeam(null);
+                                }}
+                            >
+                                ×
+                            </button>
+                        </div>
+                        <div className="team-details">
+                            <p><strong>Tên đội:</strong> {selectedTeam.name}</p>
+                            <p><strong>Đội trưởng:</strong> {selectedTeam.captain_name}</p>
+                            <p><strong>Trạng thái:</strong> {selectedTeam.status}</p>
+                            
+                            <div className="members-list">
+                                <h3>Danh sách thành viên</h3>
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Tên</th>
+                                            <th>Số áo</th>
+                                            <th>Vị trí</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {selectedTeam.members.map((member, index) => (
+                                            <tr key={member._id || index}>
+                                                <td>{member.name}</td>
+                                                <td>{member.number}</td>
+                                                <td>{member.position}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
