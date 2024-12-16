@@ -367,7 +367,6 @@
     background-color: #b82b23;
 }
 
-/* Styles cho nút dịch vụ */
 .service-btn {
   background: none;
   border: none;
@@ -386,7 +385,6 @@
   color: #ffd700;
 }
 
-/* Styles cho dropdown dịch vụ */
 .service-dropdown {
   min-width: 200px; /* Rộng hơn một chút so với dropdown thông thường */
   left: 0; /* Căn lề trái thay vì phải */
@@ -410,7 +408,6 @@
   color: #1e4c9a;
 }
 
-/* Điều chỉnh vị trí của dropdown dịch vụ */
 .dropdown .service-dropdown {
   margin-top: 0.5rem;
   padding-top: 8px;

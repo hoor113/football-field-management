@@ -73,23 +73,21 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                     <Link to="/" className="nav-item">Trang chủ</Link>
                     {isLoggedIn ? (
                         <div className="dropdown">
-                            <button className="nav-item service-btn">Dịch vụ</button>
+                            <button className="nav-item service-btn">Giải đấu</button>
                             <div className="dropdown-content service-dropdown">
                                 {userType === 'customer' ? (
                                     <>
-                                        <Link to="/customer/book-field">Đặt Sân</Link>
                                         <Link to="/customer/tournaments">Tham Gia Giải Đấu</Link>
                                     </>
                                 ) : userType === 'field_owner' ? (
                                     <>
-                                        <Link to="/field_owner/manage-fields">Quản Lý Sân</Link>
                                         <Link to="/field_owner/manage-tournaments">Quản Lý Giải Đấu</Link>
                                     </>
                                 ) : null}
                             </div>
                         </div>
                     ) : (
-                        <a href="#" className="nav-item" onClick={handleServiceClick}>Dịch vụ</a>
+                        <a href="#" className="nav-item" onClick={handleServiceClick}>Giải đấu</a>
                     )}
                     <Link to="/gioi-thieu" className="nav-item">Giới thiệu</Link>
                     <Link to="/chinh-sach" className="nav-item">Chính sách</Link>
