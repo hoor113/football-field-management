@@ -250,6 +250,7 @@ const ManageTournaments = () => {
             if (response.ok) {
                 alert('Phê duyệt đội thành công!');
                 fetchTournaments(); // Refresh danh sách
+                window.location.reload();
             } else {
                 alert(data.message || 'Có lỗi xảy ra khi phê duyệt đội');
             }
