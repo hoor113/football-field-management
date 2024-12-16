@@ -40,7 +40,7 @@ const CustomerLogin = () => {
             <div className="customer-login-form-group">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Tên đăng nhập"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="customer-login-input"
@@ -49,13 +49,13 @@ const CustomerLogin = () => {
             <div className="customer-login-form-group">
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="customer-login-input"
               />
             </div>
-            <button type="submit" className="customer-login-button">Login</button>
+            <button type="submit" className="customer-login-button">Đăng nhập</button>
             <p className="register-link">
               Bạn chưa có tài khoản? <a href="http://localhost:5000/customer/register">Đăng ký ngay</a>
             </p>
