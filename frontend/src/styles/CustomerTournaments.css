@@ -246,3 +246,21 @@
     transform: none;
     box-shadow: none;
 } 
+
+.approved-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    width: 100%;
+    opacity: 0.8;
+    cursor: not-allowed;
+}
+
+.approved-btn:disabled {
+    transform: none;
+    box-shadow: none;
+} 

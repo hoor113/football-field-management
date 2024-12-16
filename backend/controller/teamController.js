@@ -178,7 +178,7 @@ export const registerTeam = async (req, res) => {
         // Kiểm tra xem customer đã đăng ký team cho giải đấu này chưa
         const existingTeam = await Team.findOne({
             tournament_id,
-            captain_name: req.user.fullname // Sử dụng fullname từ token
+            user_id: req.user.id
         });
 
         if (existingTeam) {
@@ -193,9 +193,10 @@ export const registerTeam = async (req, res) => {
             return res.status(400).json({ message: "Đã đủ số đội tham gia giải đấu" });
         }
 
-        // Tạo đội mới
+        // Tạo đội mới với user_id
         const newTeam = new Team({
             tournament_id,
+            user_id: req.user.id,  // Lấy user_id từ token
             name: team_name,
             captain_name,
             members,
@@ -217,17 +218,17 @@ export const registerTeam = async (req, res) => {
 // Thêm hàm lấy danh sách đội đã đăng ký của user
 export const getMyRegistrations = async (req, res) => {
     try {
+        // Tìm teams theo user_id thay vì captain_name
         const teams = await Team.find({ 
-            captain_name: req.user.fullname
+            user_id: req.user.id
         });
         
-        // Đảm bảo trả về ID dưới dạng string
         const registrations = teams.map(team => ({
             tournament_id: team.tournament_id.toString(),
             status: team.status
         }));
         
-        console.log('Sending registrations:', registrations); // Debug
+        console.log('Sending registrations:', registrations);
         res.json(registrations);
     } catch (error) {
         console.error('Error in getMyRegistrations:', error);
@@ -255,39 +256,6 @@ export const getPendingTeams = async (req, res) => {
         res.status(500).json({ 
             success: false,
             message: "Lỗi khi lấy danh sách đội chờ phê duyệt" 
-        });
-    }
-};
-
-// Sửa lại hàm approveTeam để cập nhật status
-export const approveTeam = async (req, res) => {
-    try {
-        const { tournament_id, team_id } = req.body;
-
-        // Tìm và cập nhật trạng thái của đội
-        const updatedTeam = await Team.findByIdAndUpdate(
-            team_id,
-            { status: 'approved' },
-            { new: true }
-        );
-
-        if (!updatedTeam) {
-            return res.status(404).json({
-                success: false,
-                message: "Không tìm thấy đội bóng"
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Phê duyệt đội thành công",
-            team: updatedTeam
-        });
-    } catch (error) {
-        console.error('Error approving team:', error);
-        res.status(500).json({
-            success: false,
-            message: "Lỗi khi phê duyệt đội"
         });
     }
 };
