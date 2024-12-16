@@ -11,14 +11,14 @@ const OrderConfirmation = () => {
         <div className="confirmation-container">
             <div className="confirmation-content">
                 <FaCheckCircle className="success-icon" />
-                <h1>Order Confirmation</h1>
+                <h1>Xác nhận đặt sân</h1>
                 <p className="confirmation-message">{message}</p>
-                <p className="status-message">Your order is currently pending.</p>
+                <p className="status-message">Yêu cầu của bạn đang được xử lý.</p>
                 <button 
                     className="return-home-btn"
                     onClick={() => navigate('/')}
                 >
-                    Return to Homepage
+                    Trở về trang chủ
                 </button>
             </div>
         </div>

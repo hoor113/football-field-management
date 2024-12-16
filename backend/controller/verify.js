@@ -4,19 +4,19 @@ export const authenticateToken = (req, res, next) => {
     const token = req.cookies.token
 
     if (!token) {
-        return res.status(401).json({message: "Unauthorized, token missing"})
+        return res.status(401).json({message: "Phiên đăng nhập không xác định, token không tồn tại"})
     }
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET)
         if (!decoded || !decoded.id) {
-            return res.status(400).json({ message: 'Invalid token structure.' });
+            return res.status(400).json({ message: 'Token không đúng cấu trúc.' });
         }
 
         req.user = decoded
         next()
     } catch (error) {
-        return res.status(403).json({message: "Token is invalid or expired"})
+        return res.status(403).json({message: "Token không đúng hoặc đã hết hạn"})
     }
 }
 

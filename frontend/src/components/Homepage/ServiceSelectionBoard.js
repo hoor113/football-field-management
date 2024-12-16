@@ -54,7 +54,7 @@ export const ServiceSelectionBoard = ({ services, onAddService, onClose }) => {
                   className="add-to-cart-btn"
                   onClick={() => onAddService(service)}
                 >
-                  Thêm vào giỏ
+                  Thêm vào hóa đơn
                 </button>
               </div>
             </div>

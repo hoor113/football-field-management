@@ -44,7 +44,7 @@ export const RatingSection = () => {
 
     return (
         <div className="rating-section">
-            <h2>Rate this field</h2>
+            <h2>Đánh giá sân</h2>
             
             <div className="stars-container">
                 {[1, 2, 3, 4, 5].map((starValue, index) => (
@@ -73,7 +73,7 @@ export const RatingSection = () => {
                 onClick={handleSubmit}
                 disabled={!rating}
             >
-                Submit Rating
+                Đánh giá
             </button>
         </div>
     );

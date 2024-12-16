@@ -5,6 +5,7 @@ import { RatingSection } from './RatingSection';
 import { CommentsSection } from './CommentsSection';
 import DateSelector from './DateSelector';
 import { ServiceSelectionBoard } from './ServiceSelectionBoard';
+import { Button } from '@mui/material';
 
 export const OrderField = () => {
   const location = useLocation();
@@ -56,10 +57,10 @@ export const OrderField = () => {
       });
 
       if (!response.ok) {
-        throw new Error('Failed to send notification');
+        throw new Error('Lỗi khi gửi thông báo');
       }
     } catch (error) {
-      console.error('Error sending notification:', error);
+      console.error('Lỗi khi gửi thông báo:', error);
     }
   };
 
@@ -112,11 +113,11 @@ export const OrderField = () => {
         await handleSendNotification(data.bookingId);
         navigate(`/order-confirmation`, { state: { message: data.message } });
       } else {
-        alert(data.message || 'Failed to place order');
+        alert(data.message || 'Lỗi khi đặt sân');
       }
     } catch (error) {
-      console.error('Error placing order:', error);
-      alert('Error placing order');
+      console.error('Lỗi khi đặt sân:', error);
+      alert('Lỗi khi đặt sân');
     }
   };
 
@@ -182,7 +183,7 @@ export const OrderField = () => {
     return slotDate < now;
   };
 
-  if (!field) return <div>Loading...</div>;
+  if (!field) return <div>Đang tải...</div>;
 
   return (
     <div className="order-page-container">
@@ -192,7 +193,7 @@ export const OrderField = () => {
           <h1 className="field-name">{field.name}</h1>
           <div className="field-info">
             <p className="field-address">
-              <span className="label">Address:</span>
+              <span className="label">Địa chỉ:</span>
               {field.address}
             </p>
             <p className="field-owner">
@@ -204,7 +205,7 @@ export const OrderField = () => {
                             {field.description}
                         </p> */}
             <p className="field-hours">
-              <span className="label">Operating Hours:</span>
+              <span className="label">Giờ hoạt động:</span>
               {field.operating_hours.map((hours, index) => (
                 <span key={index}>
                   {hours.start_hour}:00 - {hours.end_hour}:00
@@ -213,12 +214,12 @@ export const OrderField = () => {
               ))}
             </p>
             <p className="field-grounds">
-              <span className="label">Available Grounds:</span>
+              <span className="label">Tổng số sân:</span>
               {field.total_grounds}
             </p>
           </div>
           <div className="base-price-box">
-            <span className="price-label">BASE PRICE</span>
+            <span className="price-label">Giá cơ bản</span>
             <span className="price-amount">{field.base_price} VNĐ</span>
           </div>
         </div>
@@ -242,17 +243,17 @@ export const OrderField = () => {
         {/* Right side - Order form */}
         <div className="order-form-section">
           <div className="booking-time-section">
-            <h2>Choose Booking Details</h2>
+            <h2>Chi tiết đặt sân</h2>
 
             {/* Ground Selection */}
             <div className="ground-selection">
-              <label>Select Ground:</label>
+              <label>Chọn sân:</label>
               <select
                 value={selectedGround}
                 onChange={(e) => setSelectedGround(e.target.value)}
                 className="ground-select"
               >
-                <option value="">Choose a ground...</option>
+                <option value="">Chọn sân...</option>
                 {field.grounds.map(ground => (
                   <option key={ground._id} value={ground._id}>
                     {ground.name} - Sân {ground.size} người
@@ -261,16 +262,16 @@ export const OrderField = () => {
               </select>
             </div>
 
-            {/* Date and Time Selection - Always visible but conditionally disabled */}
+            {/* Date and Time Selection */}
             <div className="date-selection">
-              <label>Select Date:</label>
+              <label>Chọn ngày:</label>
               <DateSelector
                 onDateSelect={handleDateSelect}
                 onChange={(e) => setSelectedDate(e.target.value)} />
             </div>
 
             <div className="hours-selection">
-              <label>Select Time Range:</label>
+              <label>Chọn khung giờ:</label>
               <div className="time-slots-container">
                 {!selectedGround || !selectedDate ? (
                   <div className="empty-time-slots">Chưa chọn sân và ngày</div>
@@ -316,7 +317,7 @@ export const OrderField = () => {
 
           {/* Services Selection */}
           <div className="services-section">
-            <h2>Additional Services</h2>
+            <h2>Dịch vụ thêm</h2>
             
             {/* Selected Services List */}
             {Object.keys(serviceQuantities).length > 0 && (
@@ -359,7 +360,6 @@ export const OrderField = () => {
               </div>
             )}
 
-            {/* Add Service Button - Always visible */}
             <button 
               className="add-service-btn"
               onClick={() => setShowServiceBoard(true)}
@@ -377,20 +377,20 @@ export const OrderField = () => {
             )}
           </div>
 
-          {/* New Order Summary Box */}
+          {/* Order Summary Box */}
           <div className="order-summary-box">
-            <h2>Order Summary</h2>
+            <h2>Tổng kết đơn hàng</h2>
 
             {/* Field Base Price */}
             <div className="summary-item">
-              <div className="summary-label">Field Price:</div>
+              <div className="summary-label">Giá sân:</div>
               <div className="summary-price">{field.base_price || 0} VNĐ</div>
             </div>
 
-            {/* Ground Selection Info (without price) */}
+            {/* Ground Selection Info */}
             {selectedGround && (
               <div className="summary-item">
-                <div className="summary-label">Selected Ground:</div>
+                <div className="summary-label">Sân đã chọn:</div>
                 <div className="summary-details">
                   <div>{field.grounds.find(g => g._id === selectedGround)?.name}</div>
                 </div>
@@ -415,9 +415,9 @@ export const OrderField = () => {
               return null;
             })}
 
-            {/* Update Total Calculation */}
+            {/* Total Section */}
             <div className="total-section">
-              <div className="total-label">Total Amount:</div>
+              <div className="total-label">Tổng tiền:</div>
               <div className="total-amount">
                 {(
                   (field.base_price || 0) +
@@ -431,11 +431,20 @@ export const OrderField = () => {
           </div>
 
           {/* Place Order Button */}
-          <button
-            className="submit-order-btn"
-            onClick={handlePlaceOrder}>
-            Place Order
-          </button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={handlePlaceOrder}
+            sx={{
+              width: '100%',
+              marginTop: '20px',
+              padding: '12px',
+              fontSize: '1.1em',
+              fontWeight: 'bold'
+            }}
+          >
+            Xác nhận đặt sân
+          </Button>
         </div>
       </div>
     </div>

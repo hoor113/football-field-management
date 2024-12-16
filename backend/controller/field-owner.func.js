@@ -172,7 +172,7 @@ export const UpdateField = async (req, res) => {
         //         if (hasActiveBookings) {
         //             return res.status(400).json({
         //                 success: false,
-        //                 message: "Cannot remove grounds with active bookings"
+        //                 message: "Không thể xóa sân đang có lịch đặt"
         //             });
         //         }
 
@@ -377,7 +377,7 @@ export const acceptBooking = async (req, res) => {
         if (!ground) {
             return res.status(404).json({ 
                 success: false, 
-                message: 'Không tồn tại sân này trong hệ thống sân này' 
+                message: 'Không tồn tại sân này trong hệ thống' 
             });
         }
 
@@ -473,9 +473,9 @@ export const cancelBooking = async (req, res) => {
             type: 'failed'
         });
 
-        res.status(200).json({ success: true, message: 'Booking canceled', booking });
+        res.status(200).json({ success: true, message: 'Đã hủy lịch đặt sân', booking });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error', error: error.message });
+        res.status(500).json({ success: false, message: 'Lỗi máy chủ', error: error.message });
     }
 };
 export const getFieldDetails = async (req, res) => {
@@ -589,14 +589,14 @@ export const updateRecommendedServices = async (req, res) => {
         if (!Array.isArray(serviceIds)) {
             return res.status(400).json({
                 success: false,
-                message: 'serviceIds must be an array'
+                message: 'ServiceIds phải là một mảng'
             });
         }
 
         if (serviceIds.length > 3) {
             return res.status(400).json({
                 success: false,
-                message: 'Maximum 3 recommended services allowed'
+                message: 'Chỉ được phép tối đa 3 dịch vụ được đề xuất'
             });
         }
 
@@ -605,7 +605,7 @@ export const updateRecommendedServices = async (req, res) => {
         if (!field) {
             return res.status(404).json({
                 success: false,
-                message: 'Field not found'
+                message: 'Không tìm thấy sân'
             });
         }
 
@@ -613,7 +613,7 @@ export const updateRecommendedServices = async (req, res) => {
         if (field.owner_id.toString() !== req.user.id) {
             return res.status(403).json({
                 success: false,
-                message: 'Not authorized to modify this field'
+                message: 'Không có quyền chỉnh sửa sân này'
             });
         }
 
@@ -625,7 +625,7 @@ export const updateRecommendedServices = async (req, res) => {
         if (!validServiceIds) {
             return res.status(400).json({
                 success: false,
-                message: 'One or more service IDs are invalid'
+                message: 'Một hoặc nhiều ID dịch vụ không hợp lệ'
             });
         }
 
@@ -645,15 +645,15 @@ export const updateRecommendedServices = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Recommended services updated successfully',
+            message: 'Cập nhật dịch vụ đề xuất thành công',
             recommended_services: field.recommended_services
         });
 
     } catch (error) {
-        console.error('Error updating recommended services:', error);
+        console.error('Lỗi khi cập nhật dịch vụ đề xuất:', error);
         res.status(500).json({
             success: false,
-            message: 'Error updating recommended services',
+            message: 'Lỗi khi cập nhật dịch vụ đề xuất',
             error: error.message
         });
     }

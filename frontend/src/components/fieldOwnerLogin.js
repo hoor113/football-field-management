@@ -37,7 +37,7 @@ const FieldOwnerLogin = () => {
             <div className="field-owner-login-form-group">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Tên đăng nhập"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="field-owner-login-input"
@@ -46,13 +46,13 @@ const FieldOwnerLogin = () => {
             <div className="field-owner-login-form-group">
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="field-owner-login-input"
               />
             </div>
-            <button type="submit" className="field-owner-login-button">Login</button>
+            <button type="submit" className="field-owner-login-button">Đăng nhập</button>
             <p className="register-link">
               Bạn chưa có tài khoản? <a href="http://localhost:5000/field_owner/register">Đăng ký ngay</a>
             </p>

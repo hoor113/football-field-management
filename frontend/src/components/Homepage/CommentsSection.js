@@ -22,10 +22,10 @@ export const CommentsSection = ({ fieldId }) => {
                 if (response.ok) {
                     setComments(data.ratings);
                 } else {
-                    console.error('Failed to fetch comments:', data.message);
+                    console.error('Lỗi khi lấy bình luận:', data.message);
                 }
             } catch (error) {
-                console.error('Error fetching comments:', error);
+                console.error('Lỗi khi lấy bình luận:', error);
             }
         };
 
@@ -47,7 +47,7 @@ export const CommentsSection = ({ fieldId }) => {
 
     return (
         <div className="comments-section">
-            <h2>Comments</h2>
+            <h2>Bình luận</h2>
             {currentComments.length > 0 ? (
                 currentComments.map((comment, index) => (
                     <div key={index} className="comment">
@@ -62,7 +62,7 @@ export const CommentsSection = ({ fieldId }) => {
                     </div>
                 ))
             ) : (
-                <p>No comments yet.</p>
+                <p>Chưa có bình luận nào.</p>
             )}
             <div className="pagination">
                 {Array.from({ length: Math.ceil(comments.length / commentsPerPage) }, (_, i) => (

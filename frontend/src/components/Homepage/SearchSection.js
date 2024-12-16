@@ -63,7 +63,7 @@ export const SearchSection = () => {
 
             {searchResults ? (
                 <div className="search-results">
-                    <h2 className="search-results-title">Search Results</h2>
+                    <h2 className="search-results-title">Kết quả tìm kiếm</h2>
                     <div className="fields-grid">
                         {searchResults.map(field => (
                             <FieldCard key={field._id} field={field} isLoggedIn={2} />
@@ -76,7 +76,7 @@ export const SearchSection = () => {
                         textAlign: 'center',
                         width: '100%',
                         margin: '0 auto'
-                    }}>Các Sân Bóng Được Đề Xuất</h2>
+                    }}>Các sân bóng được đề xuất</h2>
                     <br></br>
                     <div className="fields-grid">
                         {recommendedFields.map(field => (

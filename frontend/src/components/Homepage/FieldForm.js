@@ -89,26 +89,26 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
   return (
     <div className="modal field-form-modal">
-      <h2 className="field-title">Add New Field</h2>
+      <h2 className="field-title">Thêm sân mới</h2>
 
       {/* Basic Field Information */}
       <input
         type="text"
-        placeholder="Field Name"
+        placeholder="Tên sân"
         value={newField.name}
         onChange={(e) => setNewField({ ...newField, name: e.target.value })}
         className="modal-input"
       />
       <input
         type="text"
-        placeholder="Description (optional)"
+        placeholder="Mô tả (tùy chọn)"
         value={newField.description}
         onChange={(e) => setNewField({ ...newField, description: e.target.value })}
         className="modal-input"
       />
       <input
         type="text"
-        placeholder="Address"
+        placeholder="Địa chỉ"
         value={newField.address}
         onChange={(e) => setNewField({ ...newField, address: e.target.value })}
         className="modal-input"
@@ -116,7 +116,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       <input
         type="number"
         min="0"
-        placeholder="Base Price"
+        placeholder="Giá cơ bản"
         value={newField.base_price}
         onChange={(e) => {
           const value = Number(e.target.value);
@@ -128,7 +128,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       />
       <input
         type="text"
-        placeholder="Image URL"
+        placeholder="URL hình ảnh"
         value={newField.image_url}
         onChange={(e) => setNewField({ ...newField, image_url: e.target.value })}
         className="modal-input"
@@ -136,7 +136,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
       <input
         type="number"
         min="0"
-        placeholder="Total Grounds"
+        placeholder="Tổng số sân"
         value={newField.total_grounds}
         onChange={(e) => {
           const value = Number(e.target.value);
@@ -149,7 +149,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
       {/* Operating Hours Section */}
       <div className="operating-hours-section">
-        <h3>Operating Hours (Required)</h3>
+        <h3>Giờ hoạt động (Bắt buộc)</h3>
 
         {/* Display existing operating hours */}
         {newField.operating_hours.length > 0 && (
@@ -178,13 +178,13 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
 
         {/* Add new operating hours */}
         <div className="operating-hours-input">
-          <label>Add Operating Hours Range (2-hour intervals)</label>
+          <label>Thêm khung giờ hoạt động (chia hết cho 2 giờ)</label>
           <div className="hours-inputs">
             <input
               type="number"
               min="0"
               max="23"
-              placeholder="Start Hour (0-23)"
+              placeholder="Giờ bắt đầu (0-23)"
               value={currentOperatingHours.start_hour}
               onChange={(e) => setCurrentOperatingHours(prev => ({
                 ...prev,
@@ -196,7 +196,7 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
               type="number"
               min="1"
               max="24"
-              placeholder="End Hour (1-24)"
+              placeholder="Giờ kết thúc (1-24)"
               value={currentOperatingHours.end_hour}
               onChange={(e) => setCurrentOperatingHours(prev => ({
                 ...prev,
@@ -209,13 +209,13 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
               className="add-hours-button"
               type="button"
             >
-              Add Hours
+              Thêm giờ
             </button>
           </div>
           <small className="help-text">
-            Hours must be in 2-hour intervals and cannot overlap
+            Giờ hoạt động phải chia hết cho 2 giờ và không được chồng lên nhau
             <br />
-            Example: 7:00-13:00, 15:00-21:00 is valid
+            Ví dụ: 7:00-13:00, 15:00-21:00 là hợp lệ
           </small>
         </div>
       </div>
@@ -226,10 +226,10 @@ export const FieldForm = ({ onSubmit, onCancel }) => {
           onClick={handleSubmit}
           className="submit-button"
         >
-          Add Field
+          Thêm sân
         </button>
         <button onClick={onCancel} className="cancel-button">
-          Cancel
+          Hủy
         </button>
       </div>
     </div>

@@ -174,7 +174,7 @@ button:disabled {
     width: 300%;
     max-width: 400px;
     padding: 0.5rem 0;
-    height: 40px;
+    /* height: 40px; */
 }
 
 .save-btn {

@@ -66,15 +66,15 @@ const NotificationPageCustomer = () => {
         return new Date(dateString).toLocaleString();
     };
 
-    if (loading) return <div className="loading">Loading notifications...</div>;
-    if (error) return <div className="error">Error: {error}</div>;
+    if (loading) return <div className="loading">Đang tải thông báo...</div>;
+    if (error) return <div className="error">Lỗi: {error}</div>;
 
     return (
         <div className="notification-page">
-            <h1>Your Notifications</h1>
+            <h1>Thông báo của bạn</h1>
             <div className="notifications-container">
                 {notifications.length === 0 ? (
-                    <p className="no-notifications">No notifications</p>
+                    <p className="no-notifications">Chưa có thông báo nào</p>
                 ) : (
                     notifications.map(notification => (
                         <div 
@@ -86,7 +86,7 @@ const NotificationPageCustomer = () => {
                                 <div className="notification-header">
                                     <span className={`notification-status ${notification.type}`}>
                                         {notification.type === 'success' ? '✓' : 
-                                         notification.type === 'failed' ? '✗' : '!'}
+                                        notification.type === 'failed' ? '✗' : '!'}
                                     </span>
                                     <span className="notification-time">
                                         {formatDateTime(notification.createdAt)}

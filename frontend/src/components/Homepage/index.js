@@ -530,10 +530,10 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
                     setFields(fieldsData.fields);
                 }
             } else {
-                throw new Error('Failed to add service');
+                throw new Error('Lỗi khi thêm dịch vụ');
             }
         } catch (error) {
-            console.error('Error adding service:', error);
+            console.error('Lỗi khi thêm dịch vụ:', error);
             alert(error.message);
         }
     };
@@ -546,7 +546,7 @@ export const HomePage = ({ isLoggedIn, fullname }) => {
             // Redirect to the search results page
             navigate('/search-results', { state: { fields: data.fields } });
         } catch (error) {
-            console.error('Error fetching search results:', error);
+            console.error('Lỗi khi tìm kiếm sân:', error);
         }
     };
 

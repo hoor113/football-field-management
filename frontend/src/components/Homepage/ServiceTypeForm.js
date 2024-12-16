@@ -33,7 +33,7 @@ export const ServiceTypeForm = ({ fieldId, onClose }) => {
             }
         } catch (error) {
             console.error('Error:', error);
-            alert('Failed to add service types');
+            alert('Lỗi khi thêm loại dịch vụ');
         }
     };
 

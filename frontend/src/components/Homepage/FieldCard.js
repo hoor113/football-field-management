@@ -10,6 +10,7 @@ import RecommendedServicesForm from './RecommendedServicesForm';
 import { Button } from '@mui/material';
 import RoomServiceIcon from '@mui/icons-material/RoomService';
 import StadiumIcon from '@mui/icons-material/Stadium';
+import TouchAppIcon from '@mui/icons-material/TouchApp';
 
 export const FieldCard = ({ field, isLoggedIn }) => {
     const navigate = useNavigate();
@@ -43,7 +44,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to delete the field:', errorText);
+                console.error('Lỗi khi xóa sân:', errorText);
                 return;
             }
 
@@ -52,8 +53,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             alert(result.message);
             window.location.reload();
         } catch (error) {
-            console.error('An unexpected error occurred:', error.message);
-            alert('An unexpected error occurred. Please try again later.');
+            console.error('Lỗi không xác định:', error.message);
+            alert('Lỗi không xác định. Vui lòng thử lại sau.');
         }
     };
 
@@ -70,8 +71,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             if (!response.ok) {
                 const errorText = await response.text();
-                console.error('Failed to update the field:', errorText);
-                alert('Failed to update the field. Please try again.');
+                console.error('Lỗi khi cập nhật sân:', errorText);
+                alert('Lỗi khi cập nhật sân. Vui lòng thử lại.');
                 return;
             }
 
@@ -79,8 +80,8 @@ export const FieldCard = ({ field, isLoggedIn }) => {
             alert(result.message);
             window.location.reload();
         } catch (error) {
-            console.error('An unexpected error occurred:', error.message);
-            alert('An unexpected error occurred. Please try again later.');
+            console.error('Lỗi không xác định:', error.message);
+            alert('Lỗi không xác định. Vui lòng thử lại sau.');
         }
     };
 
@@ -107,13 +108,13 @@ export const FieldCard = ({ field, isLoggedIn }) => {
 
             <img src={field.image_url} alt={field.name} className="field-image" />
             <RatingDisplay fieldId={field._id} />
-            <p><strong>Description:</strong> {field.description}</p>
-            <p><strong>Address:</strong> {field.address}</p>
-            <p><strong>Base Price:</strong>  {field.base_price.toLocaleString()} VND</p>
-            <p><strong>Total Grounds:</strong> {field.total_grounds}</p>
+            <p><strong>Mô tả:</strong> {field.description}</p>
+            <p><strong>Địa chỉ:</strong> {field.address}</p>
+            <p><strong>Giá cơ bản:</strong>  {field.base_price.toLocaleString()} VND</p>
+            <p><strong>Tổng số sân:</strong> {field.total_grounds}</p>
 
             <div className="operating-hours-display">
-                <h3>Operating Hours:</h3>
+                <h3>Giờ hoạt động:</h3>
                 {field.operating_hours && field.operating_hours.length > 0 ? (
                     <div className="time-ranges">
                         {field.operating_hours
@@ -129,7 +130,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                             ))}
                     </div>
                 ) : (
-                    <p className="no-hours">No operating hours set</p>
+                    <p className="no-hours">Không có giờ hoạt động</p>
                 )}
             </div>
 
@@ -186,7 +187,7 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                         <h3>Tất cả dịch vụ</h3>
                         {Object.entries(groupedServices).map(([type, services]) => (
                             <div key={type}>
-                                <h4>{type}</h4>
+                                <h4 className="service-type-header">{type}</h4>
                                 <div className="services-grid">
                                     {services.map((service, index) => (
                                         <div key={index} className="service-item">
@@ -295,12 +296,26 @@ export const FieldCard = ({ field, isLoggedIn }) => {
                     </div>
                 </div>
             ) : null}
-            {isLoggedIn === 2 ? <button
-                className="add-service-button"
-                onClick={handleOrderClick}
-            >
-                Order Now
-            </button> : null}
+            {isLoggedIn === 2 ? (
+                <Button
+                    variant="outlined"
+                    startIcon={<TouchAppIcon />}
+                    onClick={handleOrderClick}
+                    sx={{
+                        color: '#1976d2',
+                        borderColor: '#1976d2',
+                        backgroundColor: 'white',
+                        width: '100%',
+                        marginTop: '10px',
+                        '&:hover': {
+                            borderColor: '#1976d2',
+                            backgroundColor: 'rgba(25, 118, 210, 0.04)'
+                        }
+                    }}
+                >
+                    ĐẶT SÂN NGAY
+                </Button>
+            ) : null}
             {showServiceTypeForm && (
 
                 <ServiceTypeForm

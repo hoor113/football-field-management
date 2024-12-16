@@ -7,14 +7,14 @@ import { Field } from '../models/field.model.js';
 export const register = async (req, res) => {
     const { username, password, fullname, sex, birthday, phone_no, email } = req.body;
     if (!(username && password && fullname && sex && birthday && phone_no && email)) {
-        return res.status(400).json({ success: false, message: "Please provide all fields" });
+        return res.status(400).json({ success: false, message: "Xin hãy điền đầy đủ thông tin" });
     }
 
     try {
         // Kiểm tra nếu username hoặc email đã tồn tại
         const existingFieldOwner = await FieldOwner.findOne({ $or: [{ username }, { email }] });
         if (existingFieldOwner) {
-            return res.status(400).json({ message: 'Username or Email already exists' });
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc Email đã được sử dụng' });
         }
 
         // Tạo chủ sân mới
@@ -31,7 +31,7 @@ export const register = async (req, res) => {
         // Lưu chủ sân vào cơ sở dữ liệu
         await newFieldOwner.save();
 
-        res.status(201).json({ message: 'FieldOwner registered successfully', user: newFieldOwner });
+        res.status(201).json({ message: 'Chủ sân đã đăng ký thành công', user: newFieldOwner });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -43,25 +43,25 @@ export const login = async (req, res) => {
 
     // Kiểm tra xem có username và password không
     if (!username || !password) {
-        return res.status(400).json({ message: 'Username and password are required' });
+        return res.status(400).json({ message: 'Tên đăng nhập và mật khẩu là bắt buộc' });
     }
 
     try {
         // Tìm chủ sân theo username
         const fieldOwner = await FieldOwner.findOne({ username });
         if (!fieldOwner) {
-            return res.status(400).json({ message: 'Invalid credentials' });
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
         }
 
         // Kiểm tra mật khẩu
         const isMatch = await fieldOwner.comparePassword(password);
         if (!isMatch) {
-            return res.status(400).json({ message: 'Invalid credentials because error password or username' });
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
         }
 
         // Kiểm tra biến môi trường JWT_SECRET
         if (!process.env.JWT_SECRET) {
-            return res.status(500).json({ message: 'JWT secret is not defined' });
+            return res.status(500).json({ message: 'Môi trường chưa được xác định' });
         }
 
         // Tạo JWT token
@@ -81,7 +81,7 @@ export const login = async (req, res) => {
             maxAge: 60 * 60 * 1000 // 1 hour
         });
 
-        res.status(200).json({ message: 'Login successful', token });
+        res.status(200).json({ message: 'Đăng nhập thành công', token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
@@ -93,7 +93,7 @@ export const logout = (req, res) => {
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'Strict',
     });
-    res.status(200).json({ message: 'Logged out successfully' });
+    res.status(200).json({ message: 'Đăng xuất thành công' });
 };  
 
 export const getFieldOwner = async (req, res) => {
@@ -101,7 +101,7 @@ export const getFieldOwner = async (req, res) => {
         console.log("Request user:", req.user)
         const fieldOwnerGet = await FieldOwner.findById(req.user.id).select('fullname')
         if (!fieldOwnerGet) {
-            return res.status(404).json({ message: "Failed to get full name"})
+            return res.status(404).json({ message: "Không tìm thấy tên chủ sân"})
         }
         res.json({ fullname: fieldOwnerGet.fullname })
     } catch (error) {

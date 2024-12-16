@@ -32,25 +32,25 @@ export const makeBooking = async (req, res) => {
     const { field_id, ground_id, start_time, end_time, price, services, booking_date } = req.body;
 
     if (!(field_id && ground_id && start_time && end_time && booking_date)) {
-        return res.status(400).json({ success: false, message: "Please provide all fields" });
+        return res.status(400).json({ success: false, message: "Vui lòng điền đầy đủ thông tin" });
     }
 
     try {
         const field = await Field.findById(field_id);
         if (!field) {
-            return res.status(404).json({ success: false, message: "Field not found" });
+            return res.status(404).json({ success: false, message: "Không tìm thấy sân" });
         }
 
         const ground = field.grounds.id(ground_id);
         if (!ground) {
-            return res.status(404).json({ success: false, message: "Ground not found" });
+            return res.status(404).json({ success: false, message: "Không tìm thấy sân con" });
         }
 
         // Check if the time slot is available
         if (!isTimeSlotAvailable(ground, start_time)) {
             return res.status(400).json({
                 success: false,
-                message: "This time slot is not available. You are either booking in the past or the slot is already occupied."
+                message: "Khung giờ này không khả dụng. Bạn đang đặt sân trong quá khứ hoặc khung giờ đã được đặt."
             });
         }
 
@@ -70,7 +70,7 @@ export const makeBooking = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: 'Booking created successfully',
+            message: 'Đặt sân thành công',
             bookingId: booking._id,
             start_time: start_time,
             end_time: end_time
@@ -78,7 +78,7 @@ export const makeBooking = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Server error',
+            message: 'Lỗi máy chủ',
             error: error.message
         });
     }
@@ -119,7 +119,7 @@ export const SearchFields = async (req, res) => {
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: 'Error searching fields',
+            message: 'Lỗi khi tìm kiếm sân',
             error: error.message
         });
     }
@@ -167,10 +167,10 @@ export const getResponseNoti = async (req, res) => {
         });
 
     } catch (error) {
-        console.error('Error fetching customer notifications:', error);
+        console.error('Lỗi khi lấy thông báo của khách hàng:', error);
         res.status(500).json({
             success: false,
-            message: 'Error fetching notifications',
+            message: 'Lỗi khi lấy thông báo',
             error: error.message
         });
     }
@@ -187,13 +187,13 @@ export const markAllNotificationsAsRead = async (req, res) => {
 
         res.status(200).json({ 
             success: true, 
-            message: 'All notifications marked as read' 
+            message: 'Đã đánh dấu tất cả thông báo là đã đọc' 
         });
     } catch (error) {
-        console.error('Error marking notifications as read:', error);
+        console.error('Lỗi khi đánh dấu thông báo đã đọc:', error);
         res.status(500).json({ 
             success: false, 
-            message: 'Error marking notifications as read', 
+            message: 'Lỗi khi đánh dấu thông báo đã đọc', 
             error: error.message 
         });
     }
@@ -217,8 +217,12 @@ export const HPsearchFields = async (req, res) => {
         const fields = await Field.find(query);
         res.status(200).json({ success: true, fields });
     } catch (error) {
-        console.error('Error searching fields:', error);
-        res.status(500).json({ success: false, message: 'Error searching fields', error: error.message });
+        console.error('Lỗi khi tìm kiếm sân:', error);
+        res.status(500).json({ 
+            success: false, 
+            message: 'Lỗi khi tìm kiếm sân', 
+            error: error.message 
+        });
     }
 };
 
@@ -236,9 +240,13 @@ export const submitRating = async (req, res) => {
 
         await newRating.save();
 
-        res.status(201).json({ success: true, message: 'Rating submitted successfully' });
+        res.status(201).json({ success: true, message: 'Gửi đánh giá thành công' });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error submitting rating', error: error.message });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Lỗi khi gửi đánh giá', 
+            error: error.message 
+        });
     }
 };
 
@@ -250,7 +258,11 @@ export const getFieldRatings = async (req, res) => {
 
         res.status(200).json({ success: true, ratings });
     } catch (error) {
-        res.status(500).json({ success: false, message: 'Error fetching ratings', error: error.message });
+        res.status(500).json({ 
+            success: false, 
+            message: 'Lỗi khi lấy đánh giá', 
+            error: error.message 
+        });
     }
 };
 
@@ -266,6 +278,9 @@ export const getAverageRating = async (req, res) => {
         const averageRating = ratings.reduce((acc, curr) => acc + curr.stars, 0) / ratings.length;
         res.json({ averageRating });
     } catch (error) {
-        res.status(500).json({ message: 'Error fetching average rating', error: error.message });
+        res.status(500).json({ 
+            message: 'Lỗi khi lấy điểm đánh giá trung bình', 
+            error: error.message 
+        });
     }
 };

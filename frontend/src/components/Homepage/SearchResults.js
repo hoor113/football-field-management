@@ -27,7 +27,7 @@ const SearchResults = () => {
     return (
         <Container maxWidth="lg" sx={{ py: 4 }}>
             <Typography variant="h4" component="h2" gutterBottom sx={{ mb: 4, textAlign: 'center' }}>
-                Search Results
+                Kết quả tìm kiếm
             </Typography>
             
             {fields.length > 0 ? (
@@ -94,7 +94,7 @@ const SearchResults = () => {
             ) : (
                 <Box sx={{ textAlign: 'center', mt: 4 }}>
                     <Typography variant="h6" color="text.secondary">
-                        No fields found
+                        Không tìm thấy sân
                     </Typography>
                 </Box>
             )}

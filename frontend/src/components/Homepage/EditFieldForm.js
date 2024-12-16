@@ -22,65 +22,65 @@ const EditFieldForm = ({ field, onClose, onSubmit }) => {
 
     return (
         <div>
-            <h2>Edit Field</h2>
+            <h2>Chỉnh sửa sân</h2>
             <form className="edit-field-form" onSubmit={handleFormSubmit}>
                 <div className="form-group">
-                    <label htmlFor="name">Field Name</label>
+                    <label htmlFor="name">Tên sân</label>
                     <input
                         type="text"
                         id="name"
                         name="name"
                         value={editData.name}
                         onChange={handleInputChange}
-                        placeholder="Enter new field name"
+                        placeholder="Nhập tên sân mới"
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="description">Description</label>
+                    <label htmlFor="description">Mô tả</label>
                     <textarea
                         id="description"
                         name="description"
                         value={editData.description}
                         onChange={handleInputChange}
-                        placeholder="Enter field description"
+                        placeholder="Nhập mô tả sân"
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="address">Address</label>
+                    <label htmlFor="address">Địa chỉ</label>
                     <input
                         type="text"
                         id="address"
                         name="address"
                         value={editData.address}
                         onChange={handleInputChange}
-                        placeholder="Enter field address"
+                        placeholder="Nhập địa chỉ sân"
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="base_price">Base Price</label>
+                    <label htmlFor="base_price">Giá cơ bản</label>
                     <input
                         type="number"
                         id="base_price"
                         name="base_price"
                         value={editData.base_price}
                         onChange={handleInputChange}
-                        placeholder="Enter base price"
+                        placeholder="Nhập giá cơ bản"
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="total_grounds">Total Grounds</label>
+                    <label htmlFor="total_grounds">Tổng số sân</label>
                     <input
                         type="number"
                         id="total_grounds"
                         name="total_grounds"
                         value={editData.total_grounds}
                         onChange={handleInputChange}
-                        placeholder="Enter total number of grounds"
+                        placeholder="Nhập tổng số sân"
                     />
                 </div>
                 <div className="button-group">
-                    <button type="submit" className="save-button">Save</button><br />
-                    <button type="button" className="cancel-button" onClick={onClose}>Cancel</button>
+                    <button type="submit" className="save-button">Lưu</button><br />
+                    <button type="button" className="cancel-button" onClick={onClose}>Hủy</button>
                 </div>
             </form>
         </div>

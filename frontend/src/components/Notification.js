@@ -10,13 +10,13 @@ const Notification = ({ notifications, onAccept, onDecline }) => {
     return (
         <div className="notification-dropdown">
             {notifications.length === 0 ? (
-                <p className="no-notifications">No notifications</p>
+                <p className="no-notifications">Chưa có thông báo nào</p>
             ) : (
                 notifications.map(notification => (
                     <div key={notification._id} className="notification-item">
                         <div className="notification-header">
                             <span className="notification-time">{formatDate(notification.createdAt)}</span>
-                            {!notification.isRead && <span className="unread-badge">New</span>}
+                            {!notification.isRead && <span className="unread-badge">Mới</span>}
                         </div>
                         <p className="notification-message">{notification.message}</p>
                         <div className="notification-actions">
@@ -24,13 +24,13 @@ const Notification = ({ notifications, onAccept, onDecline }) => {
                                 className="accept-btn"
                                 onClick={() => onAccept(notification.bookingId)}
                             >
-                                Accept
+                                Chấp nhận
                             </button>
                             <button 
                                 className="decline-btn"
                                 onClick={() => onDecline(notification.bookingId)}
                             >
-                                Decline
+                                Từ chối
                             </button>
                         </div>
                     </div>

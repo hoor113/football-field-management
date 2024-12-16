@@ -26,14 +26,14 @@ export const ServiceForm = ({ fieldId, onClose }) => {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add service');
+                throw new Error('Lỗi khi thêm dịch vụ');
             }
 
-            alert('Service added successfully!');
+            alert('Thêm dịch vụ thành công!');
             onClose();
             window.location.reload();
         } catch (error) {
-            alert('Error adding service: ' + error.message);
+            alert('Lỗi khi thêm dịch vụ: ' + error.message);
         }
     };
 
@@ -43,13 +43,13 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                 {/* <button className="close-button" onClick={onClose}>×</button> */}
 
                 <div className="modal-header">
-                    <h2>Add New Service</h2>
+                    <h2>Thêm dịch vụ mới</h2>
                 </div>
 
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"
-                        placeholder="Service Name"
+                        placeholder="Tên dịch vụ"
                         value={service.name}
                         onChange={(e) => setService({ ...service, name: e.target.value })}
                         required
@@ -58,7 +58,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
                     <input
                         type="text"
-                        placeholder="Service Type"
+                        placeholder="Loại dịch vụ"
                         value={service.type}
                         onChange={(e) => setService({ ...service, type: e.target.value })}
                         required
@@ -68,7 +68,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
                     <div className="price-unit-container">
                         <input
                             type="number"
-                            placeholder="Price"
+                            placeholder="Giá"
                             value={service.price}
                             onChange={(e) => {
                                 const value = Number(e.target.value);
@@ -82,7 +82,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
                         <input
                             type="text"
-                            placeholder="Unit (e.g., per hour, per session)"
+                            placeholder="Đơn vị tính(ví dụ: giờ, phiên)"
                             value={service.unit}
                             onChange={(e) => setService({ ...service, unit: e.target.value })}
                             required
@@ -92,7 +92,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
                     <input
                         type="url"
-                        placeholder="Image URL"
+                        placeholder="URL hình ảnh"
                         value={service.imageUrl}
                         onChange={(e) => setService({ ...service, imageUrl: e.target.value })}
                         className="modal-input"
@@ -100,10 +100,10 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
                     <div className="form-buttons">
                         <button type="submit" className="submit-button">
-                            Add Service
+                            Thêm dịch vụ
                         </button>
                         <button type="button" onClick={onClose} className="cancel-button">
-                            Cancel
+                            Hủy
                         </button>
                     </div>
                 </form>

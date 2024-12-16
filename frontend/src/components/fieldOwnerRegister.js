@@ -20,11 +20,11 @@ const FieldOwnerRegister = () => {
     e.preventDefault();
     
     if (formData.password !== formData.confirmPassword) {
-        setPasswordError("Passwords don't match!");
+        setPasswordError("Mật khẩu không khớp!");
         return;
     }
     if (formData.password.length < 6) {
-        setPasswordError("Password must be at least 6 characters long!");
+        setPasswordError("Mật khẩu phải có ít nhất 6 ký tự!");
         return;
     }
     
@@ -35,7 +35,7 @@ const FieldOwnerRegister = () => {
       alert(response.data.message);
       window.location.href = '/field-owner/login';
     } catch (error) {
-      const message = error.response ? error.response.data.message : "An error occurred. Please try again.";
+      const message = error.response ? error.response.data.message : "Có lỗi xảy ra. Vui lòng thử lại.";
       alert(message);
     }
   };
@@ -57,7 +57,7 @@ const FieldOwnerRegister = () => {
             <div className="field-owner-register-form-group">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Tên đăng nhập"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="field-owner-register-input"
@@ -66,7 +66,7 @@ const FieldOwnerRegister = () => {
             <div className="field-owner-register-form-group">
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="field-owner-register-input"
@@ -75,7 +75,7 @@ const FieldOwnerRegister = () => {
             <div className="field-owner-register-form-group">
               <input
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Nhập lại mật khẩu"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className="field-owner-register-input"
@@ -85,7 +85,7 @@ const FieldOwnerRegister = () => {
             <div className="field-owner-register-form-group">
               <input
                 type="text"
-                placeholder="Full Name"
+                placeholder="Họ tên"
                 value={formData.fullname}
                 onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
                 className="field-owner-register-input"
@@ -97,16 +97,16 @@ const FieldOwnerRegister = () => {
                 onChange={(e) => setFormData({ ...formData, sex: e.target.value })}
                 className="field-owner-register-input"
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="">Chọn giới tính</option>
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+                <option value="other">Khác</option>
               </select>
             </div>
             <div className="field-owner-register-form-group">
               <input
                 type="date"
-                placeholder="Birthday"
+                placeholder="Ngày sinh"
                 value={formData.birthday}
                 onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
                 className="field-owner-register-input"
@@ -115,7 +115,7 @@ const FieldOwnerRegister = () => {
             <div className="field-owner-register-form-group">
               <input
                 type="text"
-                placeholder="Phone Number"
+                placeholder="Số điện thoại"
                 value={formData.phone_no}
                 onChange={(e) => setFormData({ ...formData, phone_no: e.target.value })}
                 className="field-owner-register-input"
@@ -130,7 +130,7 @@ const FieldOwnerRegister = () => {
                 className="field-owner-register-input"
               />
             </div>
-            <button type="submit" className="field-owner-register-button">Register</button>
+            <button type="submit" className="field-owner-register-button">Đăng ký</button>
           </form>
         </div>
       </div>

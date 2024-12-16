@@ -60,7 +60,7 @@ const CustomerRegister = () => {
             <div className="customer-register-form-group">
               <input
                 type="text"
-                placeholder="Username"
+                placeholder="Tên đăng nhập"
                 value={formData.username}
                 onChange={(e) => setFormData({ ...formData, username: e.target.value })}
                 className="customer-register-input"
@@ -69,7 +69,7 @@ const CustomerRegister = () => {
             <div className="customer-register-form-group">
               <input
                 type="password"
-                placeholder="Password"
+                placeholder="Mật khẩu"
                 value={formData.password}
                 onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                 className="customer-register-input"
@@ -78,7 +78,7 @@ const CustomerRegister = () => {
             <div className="customer-register-form-group">
               <input
                 type="password"
-                placeholder="Confirm Password"
+                placeholder="Nhập lại mật khẩu"
                 value={formData.confirmPassword}
                 onChange={(e) => setFormData({ ...formData, confirmPassword: e.target.value })}
                 className="customer-register-input"
@@ -88,7 +88,7 @@ const CustomerRegister = () => {
             <div className="customer-register-form-group">
               <input
                 type="text"
-                placeholder="Full Name"
+                placeholder="Họ tên"
                 value={formData.fullname}
                 onChange={(e) => setFormData({ ...formData, fullname: e.target.value })}
                 className="customer-register-input"
@@ -100,16 +100,16 @@ const CustomerRegister = () => {
                 onChange={(e) => setFormData({ ...formData, sex: e.target.value })}
                 className="customer-register-input"
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-                <option value="other">Other</option>
+                <option value="">Chọn giới tính</option>
+                <option value="male">Nam</option>
+                <option value="female">Nữ</option>
+                <option value="other">Khác</option>
               </select>
             </div>
             <div className="customer-register-form-group">
               <input
                 type="date"
-                placeholder="Birthday"
+                placeholder="Ngày sinh"
                 value={formData.birthday}
                 onChange={(e) => setFormData({ ...formData, birthday: e.target.value })}
                 className="customer-register-input"
@@ -118,7 +118,7 @@ const CustomerRegister = () => {
             <div className="customer-register-form-group">
               <input
                 type="text"
-                placeholder="Phone Number"
+                placeholder="Số điện thoại"
                 value={formData.phone_no}
                 onChange={(e) => setFormData({ ...formData, phone_no: e.target.value })}
                 className="customer-register-input"
@@ -133,7 +133,7 @@ const CustomerRegister = () => {
                 className="customer-register-input"
               />
             </div>
-            <button type="submit" className="customer-register-button">Register</button>
+            <button type="submit" className="customer-register-button">Đăng ký</button>
           </form>
         </div>
       </div>

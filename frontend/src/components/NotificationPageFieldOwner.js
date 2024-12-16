@@ -121,11 +121,11 @@ const NotificationPageFieldOwner = () => {
         return (
             <div className="modal-overlay">
                 <div className="modal-content">
-                    <h2>Confirm Booking</h2>
-                    <p>Are you sure you want to accept this booking?</p>
+                    <h2>Xác nhận đặt sân</h2>
+                    <p>Bạn có chắc chắn muốn chấp nhận đặt sân này không?</p>
                     <div className="modal-actions">
-                        <button onClick={onConfirm} className="confirm-btn">Yes, Accept</button>
-                        <button onClick={onClose} className="cancel-btn">Cancel</button>
+                        <button onClick={onConfirm} className="confirm-btn">Chấp nhận</button>
+                        <button onClick={onClose} className="cancel-btn">Hủy</button>
                     </div>
                 </div>
             </div>
@@ -164,26 +164,26 @@ const NotificationPageFieldOwner = () => {
         return (
             <div className="modal-overlay">
                 <div className="modal-content">
-                    <h2>Confirm Decline</h2>
-                    <p>Are you sure you want to decline this booking?</p>
+                    <h2>Xác nhận từ chối</h2>
+                    <p>Bạn có chắc chắn muốn từ chối đặt sân này không?</p>
                     <div className="modal-actions">
-                        <button onClick={onConfirm} className="confirm-btn">Yes, Decline</button>
-                        <button onClick={onClose} className="cancel-btn">Cancel</button>
+                        <button onClick={onConfirm} className="confirm-btn">Chấp nhận</button>
+                        <button onClick={onClose} className="cancel-btn">Hủy</button>
                     </div>
                 </div>
             </div>
         );
     };
 
-    if (loading) return <div className="loading">Loading notifications...</div>;
-    if (error) return <div className="error">Error: {error}</div>;
+    if (loading) return <div className="loading">Đang tải thông báo...</div>;
+    if (error) return <div className="error">Lỗi: {error}</div>;
 
     return (
         <div className="notification-page">
-            <h1>Pending Booking Requests</h1>
+            <h1>Đơn đặt sân đang chờ xử lý</h1>
             <div className="notifications-container">
                 {notifications.length === 0 ? (
-                    <p className="no-notifications">No pending bookings</p>
+                    <p className="no-notifications">Chưa có đơn đặt sân nào</p>
                 ) : (
                     notifications.map(notification => (
                         <div key={notification._id} className="notification-box">
@@ -192,9 +192,9 @@ const NotificationPageFieldOwner = () => {
                                 <div className="customer-info">
                                     <h3>Customer Details</h3>
                                     <div className="info-content">
-                                        <p><i className="fas fa-user"></i> <strong>Name:</strong> {notification.customerDetails.fullname}</p>
+                                        <p><i className="fas fa-user"></i> <strong>Họ tên:</strong> {notification.customerDetails.fullname}</p>
                                         <p><i className="fas fa-envelope"></i> <strong>Email:</strong> {notification.customerDetails.email}</p>
-                                        <p><i className="fas fa-phone"></i> <strong>Phone:</strong> {notification.customerDetails.phone_no}</p>
+                                        <p><i className="fas fa-phone"></i> <strong>Số điện thoại:</strong> {notification.customerDetails.phone_no}</p>
                                     </div>
                                 </div>
 
@@ -202,18 +202,18 @@ const NotificationPageFieldOwner = () => {
                                 <div className="booking-details">
                                     <h3>Booking Details</h3>
                                     <div className="info-content">
-                                        <p><i className="fas fa-bookmark"></i> <strong>Booking ID:</strong> {notification.bookingDetails._id}</p>
-                                        <p><i className="fas fa-clock"></i> <strong>Start Time:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
-                                        <p><i className="fas fa-clock"></i> <strong>End Time:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
+                                        <p><i className="fas fa-bookmark"></i> <strong>Mã đơn đặt:</strong> {notification.bookingDetails._id}</p>
+                                        <p><i className="fas fa-clock"></i> <strong>Thời gian bắt đầu:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>
+                                        <p><i className="fas fa-clock"></i> <strong>Thời gian kết thúc:</strong> {formatDateTime(notification.bookingDetails.end_time)}</p>
                                         <p>
                                             <i className="fas fa-map-marker-alt"></i> 
-                                            <strong>Ground:</strong> 
+                                            <strong>Sân:</strong> 
                                             {notification.bookingDetails.ground ? 
                                                 `${notification.bookingDetails.field_name} - ${notification.bookingDetails.ground.name} (Sân ${notification.bookingDetails.ground.number})` : 
                                                 `${notification.bookingDetails.field_name} - Unknown Ground`
                                             }
                                         </p>
-                                        <p><i className="fas fa-money-bill-wave"></i> <strong>Total Price:</strong> {formatPrice(notification.bookingDetails.price)}</p>
+                                        <p><i className="fas fa-money-bill-wave"></i> <strong>Tổng tiền:</strong> {formatPrice(notification.bookingDetails.price)}</p>
                                     </div>
                                 </div>
                             </div>
@@ -221,7 +221,7 @@ const NotificationPageFieldOwner = () => {
                             {/* Additional Services */}
                             {notification.bookingDetails.services?.length > 0 && (
                                 <div className="services-section">
-                                    <h4><i className="fas fa-concierge-bell"></i> Additional Services:</h4>
+                                    <h4><i className="fas fa-concierge-bell"></i> Dịch vụ bổ sung:</h4>
                                     <div className="services-grid">
                                         {notification.bookingDetails.services.map(service => (
                                             <div key={service._id} className="service-item">
@@ -241,13 +241,13 @@ const NotificationPageFieldOwner = () => {
                                     onClick={() => handleAcceptClick(notification.bookingDetails._id, notification.id)} 
                                     className="accept-btn"
                                 >
-                                    <i className="fas fa-check"></i> Accept Booking
+                                    <i className="fas fa-check"></i> Chấp nhận
                                 </button>
                                 <button 
                                     onClick={() => handleDeclineClick(notification.bookingDetails._id, notification.id)} 
                                     className="decline-btn"
                                 >
-                                    <i className="fas fa-times"></i> Decline Booking
+                                    <i className="fas fa-times"></i> Từ chối
                                 </button>
                             </div>
                         </div>
