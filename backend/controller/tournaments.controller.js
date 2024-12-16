@@ -1,7 +1,99 @@
 import { Tournament } from "../models/tournaments.model.js";
 import { Team } from "../models/teams.model.js";
 
-// Tạo giải đấu mới
+/**
+ * @swagger
+ * /api/tournaments:
+ *   get:
+ *     summary: Lấy danh sách tất cả giải đấu
+ *     tags: [Tournament]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Tournament'
+ *       500:
+ *         description: Lỗi server
+ */
+export const getAllTournaments = async (req, res) => {
+  try {
+    const tournaments = await Tournament.find();
+    res.status(200).json(tournaments);
+  } catch (error) {
+    res.status(500).json({ message: "Không thể lấy danh sách giải đấu", error: error.message });
+  }
+};
+
+/**
+ * @swagger
+ * /api/tournaments:
+ *   post:
+ *     summary: Tạo giải đấu mới
+ *     tags: [Tournament]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - name
+ *               - type
+ *               - team_limit
+ *               - start_date
+ *               - end_date
+ *             properties:
+ *               name:
+ *                 type: string
+ *                 description: Tên giải đấu
+ *               description:
+ *                 type: string
+ *                 description: Mô tả giải đấu
+ *               type:
+ *                 type: string
+ *                 description: Loại giải đấu (5 người, 7 người, etc)
+ *               team_limit:
+ *                 type: number
+ *                 description: Số đội tối đa có thể tham gia
+ *               start_date:
+ *                 type: string
+ *                 format: date
+ *                 description: Ngày bắt đầu giải
+ *               end_date:
+ *                 type: string
+ *                 format: date
+ *                 description: Ngày kết thúc giải
+ *               fee:
+ *                 type: number
+ *                 description: Phí tham gia
+ *               prize:
+ *                 type: number
+ *                 description: Giải thưởng
+ *     responses:
+ *       201:
+ *         description: Tạo giải đấu thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 data:
+ *                   $ref: '#/components/schemas/Tournament'
+ *       400:
+ *         description: Thiếu thông tin bắt buộc
+ *       500:
+ *         description: Lỗi server
+ */
 export const createTournament = async (req, res) => {
   try {
     const { name, description, type, team_limit, start_date, end_date, fee, prize } = req.body;
@@ -30,18 +122,31 @@ export const createTournament = async (req, res) => {
   }
 };
 
-
-// Lấy danh sách tất cả giải đấu
-export const getAllTournaments = async (req, res) => {
-  try {
-    const tournaments = await Tournament.find();
-    res.status(200).json(tournaments);
-  } catch (error) {
-    res.status(500).json({ message: "Không thể lấy danh sách giải đấu", error: error.message });
-  }
-};
-
-// Lấy thông tin một giải đấu cụ thể
+/**
+ * @swagger
+ * /api/tournaments/{id}:
+ *   get:
+ *     summary: Lấy thông tin chi tiết một giải đấu
+ *     tags: [Tournament]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của giải đấu
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Tournament'
+ *       404:
+ *         description: Không tìm thấy giải đấu
+ */
 export const getTournamentById = async (req, res) => {
   try {
     const { id } = req.params;
@@ -57,7 +162,50 @@ export const getTournamentById = async (req, res) => {
   }
 };
 
-// Cập nhật thông tin giải đấu
+/**
+ * @swagger
+ * /api/tournaments/{id}:
+ *   put:
+ *     summary: Cập nhật thông tin giải đấu
+ *     tags: [Tournament]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của giải đấu
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               type:
+ *                 type: string
+ *               team_limit:
+ *                 type: number
+ *               start_date:
+ *                 type: string
+ *                 format: date
+ *               end_date:
+ *                 type: string
+ *                 format: date
+ *               fee:
+ *                 type: number
+ *               prize:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Cập nhật thành công
+ *       404:
+ *         description: Không tìm thấy giải đấu
+ */
 export const updateTournament = async (req, res) => {
   try {
     const { id } = req.params;
@@ -75,7 +223,27 @@ export const updateTournament = async (req, res) => {
   }
 };
 
-// Xóa giải đấu
+/**
+ * @swagger
+ * /api/tournaments/{id}:
+ *   delete:
+ *     summary: Xóa giải đấu
+ *     tags: [Tournament]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của giải đấu
+ *     responses:
+ *       200:
+ *         description: Xóa thành công
+ *       404:
+ *         description: Không tìm thấy giải đấu
+ */
 export const deleteTournament = async (req, res) => {
   try {
     const { id } = req.params;
@@ -92,7 +260,34 @@ export const deleteTournament = async (req, res) => {
   }
 };
 
-// Cấp phép cho đội tham gia giải
+/**
+ * @swagger
+ * /api/tournaments/teams/approve:
+ *   post:
+ *     summary: Phê duyệt đội tham gia giải
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tournament_id
+ *               - team_name
+ *             properties:
+ *               tournament_id:
+ *                 type: string
+ *               team_name:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Phê duyệt thành công
+ *       404:
+ *         description: Không tìm thấy giải đấu hoặc đội
+ */
 export const approveTeam = async (req, res) => {
   try {
     const { tournament_id, team_name } = req.body;

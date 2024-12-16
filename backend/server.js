@@ -8,6 +8,8 @@ import router4 from "./routes/tournaments.routes.js"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
 import path from "path"
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './config/swagger.js';
 
 dotenv.config()
 
@@ -33,6 +35,9 @@ app.use("/api/field", router3);
 
 //route tổ chức giải đấu
 app.use("/api/tournaments", router4)
+
+// Thêm route cho Swagger UI (thêm vào trước các routes khác)
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 const __dirname = path.resolve()
 

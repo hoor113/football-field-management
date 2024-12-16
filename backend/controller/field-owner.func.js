@@ -68,7 +68,7 @@ export const UploadService = async (req, res) => {
         }
         field.services.push({ name, type, price })
         await field.save()
-        res.status(200).json({ message: 'Thêm dịch v�� thành công', field });
+        res.status(200).json({ message: 'Thêm dịch vụ thành công', field });
     } catch (error) {
         res.status(500).json({ message: 'Có lỗi xảy ra', error: error.message });
     }

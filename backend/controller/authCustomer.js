@@ -1,7 +1,50 @@
 import { Customer } from '../models/customer.model.js';
 import jwt from 'jsonwebtoken';
 
-// Đăng ký người dùng mới
+/**
+ * @swagger
+ * /api/customer/register:
+ *   post:
+ *     summary: Đăng ký tài khoản khách hàng
+ *     tags: [Auth Customer]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *               - fullname
+ *               - sex
+ *               - birthday
+ *               - phone_no
+ *               - email
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               fullname:
+ *                 type: string
+ *               sex:
+ *                 type: string
+ *               birthday:
+ *                 type: string
+ *                 format: date
+ *               phone_no:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Dữ liệu không hợp lệ
+ *       500:
+ *         description: Lỗi server
+ */
 export const register = async (req, res) => {
     const { username, password, fullname, sex, birthday, phone_no, email } = req.body;
     if (!(username && password && fullname && sex && birthday && phone_no && email)) {
@@ -35,7 +78,43 @@ export const register = async (req, res) => {
     }
 };
 
-// Đăng nhập người dùng
+/**
+ * @swagger
+ * /api/customer/login:
+ *   post:
+ *     summary: Đăng nhập tài khoản khách hàng
+ *     tags: [Auth Customer]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Đăng nhập thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Username hoặc password không đúng
+ *       500:
+ *         description: Lỗi server
+ */
 export const login = async (req, res) => {
     const { username, password } = req.body;
 
@@ -86,6 +165,18 @@ export const login = async (req, res) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/customer/logout:
+ *   post:
+ *     summary: Đăng xuất
+ *     tags: [Auth Customer]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Đăng xuất thành công
+ */
 export const logout = (req, res) => {
     res.clearCookie('token', {
         httpOnly: true,
@@ -95,19 +186,33 @@ export const logout = (req, res) => {
     res.status(200).json({ message: 'Logged out successfully' });
 };
 
-export const getCustomer = async (req, res) => {
-    try {
-        console.log("Request user:", req.user)
-        const customerGet = await Customer.findById(req.user.id).select('fullname')
-        if (!customerGet) {
-            return res.status(404).json({ message: "Failed to get full name"})
-        }
-        res.json({ fullname: customerGet.fullname })
-    } catch (error) {
-        res.status(500).json({ error: error.message })
-    }
-}
-
+/**
+ * @swagger
+ * /api/customer/profile:
+ *   get:
+ *     summary: Lấy thông tin profile khách hàng
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fullname:
+ *                   type: string
+ *                 username:
+ *                   type: string
+ *                 email:
+ *                   type: string
+ *                 phone:
+ *                   type: string
+ *       404:
+ *         description: Không tìm thấy thông tin khách hàng
+ */
 export const getProfile = async (req, res) => {
     try {
         const customer = await Customer.findById(req.user.id)
@@ -128,6 +233,33 @@ export const getProfile = async (req, res) => {
     }
 };
 
+/**
+ * @swagger
+ * /api/customer/profile/update:
+ *   put:
+ *     summary: Cập nhật thông tin profile khách hàng
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               fullname:
+ *                 type: string
+ *               phone_no:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Cập nhật thành công
+ *       404:
+ *         description: Không tìm thấy thông tin khách hàng
+ */
 export const updateProfile = async (req, res) => {
     try {
         const { fullname, email, phone, currentPassword, newPassword } = req.body;
@@ -182,4 +314,40 @@ export const updateProfile = async (req, res) => {
         res.status(500).json({ message: 'Lỗi khi cập nhật thông tin' });
     }
 };
+
+/**
+ * @swagger
+ * /api/customer:
+ *   get:
+ *     summary: Lấy thông tin cơ bản của khách hàng
+ *     tags: [Profile]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 fullname:
+ *                   type: string
+ *       404:
+ *         description: Không tìm thấy thông tin khách hàng
+ *       500:
+ *         description: Lỗi server
+ */
+export const getCustomer = async (req, res) => {
+    try {
+        console.log("Request user:", req.user)
+        const customerGet = await Customer.findById(req.user.id).select('fullname')
+        if (!customerGet) {
+            return res.status(404).json({ message: "Failed to get full name"})
+        }
+        res.json({ fullname: customerGet.fullname })
+    } catch (error) {
+        res.status(500).json({ error: error.message })
+    }
+}
 
