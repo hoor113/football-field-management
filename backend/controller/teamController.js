@@ -1,6 +1,169 @@
 import { Tournament } from "../models/tournaments.model.js";
 import { Team } from "../models/teams.model.js";
 
+/**
+ * @swagger
+ * /api/tournaments/teams/register:
+ *   post:
+ *     summary: Đăng ký đội tham gia giải đấu
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tournament_id
+ *               - team_name
+ *               - captain_name
+ *               - members
+ *             properties:
+ *               tournament_id:
+ *                 type: string
+ *               team_name:
+ *                 type: string
+ *               captain_name:
+ *                 type: string
+ *               members:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *     responses:
+ *       201:
+ *         description: Đăng ký đội thành công
+ */
+
+/**
+ * @swagger
+ * /api/tournaments/teams/my-registrations:
+ *   get:
+ *     summary: Lấy danh sách đội đã đăng ký của người dùng hiện tại
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   tournament_id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   captain_name:
+ *                     type: string
+ *                   members:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *                   status:
+ *                     type: string
+ *                     enum: [pending, approved]
+ *       500:
+ *         description: Lỗi server
+ */
+
+/**
+ * @swagger
+ * /api/tournaments/tournaments/{tournament_id}/pending-teams:
+ *   get:
+ *     summary: Lấy danh sách đội đang chờ phê duyệt cho một giải đấu
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: tournament_id
+ *         required: true
+ *         schema:
+ *           type: string
+ *         description: ID của giải đấu
+ *     responses:
+ *       200:
+ *         description: Thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 pendingTeams:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       name:
+ *                         type: string
+ *                       captain_name:
+ *                         type: string
+ *                       members:
+ *                         type: array
+ *                         items:
+ *                           type: string
+ *                       status:
+ *                         type: string
+ *                         enum: [pending]
+ *       500:
+ *         description: Lỗi server
+ */
+
+/**
+ * @swagger
+ * /api/tournaments/teams/approve:
+ *   post:
+ *     summary: Phê duyệt đội tham gia giải đấu
+ *     tags: [Team]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - tournament_id
+ *               - team_id
+ *             properties:
+ *               tournament_id:
+ *                 type: string
+ *               team_id:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Phê duyệt thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 team:
+ *                   type: object
+ *                   properties:
+ *                     name:
+ *                       type: string
+ *                     status:
+ *                       type: string
+ *                       enum: [approved]
+ *       404:
+ *         description: Không tìm thấy đội
+ *       500:
+ *         description: Lỗi server
+ */
+
 // Hàm đăng ký đội hiện tại
 export const registerTeam = async (req, res) => {
     try {
@@ -15,7 +178,7 @@ export const registerTeam = async (req, res) => {
         // Kiểm tra xem customer đã đăng ký team cho giải đấu này chưa
         const existingTeam = await Team.findOne({
             tournament_id,
-            captain_name: req.user.fullname // Sử dụng fullname từ token
+            user_id: req.user.id
         });
 
         if (existingTeam) {
@@ -30,9 +193,10 @@ export const registerTeam = async (req, res) => {
             return res.status(400).json({ message: "Đã đủ số đội tham gia giải đấu" });
         }
 
-        // Tạo đội mới
+        // Tạo đội mới với user_id
         const newTeam = new Team({
             tournament_id,
+            user_id: req.user.id,  // Lấy user_id từ token
             name: team_name,
             captain_name,
             members,
@@ -54,17 +218,17 @@ export const registerTeam = async (req, res) => {
 // Thêm hàm lấy danh sách đội đã đăng ký của user
 export const getMyRegistrations = async (req, res) => {
     try {
+        // Tìm teams theo user_id thay vì captain_name
         const teams = await Team.find({ 
-            captain_name: req.user.fullname
+            user_id: req.user.id
         });
         
-        // Đảm bảo trả về ID dưới dạng string
         const registrations = teams.map(team => ({
             tournament_id: team.tournament_id.toString(),
             status: team.status
         }));
         
-        console.log('Sending registrations:', registrations); // Debug
+        console.log('Sending registrations:', registrations);
         res.json(registrations);
     } catch (error) {
         console.error('Error in getMyRegistrations:', error);
@@ -92,39 +256,6 @@ export const getPendingTeams = async (req, res) => {
         res.status(500).json({ 
             success: false,
             message: "Lỗi khi lấy danh sách đội chờ phê duyệt" 
-        });
-    }
-};
-
-// Sửa lại hàm approveTeam để cập nhật status
-export const approveTeam = async (req, res) => {
-    try {
-        const { tournament_id, team_id } = req.body;
-
-        // Tìm và cập nhật trạng thái của đội
-        const updatedTeam = await Team.findByIdAndUpdate(
-            team_id,
-            { status: 'approved' },
-            { new: true }
-        );
-
-        if (!updatedTeam) {
-            return res.status(404).json({
-                success: false,
-                message: "Không tìm thấy đội bóng"
-            });
-        }
-
-        res.json({
-            success: true,
-            message: "Phê duyệt đội thành công",
-            team: updatedTeam
-        });
-    } catch (error) {
-        console.error('Error approving team:', error);
-        res.status(500).json({
-            success: false,
-            message: "Lỗi khi phê duyệt đội"
         });
     }
 };

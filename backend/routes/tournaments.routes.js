@@ -35,6 +35,6 @@ router4.post("/teams/approve", authenticateToken, checkRole(['fieldOwner']), app
 router4.get("/teams/my-registrations", authenticateToken, checkRole(['customer']), getMyRegistrations);
 
 // Thêm route để lấy danh sách đội chờ phê duyệt
-router4.get("/tournaments/:tournament_id/pending-teams", authenticateToken, checkRole(['fieldOwner']), getPendingTeams);
+router4.get("/:tournament_id/pending-teams", authenticateToken, checkRole(['fieldOwner']), getPendingTeams);
 
 export default router4;

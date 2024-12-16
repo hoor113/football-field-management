@@ -14,28 +14,47 @@ const CustomerTournaments = () => {
     });
     const [registeredTeams, setRegisteredTeams] = useState({});
 
+    const fetchRegisteredTeams = async () => {
+        try {
+            console.log('Fetching registered teams...');
+            const response = await fetch('/api/tournaments/teams/my-registrations', {
+                credentials: 'include'
+            });
+            console.log('Response status:', response.status);
+            const data = await response.json();
+            console.log('Received data:', data);
+            
+            if (response.ok) {
+                const teamsMap = {};
+                if (Array.isArray(data)) {
+                    data.forEach(team => {
+                        const tournamentId = team.tournament_id._id || team.tournament_id;
+                        if (tournamentId) {
+                            teamsMap[tournamentId.toString()] = team.status;
+                        }
+                    });
+                }
+                console.log('Processed teams map:', teamsMap);
+                setRegisteredTeams(teamsMap);
+            } else {
+                console.error('Error fetching registered teams:', data.message);
+            }
+        } catch (error) {
+            console.error('Lỗi khi lấy thông tin đội đã đăng ký:', error);
+        }
+    };
+
     useEffect(() => {
         fetchTournaments();
-        const fetchRegisteredTeams = async () => {
-            try {
-                const response = await fetch('/api/tournaments/teams/my-registrations', {
-                    credentials: 'include'
-                });
-                const data = await response.json();
-                if (response.ok) {
-                    const teamsMap = {};
-                    data.forEach(team => {
-                        teamsMap[team.tournament_id.toString()] = team.status;
-                    });
-                    console.log('Registered Teams Map:', teamsMap);
-                    setRegisteredTeams(teamsMap);
-                }
-            } catch (error) {
-                console.error('Lỗi khi lấy thông tin đội đã đăng ký:', error);
-            }
-        };
-
         fetchRegisteredTeams();
+
+        // Tạo interval để cập nhật mỗi 30 giây
+        const intervalId = setInterval(() => {
+            fetchRegisteredTeams();
+        }, 30000);
+
+        // Cleanup function
+        return () => clearInterval(intervalId);
     }, []);
 
     const fetchTournaments = async () => {
@@ -139,31 +158,43 @@ const CustomerTournaments = () => {
         const tournamentId = tournament._id.toString();
         const registrationStatus = registeredTeams[tournamentId];
         
-        console.log('Tournament ID:', tournamentId);
-        console.log('Registration Status:', registrationStatus);
+        console.log(`Tournament ${tournamentId} status:`, registrationStatus);
         
-        if (registrationStatus === 'pending') {
-            return (
-                <button 
-                    className="pending-btn"
-                    disabled
-                >
-                    Đang Chờ Phê Duyệt
-                </button>
-            );
+        // Kiểm tra các trạng thái
+        switch(registrationStatus) {
+            case 'pending':
+                return (
+                    <button 
+                        className="pending-btn"
+                        disabled
+                    >
+                        Đang Chờ Phê Duyệt
+                    </button>
+                );
+                
+            case 'approved':
+                return (
+                    <button 
+                        className="approved-btn"
+                        disabled
+                    >
+                        Đã Tham Gia
+                    </button>
+                );
+                
+            default:  // Bao gồm undefined, null và các trường hợp khác
+                return (
+                    <button 
+                        className="join-btn"
+                        onClick={() => {
+                            setSelectedTournament(tournament);
+                            setShowRegisterForm(true);
+                        }}
+                    >
+                        Tham Gia Giải Đấu
+                    </button>
+                );
         }
-
-        return (
-            <button 
-                className="join-btn"
-                onClick={() => {
-                    setSelectedTournament(tournament);
-                    setShowRegisterForm(true);
-                }}
-            >
-                Tham Gia Giải Đấu
-            </button>
-        );
     };
 
     return (

@@ -3,7 +3,50 @@ import jwt from 'jsonwebtoken';
 import express from "express"
 import { Field } from '../models/field.model.js';
 
-// Đăng ký chủ sân mới
+/**
+ * @swagger
+ * /api/field_owner/register:
+ *   post:
+ *     summary: Đăng ký tài khoản chủ sân
+ *     tags: [Auth Field Owner]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *               - fullname
+ *               - sex
+ *               - birthday
+ *               - phone_no
+ *               - email
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               fullname:
+ *                 type: string
+ *               sex:
+ *                 type: string
+ *               birthday:
+ *                 type: string
+ *                 format: date
+ *               phone_no:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Dữ liệu không hợp lệ
+ *       500:
+ *         description: Lỗi server
+ */
 export const register = async (req, res) => {
     const { username, password, fullname, sex, birthday, phone_no, email } = req.body;
     if (!(username && password && fullname && sex && birthday && phone_no && email)) {
@@ -37,7 +80,43 @@ export const register = async (req, res) => {
     }
 };
 
-// Đăng nhập chủ sân
+/**
+ * @swagger
+ * /api/field_owner/login:
+ *   post:
+ *     summary: Đăng nhập tài khoản chủ sân
+ *     tags: [Auth Field Owner]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Đăng nhập thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Username hoặc password không đúng
+ *       500:
+ *         description: Lỗi server
+ */
 export const login = async (req, res) => {
     const { username, password } = req.body;
 

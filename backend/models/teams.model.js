@@ -4,6 +4,7 @@ const { Schema } = mongoose;
 // Định nghĩa TeamSchema
 const TeamSchema = new Schema({
   tournament_id: { type: Schema.Types.ObjectId, ref: 'Tournament', required: true }, // Tham chiếu đến giải đấu
+  user_id: { type: Schema.Types.ObjectId, ref: 'Customer', required: true }, // Thêm trường này
   name: { type: String, required: true }, // Tên đội
   captain_name: { type: String, required: true }, // Tên đội trưởng
   members: [
