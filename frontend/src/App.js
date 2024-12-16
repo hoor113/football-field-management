@@ -21,6 +21,8 @@ import NotificationPageFieldOwner from './components/NotificationPageFieldOwner'
 import CustomerStatistics from './components/CustomerStatistics';
 import FieldOwnerStatistics from './components/FieldOwnerStatistics';
 import SearchResults from './components/Homepage/SearchResults.js';
+import ManageTournaments from './components/ManageTournaments';
+import CustomerTournaments from './components/CustomerTournaments';
 
 
 // Create a wrapper component that handles the conditional rendering
@@ -72,6 +74,8 @@ const AppContent = () => {
                     <Route path="/customer/statistics" element={<CustomerStatistics />} />
                     <Route path="/field_owner/statistics" element={<FieldOwnerStatistics />} />
                     <Route path="/search-results" element={<SearchResults />} />
+                    <Route path="/field_owner/manage-tournaments" element={<ManageTournaments />} />
+                    <Route path="/customer/tournaments" element={<CustomerTournaments />} />
                 </Routes>
             </main>
             {!shouldHideNavbarFooter && <Footer />}
