@@ -100,7 +100,7 @@ export const ServiceForm = ({ fieldId, onClose }) => {
 
                     <div className="form-buttons">
                         <button type="submit" className="submit-button">
-                            Thêm d��ch vụ
+                            Thêm dịch vụ
                         </button>
                         <button type="button" onClick={onClose} className="cancel-button">
                             Hủy
