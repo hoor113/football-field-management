@@ -190,7 +190,7 @@ const NotificationPageFieldOwner = () => {
                             <div className="notification-grid">
                                 {/* Customer Information */}
                                 <div className="customer-info">
-                                    <h3>Customer Details</h3>
+                                    <h3>Thông tin khách hàng</h3>
                                     <div className="info-content">
                                         <p><i className="fas fa-user"></i> <strong>Họ tên:</strong> {notification.customerDetails.fullname}</p>
                                         <p><i className="fas fa-envelope"></i> <strong>Email:</strong> {notification.customerDetails.email}</p>
@@ -200,7 +200,7 @@ const NotificationPageFieldOwner = () => {
 
                                 {/* Booking Details */}
                                 <div className="booking-details">
-                                    <h3>Booking Details</h3>
+                                    <h3>Thông tin đơn đặt</h3>
                                     <div className="info-content">
                                         <p><i className="fas fa-bookmark"></i> <strong>Mã đơn đặt:</strong> {notification.bookingDetails._id}</p>
                                         <p><i className="fas fa-clock"></i> <strong>Thời gian bắt đầu:</strong> {formatDateTime(notification.bookingDetails.start_time)}</p>

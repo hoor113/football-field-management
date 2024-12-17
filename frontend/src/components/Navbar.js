@@ -112,10 +112,10 @@ const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
                             ))
                         ) : (
                             <div className="notification-item">
-                                <p>No notifications</p>
+                                <p>Không có thông báo</p>
                             </div>
                         )}
-                        <button onClick={handleSeeMore} className="see-more">See more...</button>
+                        <button onClick={handleSeeMore} className="see-more">Xem thêm...</button>
                     </div>
                 </div>
             )}
