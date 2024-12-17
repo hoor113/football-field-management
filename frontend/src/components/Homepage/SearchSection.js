@@ -51,13 +51,13 @@ export const SearchSection = () => {
             <form onSubmit={handleSearch} className="search-form">
                 <input
                     type="text"
-                    placeholder="Search for fields..."
+                    placeholder="Tìm kiếm sân bóng..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="search-input"
                 />
                 <button type="submit" className="search-button">
-                    Search
+                    Tìm kiếm
                 </button>
             </form>
 
