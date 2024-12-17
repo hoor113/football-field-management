@@ -42,7 +42,7 @@ export const OrderField = () => {
     try {
       const notificationData = {
         recipient_id: field.owner_id,
-        message: `New booking request for ${field.name}`,
+        message: `Đơn đặt sân ${field.name} mới nhận`,
         booking_id: bookingId,
         type: 'request'
       };
