@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/NotificationPage.css';
+import '#styles/NotificationPage.css';
 
 const NotificationPageCustomer = () => {
     const [notifications, setNotifications] = useState([]);

@@ -1,0 +1,187 @@
+import { Customer } from '#backend/models/customer.model.js';
+import jwt from 'jsonwebtoken';
+
+/**
+ * @swagger
+ * /api/customer/register:
+ *   post:
+ *     summary: Đăng ký tài khoản khách hàng
+ *     tags: [Auth Customer]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *               - fullname
+ *               - sex
+ *               - birthday
+ *               - phone_no
+ *               - email
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *               fullname:
+ *                 type: string
+ *               sex:
+ *                 type: string
+ *               birthday:
+ *                 type: string
+ *                 format: date
+ *               phone_no:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *     responses:
+ *       201:
+ *         description: Đăng ký thành công
+ *       400:
+ *         description: Dữ liệu không hợp lệ
+ *       500:
+ *         description: Lỗi server
+ */
+export const register = async (req, res) => {
+    const { username, password, fullname, sex, birthday, phone_no, email } = req.body;
+    if (!(username && password && fullname && sex && birthday && phone_no && email)) {
+        return res.status(400).json({ success: false, message: "Xin hãy điền đầy đủ thông tin" });
+    }
+
+    try {
+        // Kiểm tra nếu username hoặc email đã tồn tại
+        const existingUser = await Customer.findOne({ $or: [{ username }, { email }] });
+        if (existingUser) {
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc Email đã được sử dụng' });
+        }
+
+        // Tạo người dùng mới
+        const newCustomer = new Customer({
+            username,
+            password, // Sẽ được mã hóa trong middleware trước khi lưu
+            fullname,
+            sex,
+            birthday,
+            phone_no,
+            email
+        });
+
+        // Lưu người dùng vào cơ sở dữ liệu
+        await newCustomer.save();
+
+        res.status(201).json({ message: 'Khách hàng đã đăng ký thành công', user: newCustomer });
+    } catch (error) {
+        res.status(500).json({ message: 'Có lỗi xảy ra khi đăng ký' });
+    }
+};
+
+/**
+ * @swagger
+ * /api/customer/login:
+ *   post:
+ *     summary: Đăng nhập tài khoản khách hàng
+ *     tags: [Auth Customer]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - username
+ *               - password
+ *             properties:
+ *               username:
+ *                 type: string
+ *               password:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: Đăng nhập thành công
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 message:
+ *                   type: string
+ *                 token:
+ *                   type: string
+ *       400:
+ *         description: Username hoặc password không đúng
+ *       500:
+ *         description: Lỗi server
+ */
+export const login = async (req, res) => {
+    const { username, password } = req.body;
+
+    // Kiểm tra xem có username và password không
+    if (!username || !password) {
+        return res.status(400).json({ message: 'Tên đăng nhập và mật khẩu là bắt buộc' });
+    }
+
+    try {
+        // Tìm người dùng theo username
+        const customer = await Customer.findOne({ username });
+        if (!customer) {
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
+        }
+
+        // Kiểm tra mật khẩu
+        const isMatch = await customer.comparePassword(password);
+        if (!isMatch) {
+            return res.status(400).json({ message: 'Tên đăng nhập hoặc mật khẩu không đúng' });
+        }
+
+        // Kiểm tra biến môi trường JWT_SECRET
+        if (!process.env.JWT_SECRET) {
+            return res.status(500).json({ message: 'Môi trường chưa được xác định' });
+        }
+
+        // Tạo JWT token
+        const token = jwt.sign(
+            { id: customer._id,
+            username: customer.username ,
+            role: "customer"
+        },
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' }
+        );
+
+        res.cookie('token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'Strict',
+            maxAge: 60 * 60 * 1000 // 1 hour
+        });
+
+        res.status(200).json({ message: 'Đăng nhập thành công', token });
+
+    } catch (error) {
+        res.status(500).json({ message: 'Có lỗi xảy ra khi đăng nhập' });
+    }
+};
+
+/**
+ * @swagger
+ * /api/customer/logout:
+ *   post:
+ *     summary: Đăng xuất
+ *     tags: [Auth Customer]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Đăng xuất thành công
+ */
+export const logout = (req, res) => {
+    res.clearCookie('token', {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'Strict',
+    });
+    res.status(200).json({ message: 'Đăng xuất thành công' });
+};

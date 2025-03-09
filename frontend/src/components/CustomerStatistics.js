@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/CustomerStatistics.css';
+import '#styles/CustomerStatistics.css';
 
 const CustomerStatistics = () => {
     const [bookingsCount, setBookingsCount] = useState(0);

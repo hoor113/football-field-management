@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/ManageTournaments.css';
+import '#styles/ManageTournaments.css';
 
 const ManageTournaments = () => {
     const navigate = useNavigate();

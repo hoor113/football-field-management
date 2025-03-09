@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import "../styles/FieldOwnerRegister.css"
+import "#styles/FieldOwnerRegister.css"
 
 const FieldOwnerRegister = () => {
   const [formData, setFormData] = useState({

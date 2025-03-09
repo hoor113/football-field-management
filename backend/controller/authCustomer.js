@@ -1,4 +1,4 @@
-import { Customer } from '../models/customer.model.js';
+import { Customer } from '#backend/models/customer.model.js';
 import jwt from 'jsonwebtoken';
 
 /**
@@ -186,6 +186,8 @@ export const logout = (req, res) => {
     res.status(200).json({ message: 'Đăng xuất thành công' });
 };
 
+
+//customer/profile
 /**
  * @swagger
  * /api/customer/profile:

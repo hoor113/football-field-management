@@ -1,7 +1,7 @@
-import { FieldOwner } from '../models/field-owner.model.js';
+import { FieldOwner } from '#backend/models/field-owner.model.js';
 import jwt from 'jsonwebtoken';
-import express from "express"
-import { Field } from '../models/field.model.js';
+// import express from "express"
+// import { Field } from '#backend/models/field.model.js';
 
 /**
  * @swagger
@@ -198,6 +198,8 @@ export const getFieldOwner = async (req, res) => {
 //     }
 // };
 
+
+// owner/profile
 export const getProfile = async (req, res) => {
     try {
         const fieldOwner = await FieldOwner.findById(req.user.id)

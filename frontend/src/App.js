@@ -1,28 +1,28 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Navbar from './components/Navbar.js';
-import CustomerLogin from './components/CustomerLogin.js';
-import CustomerRegister from './components/CustomerRegister.js';
-import FieldOwnerRegister from './components/fieldOwnerRegister.js';
-import FieldOwnerLogin from './components/fieldOwnerLogin.js';
-import HomePage from './components/Homepage/index.js';
-import { AuthCustomer } from './login/AuthCustomer.js';
-import { AuthFieldOwner } from './login/AuthFieldOwner.js';
-import GioiThieu from './components/GioiThieu';
-import Footer from './components/Footer';
-import ChinhSach from './components/ChinhSach';
-import DieuKhoan from './components/DieuKhoan';
-import { OrderField } from './components/Homepage/OrderField';
-import CustomerProfile from './components/CustomerProfile';
-import FieldOwnerProfile from './components/FieldOwnerProfile';
-import OrderConfirmation from './components/Homepage/OrderConfirmation';
-import NotificationPageCustomer from './components/NotificationPageCustomer';
-import NotificationPageFieldOwner from './components/NotificationPageFieldOwner';
-import CustomerStatistics from './components/CustomerStatistics';
-import FieldOwnerStatistics from './components/FieldOwnerStatistics';
-import SearchResults from './components/Homepage/SearchResults.js';
-import ManageTournaments from './components/ManageTournaments';
-import CustomerTournaments from './components/CustomerTournaments';
+import Navbar from '#components/Navbar.js';
+import CustomerLogin from '#components/CustomerLogin.js';
+import CustomerRegister from '#components/CustomerRegister.js';
+import FieldOwnerRegister from '#components/fieldOwnerRegister.js';
+import FieldOwnerLogin from '#components/fieldOwnerLogin.js';
+import HomePage from '#components/Homepage/index.js';
+import { AuthCustomer } from '#login/AuthCustomer.js';
+import { AuthFieldOwner } from '#login/AuthFieldOwner.js';
+import Introduction from '#components/Introduction.js';
+import Footer from '#components/Footer';
+import Policy from '#components/Policy.js';
+import TermsandService from '#components/TermsandCondition.js';
+import { OrderField } from '#components/Homepage/OrderField';
+import CustomerProfile from '#components/CustomerProfile';
+import FieldOwnerProfile from '#components/FieldOwnerProfile';
+import OrderConfirmation from '#components/Homepage/OrderConfirmation';
+import NotificationPageCustomer from '#components/NotificationPageCustomer';
+import NotificationPageFieldOwner from '#components/NotificationPageFieldOwner';
+import CustomerStatistics from '#components/CustomerStatistics';
+import FieldOwnerStatistics from '#components/FieldOwnerStatistics';
+import SearchResults from '#components/Homepage/SearchResults.js';
+import ManageTournaments from '#components/ManageTournaments';
+import CustomerTournaments from '#components/CustomerTournaments';
 
 
 // Create a wrapper component that handles the conditional rendering
@@ -62,9 +62,9 @@ const AppContent = () => {
                     <Route path="/field_owner/login" element={<FieldOwnerLogin />} />
                     <Route path="/customer/register" element={<CustomerRegister />} />
                     <Route path="/field_owner/register" element={<FieldOwnerRegister />} />
-                    <Route path="/gioi-thieu" element={<GioiThieu />} />
-                    <Route path="/chinh-sach" element={<ChinhSach />} />
-                    <Route path="/dieu-khoan" element={<DieuKhoan />} />
+                    <Route path="/gioi-thieu" element={<Introduction />} />
+                    <Route path="/chinh-sach" element={<Policy />} />
+                    <Route path="/dieu-khoan" element={<TermsandService />} />
                     <Route path="/order/:fieldId" element={<OrderField />} />
                     <Route path="/customer/profile" element={<CustomerProfile />} />
                     <Route path="/field_owner/profile" element={<FieldOwnerProfile />} />

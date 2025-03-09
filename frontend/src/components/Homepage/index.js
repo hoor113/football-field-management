@@ -6,12 +6,12 @@ import { useField } from './hooks/useField';
 import { handleAddField } from './functions/fieldOperations';
 import './Homepage.css';
 import { SearchSection } from './SearchSection';
-import ZirkzeeImage from './images/zirkzee.jpg';
-import AntonyImage from './images/antony.jpg';
-import NicholasJacksonImage from './images/jackson.jpg';
-import MykhayloMudrykImage from './images/mudryk.jpg';
+import ZirkzeeImage from '#styles/images/zirkzee.jpg';
+import AntonyImage from '#styles/images/antony.jpg';
+import NicholasJacksonImage from '#styles/images/jackson.jpg';
+import MykhayloMudrykImage from '#styles/images/mudryk.jpg';
 import { useNavigate } from 'react-router-dom';
-import banner from './images/banner.jpg';
+import banner from '#styles/images/banner.jpg';
 import {
   Container,
   Typography,
@@ -41,9 +41,9 @@ import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import SecurityIcon from '@mui/icons-material/Security';
 import SupportAgentIcon from '@mui/icons-material/SupportAgent';
 import VerifiedIcon from '@mui/icons-material/Verified';
-import Field1Image from "./images/san-bong-da-phui-ha-noi.jpg";
-import Field2Image from "./images/san-bong-da-phui-hcm.jpg";
-import Field3Image from "./images/san-bong-da-phui-thanh-hoa.jpg";
+import Field1Image from "#styles/images/san-bong-da-phui-ha-noi.jpg";
+import Field2Image from "#styles/images/san-bong-da-phui-hcm.jpg";
+import Field3Image from "#styles/images/san-bong-da-phui-thanh-hoa.jpg";
 
 const NewsSection = () => {
     const [displayCount, setDisplayCount] = useState(4);

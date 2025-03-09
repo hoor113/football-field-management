@@ -10,7 +10,7 @@ import {
   Paper,
   Divider
 } from '@mui/material';
-import '../styles/FieldOwnerStatistics.css';
+import '#styles/FieldOwnerStatistics.css';
 
 const FieldOwnerStatistics = () => {
     const [postedFields, setPostedFields] = useState(0);

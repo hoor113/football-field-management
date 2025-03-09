@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../styles/NotificationPageFieldOwner.css';
+import '#styles/NotificationPageFieldOwner.css';
 
 const NotificationPageFieldOwner = () => {
     const [notifications, setNotifications] = useState([]);

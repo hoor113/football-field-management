@@ -1,10 +1,11 @@
-import { Customer } from "../models/customer.model.js";
+import { Customer } from "#backend/models/customer.model.js";
 import jwt from "jsonwebtoken";
-import { Booking } from "../models/booking.model.js";
-import { Field } from "../models/field.model.js";
-import { Notification } from '../models/notification.model.js';
-import { Rating } from "../models/rating.model.js";
+import { Booking } from "#backend/models/booking.model.js";
+import { Field } from "#backend/models/field.model.js";
+import { Notification } from '#backend/models/notification.model.js';
+import { Rating } from "#backend/models/rating.model.js";
 
+//customer/book
 // Helper function to check if a time slot is currently available
 const isTimeSlotAvailable = (ground, startTime) => {
     const currentTime = new Date();
@@ -90,6 +91,7 @@ export const getBookings = async (req, res) => {
     res.status(200).json({ bookings });
 }
 
+//common/search
 export const getRecommendedFields = async (req, res) => {
     try {
         const limit = req.query.limit ? parseInt(req.query.limit) : null;
@@ -125,6 +127,7 @@ export const SearchFields = async (req, res) => {
     }
 }
 
+//customer/notification
 export const sendNotification = async (req, res) => {
     const { recipient_id, message, booking_id, type } = req.body;
     const notification = await Notification.create({
@@ -199,6 +202,7 @@ export const markAllNotificationsAsRead = async (req, res) => {
     }
 };
 
+//common/search
 // Function to search fields by name or location
 export const HPsearchFields = async (req, res) => {
     try {
@@ -226,6 +230,7 @@ export const HPsearchFields = async (req, res) => {
     }
 };
 
+//customer/rating
 export const submitRating = async (req, res) => {
     const { rating, comment, field_id } = req.body;
     const customer_id = req.user.id;

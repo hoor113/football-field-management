@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import '../styles/Navbar.css';
-import notiBell from './icons/noti-bell.svg';
-import logoIcon from './images/field_logo.jpg';
+import '#styles/Navbar.css';
+import notiBell from '#styles/icons/noti-bell.svg';
+import logoIcon from '#styles/images/field_logo.jpg';
 
 const Navbar = ({ isLoggedIn, handleLogout, fullname, userType }) => {
     const [notifications, setNotifications] = useState([]);

@@ -1,5 +1,5 @@
 import React from 'react';
-import '../styles/Notification.css';
+import '#styles/Notification.css';
 
 const Notification = ({ notifications, onAccept, onDecline }) => {
     const formatDate = (dateString) => {

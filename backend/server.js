@@ -1,15 +1,19 @@
+
 import express from "express"
 import dotenv from "dotenv"
 import { ConnectDB } from "./config/db.js"
-import router1 from "./routes/authRoutesCustomer.js"
-import router2 from "./routes/authRoutesFieldOwner.js"
-import router3 from "./routes/fieldOwners.js"
-import router4 from "./routes/tournaments.routes.js"
+import customerRouter from "#backend/routes/customerRouter.js"
+import ownerRouter from "#backend/routes/ownerRouter.js"
+import router3 from "#backend/routes/fieldRouter.js"
+import tournamentRouter from "#backend/routes/tournamentsRouter.js"
 import cors from 'cors'
 import cookieParser from "cookie-parser"
 import path from "path"
 import swaggerUi from 'swagger-ui-express';
-import { specs } from './config/swagger.js';
+import { specs } from '#backend/config/swagger.js';
+
+
+
 
 dotenv.config()
 
@@ -24,17 +28,17 @@ app.use(cookieParser())
 const PORT = process.env.PORT || 5000
 
 // Routes
-app.use("/api/customer", router1);
+app.use("/api/customer", customerRouter);
 
 
 
 // Route cho chủ sân (field owner)
-app.use("/api/field_owner", router2);
+app.use("/api/field_owner", ownerRouter);
 app.use("/api/field", router3);
 
 
 //route tổ chức giải đấu
-app.use("/api/tournaments", router4)
+app.use("/api/tournaments", tournamentRouter)
 
 // Thêm route cho Swagger UI (thêm vào trước các routes khác)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));

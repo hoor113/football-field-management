@@ -1,5 +1,5 @@
-import { Tournament } from "../models/tournaments.model.js";
-import { Team } from "../models/teams.model.js";
+import { Tournament } from "#backend/models/tournaments.model.js";
+import { Team } from "#backend/models/teams.model.js";
 
 /**
  * @swagger
