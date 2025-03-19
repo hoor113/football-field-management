@@ -1,7 +1,7 @@
 {
   "name": "football-field-management",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "backend/server.js",
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -39,10 +39,6 @@
     "#backend/*": "./backend/*",
     "#customer/*": "./backend/controller/customer/*",
     "#owner/*": "./backend/controller/owner/*",
-    "#shared/*": "./backend/controller/shared/*",
-    "#styles/*": "./frontend/src/styles/*",
-    "#components/*": "./frontend/src/components/*",
-    "#login/*": "./frontend/src/login/*",
-    "#frontend/*": "./frontend/src/*"
+    "#shared/*": "./backend/controller/shared/*"
   }
 }
