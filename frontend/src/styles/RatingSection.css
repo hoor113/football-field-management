@@ -1,0 +1,96 @@
+.rating-section {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.rating-section h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.stars-container {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.star {
+    color: #e0e0e0; /* Default gray for inactive stars */
+    font-size: 2rem; /* Adjust size as needed */
+    cursor: pointer;
+    transition: color 0.3s ease; /* Smooth color change */
+}
+
+.star.active {
+    color: #ffd700; /* Yellow glow for active stars */
+}
+
+
+/* .star {
+    font-size: 2em;
+    cursor: pointer;
+    color: #e0e0e0;
+    transition: color 0.2s ease-in-out;
+}
+
+.star:hover,
+.star.active {
+    color: #ffd700;
+}
+
+/* Create the hover effect for previous stars */
+/* .stars-container:hover .star {
+    color: #e0e0e0;
+} */
+
+/*.stars-container .star:hover ~ .star {
+    color: #e0e0e0;
+}
+
+.stars-container:hover .star:hover,
+.stars-container:hover .star:hover ~ .star {
+    color: #e0e0e0;
+}
+
+.stars-container .star:hover,
+.stars-container .star:hover ~ .star {
+    color: #ffd700;
+} */
+
+.comment-section textarea {
+    width: 100%;
+    min-height: 100px;
+    padding: 12px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    resize: vertical;
+    font-family: inherit;
+}
+
+.comment-section textarea:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 2px rgba(0,123,255,0.25);
+}
+
+.submit-rating-btn {
+    padding: 12px 24px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.2s;
+}
+
+.submit-rating-btn:hover:not(:disabled) {
+    background-color: #0056b3;
+}
+
+.submit-rating-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+} 

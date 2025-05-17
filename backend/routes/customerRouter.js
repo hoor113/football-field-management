@@ -36,7 +36,7 @@ const customerRouter = Router();
 //
 customerRouter.post('/register', register);
 customerRouter.post('/login', login);
-customerRouter.post("/logout", logout)
+customerRouter.post("/logout", logout);
 //
 customerRouter.post("/book", authenticateToken, makeBooking)
 customerRouter.get("/bookings", authenticateToken, getBookings)

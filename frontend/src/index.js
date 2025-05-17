@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import App from '#frontend/App';
-import '#frontend/index.css';
-import 'module-alias/register'
+import App from './App';
+import './index.css';
+// import 'module-alias/register'
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

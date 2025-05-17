@@ -1,0 +1,23 @@
+.field-rating-container {
+    width: 100%;
+    text-align: center;
+}
+
+.field-rating-stars {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.field-star {
+    font-size: 3em;
+    padding: 0 5px;
+}
+
+.field-star-filled {
+    color: #ffd700;
+}
+
+.field-star-empty {
+    color: #ddd;
+}
